@@ -1,10 +1,5 @@
-import React from 'react';
+import React from "react";
 
 export default function Main() {
-  return (
-    <div>
-      main
-    </div>
-  );
+  return <div>main</div>;
 }
-

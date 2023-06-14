@@ -3,6 +3,10 @@ export default {
   content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     extend: {
+      screens: {
+        md: { max: "430px" },
+        sm: { max: "320px" },
+      },
       colors: {
         mint: "#13CBBF",
         green: "#009288",
