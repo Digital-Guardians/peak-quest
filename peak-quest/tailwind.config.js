@@ -22,6 +22,10 @@ export default {
         sm: "9px",
         xs: "8px",
       },
+      screens: {
+        md: { max: "430px" },
+        sm: { max: "320px" },
+      },
     },
   },
   plugins: [],
