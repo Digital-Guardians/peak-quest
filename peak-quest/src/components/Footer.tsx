@@ -6,7 +6,9 @@ function Footer() {
       <div className="mb-2">logo</div>
       <div>
         <p>contact@peakquest.com</p>
-        <p className="text-gray">© 2023. PEAKQUEST. All rights reserved.</p>
+        <p className="text-gray text-sm">
+          © 2023. PEAKQUEST. All rights reserved.
+        </p>
       </div>
     </div>
   );

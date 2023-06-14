@@ -9,7 +9,7 @@ function Header() {
         <div>logo</div>
       </Link>
       <div className="flex items-center space-x-[16px]">
-        <div>로그인</div>
+        <div className="font-bold">로그인</div>
         <div>
           <BsFillPersonFill />
         </div>
