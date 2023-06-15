@@ -5,6 +5,7 @@ export default {
     extend: {
       colors: {
         mint: "#13CBBF",
+        turquoise: "#16CABD",
         green: "#009288",
         lightGreen: "#ECFFFE",
         turquoise: "#006259",

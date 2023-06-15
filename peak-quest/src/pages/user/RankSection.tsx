@@ -7,6 +7,40 @@ import RankItem from "./RankItem";
 export default function RankSection() {
   const [rank, setRank] = useState([]);
 
+  function PrevArrow(props: any) {
+    return (
+      <div
+        className="absolute top-1/2 left-[-10px] 
+        w-4 h-4 rounded-full
+      bg-gray text-center
+        text-md font-bold
+        z-10"
+        onClick={props.onClick}
+      >
+        <div className="leading-[14px]">
+          <span className="text-white">{"<"}</span>
+        </div>
+      </div>
+    );
+  }
+
+  function NextArrow(props: any) {
+    return (
+      <div
+        className="absolute top-1/2 right-[-10px]
+        w-4 h-4 rounded-full
+      bg-gray text-center
+        text-md font-bold
+        z-10"
+        onClick={props.onClick}
+      >
+        <div className="leading-[14px]">
+          <span className="text-white">{">"}</span>
+        </div>
+      </div>
+    );
+  }
+
   const settings = {
     infinite: true,
     autoplaySpeed: 1500,
@@ -15,6 +49,8 @@ export default function RankSection() {
     slidesToScroll: 1,
     variableHeight: true,
     touchThreshold: 20,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
   };
 
   useEffect(() => {
