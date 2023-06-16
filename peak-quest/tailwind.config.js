@@ -3,6 +3,10 @@ export default {
   content: ["./src/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     extend: {
+      screens: {
+        md: { max: "430px" },
+        sm: { max: "320px" },
+      },
       colors: {
         mint: "#13CBBF",
         turquoise: "#16CABD",
@@ -29,6 +33,9 @@ export default {
       screens: {
         md: { max: "430px" },
         sm: { max: "320px" },
+      },
+      boxShadow: {
+        "3xl": "0px 3px 20px rgb(0 0 0 / 0.1)",
       },
     },
   },
