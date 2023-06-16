@@ -2,6 +2,9 @@ import React from "react";
 import createCourse from "../../assets/create-course.png";
 import courseList from "../../assets/course-lists.png";
 import { Link } from "react-router-dom";
+import RankSection from "./RankSection";
+import EventBanner from "./EventBanner";
+        
 export default function Main() {
   return (
     <div className="bg-gray px-4 text-black">
@@ -31,6 +34,12 @@ export default function Main() {
           </div>
         </Link>
       </div>
-    </div>
+        {/* rankSection */}
+      <div className="w-[430px] m-auto bg-white rounded-xl">
+        <RankSection />
+        <EventBanner />
+      </div>
+     </div>
   );
 }
+
