@@ -1,0 +1,79 @@
+{
+  "course_ranking": [
+    {
+      "user_id": "asd123",
+      "nickname": "천둥치는 날의 정현님",
+      "title": "북한산 정복하기",
+      "view": 4313,
+      "likes": 394,
+      "img_url": "./images/rank/profile.png",
+      "tags": {
+        "toilet": true,
+        "restaurant": true,
+        "service": false
+      },
+      "created_at": "2023-03-02T14:30:00Z",
+      "modify_at": "2023-03-04T11:30:00Z"
+    },
+    {
+      "user_id": "asd123",
+      "nickname": "천둥치는 날의 정현님",
+      "title": "북한산 정복하기",
+      "view": 2353,
+      "likes": 400,
+      "img_url": "./images/rank/profile.png",
+      "tags": {
+        "toilet": true,
+        "restaurant": false,
+        "service": false
+      },
+      "created_at": "2023-03-02T14:30:00Z",
+      "modify_at": "2023-03-04T11:30:00Z"
+    },
+    {
+      "user_id": "asd123",
+      "nickname": "천둥치는 날의 정현님",
+      "title": "북한산 정복하기",
+      "view": 7353,
+      "likes": 531,
+      "img_url": "./images/rank/profile.png",
+      "tags": {
+        "toilet": true,
+        "restaurant": true,
+        "service": true
+      },
+      "created_at": "2023-03-02T14:30:00Z",
+      "modify_at": "2023-03-04T11:30:00Z"
+    },
+    {
+      "user_id": "asd123",
+      "nickname": "천둥치는 날의 정현님",
+      "title": "북한산 정복하기",
+      "view": 4213,
+      "likes": 294,
+      "img_url": "./images/rank/profile.png",
+      "tags": {
+        "toilet": false,
+        "restaurant": true,
+        "service": true
+      },
+      "created_at": "2023-03-02T14:30:00Z",
+      "modify_at": "2023-03-04T11:30:00Z"
+    },
+    {
+      "user_id": "asd123",
+      "nickname": "천둥치는 날의 정현님",
+      "title": "북한산 정복하기",
+      "view": 2353,
+      "likes": 394,
+      "img_url": "./images/rank/profile.png",
+      "tags": {
+        "toilet": true,
+        "restaurant": true,
+        "service": false
+      },
+      "created_at": "2023-03-02T14:30:00Z",
+      "modify_at": "2023-03-04T11:30:00Z"
+    }
+  ]
+}
