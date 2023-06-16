@@ -5,9 +5,12 @@ export default {
     extend: {
       colors: {
         mint: "#13CBBF",
+        turquoise: "#16CABD",
         green: "#009288",
+        lightGreen: "#ECFFFE",
         turquoise: "#006259",
         purple: "#6B4BFB",
+        lightPurple: "#F2EFFF",
         black: "#202220",
         darkGray: "#636363",
         gray: "#D9D9D9",
@@ -21,6 +24,7 @@ export default {
         md: "12px",
         sm: "9px",
         xs: "8px",
+        xxs: "4px",
       },
       screens: {
         md: { max: "430px" },
