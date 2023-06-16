@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@100;300;400;500;700;900&display=swap");
 * {
-  -webkit-text-size-adjust: none;
+  font-family: "Noto Sans KR", sans-serif;
 }
