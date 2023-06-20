@@ -22,11 +22,11 @@ function FloatingBtn() {
   };
 
   return (
-    <div className="fixed bottom-4 right-4">
+    <div className="fixed bottom-4 right-4 z-10">
       <button
         onClick={scrollToTop}
         className={`
-      bg-blue-500 rounded-full text-white w-14 h-14 flex items-center justify-center shadow-lg
+      flex h-14 w-14 items-center justify-center rounded-full bg-blue-500 text-white shadow-lg
       ${
         showFloatingBtn ? "translate-y-0" : "translate-y-[126px]"
       } transition-all duration-500`}
@@ -34,7 +34,7 @@ function FloatingBtn() {
         <ArrowUpBtn />
       </button>
       <button
-        className={`bg-[#FAE300] my-2 rounded-full w-14 h-14 flex items-center justify-center shadow-lg ${
+        className={`my-2 flex h-14 w-14 items-center justify-center rounded-full bg-[#FAE300] shadow-lg ${
           showFloatingBtn ? "translate-y-0" : "translate-y-[999px]"
         } transition-all duration-700`}
       >
@@ -42,7 +42,7 @@ function FloatingBtn() {
       </button>
       <Link to={"/area"}>
         <button
-          className={`bg-blue-500 rounded-full w-14 h-14 flex items-center justify-center shadow-lg ${
+          className={`flex h-14 w-14 items-center justify-center rounded-full bg-blue-500 shadow-lg ${
             showFloatingBtn ? "translate-y-0" : "translate-y-[999px]"
           } transition-all duration-700`}
         >
@@ -50,7 +50,7 @@ function FloatingBtn() {
         </button>
       </Link>
       <button
-        className="bg-blue-500 rounded-full mt-2 w-14 h-14 flex items-center justify-center shadow-lg"
+        className="mt-2 flex h-14 w-14 items-center justify-center rounded-full bg-blue-500 shadow-lg"
         onClick={toggleFloatingBtn}
       >
         <MoreBtn />
