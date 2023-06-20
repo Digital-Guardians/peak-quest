@@ -12,7 +12,6 @@ export default {
         turquoise: "#16CABD",
         green: "#009288",
         lightGreen: "#ECFFFE",
-        turquoise: "#006259",
         purple: "#6B4BFB",
         lightPurple: "#F2EFFF",
         black: "#202220",
