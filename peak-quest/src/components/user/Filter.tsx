@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import { IoIosArrowDropdown } from "react-icons/io";
 import SelectCourseOption from "./SelectCourseOption";
+import { changeKorean } from "../../helper/changeAreaName";
 
 // select, setSelect를 props로 전달받음
 interface FilterProps {
@@ -24,16 +25,17 @@ interface FilterProps {
 
 // 지역 변경 버튼
 interface AreaOption {
+  value: string;
   label: string;
 }
 
 const areaOptions: AreaOption[] = [
-  { label: "수도권" },
-  { label: "강원권" },
-  { label: "충청권" },
-  { label: "전라권" },
-  { label: "경상권" },
-  { label: "제주도" },
+  { value: "capital", label: "수도권" },
+  { value: "gangwon", label: "강원권" },
+  { value: "chungcheong", label: "충청권" },
+  { value: "jeolla", label: "전라권" },
+  { value: "gyeongsang", label: "경상권" },
+  { value: "jeju", label: "제주도" },
 ];
 
 // 난이도 버튼
@@ -119,7 +121,7 @@ export default function Filter({ select, setSelect }: FilterProps) {
           {/* 지역 이미지 */}
           <img
             className="w-full max-w-[430px] h-[400px] translate-y-[-10%] scale-x-125"
-            src={`../../src/assets/user/${AreaName}.png`}
+            src={`../../src/assets/user/${changeKorean(AreaName)}.png`}
           />
           {/* 이미지 그라데이션 */}
           <div className="w-full h-full bg-gradient-to-b from-black/90 to-black/50 absolute top-0 left-0" />
@@ -131,7 +133,7 @@ export default function Filter({ select, setSelect }: FilterProps) {
               className="flex justify-center items-center text-xl font-bold ml-2 relative"
               onClick={() => setAreaSelect(!areaSelect)}
             >
-              {AreaName}
+              {changeKorean(AreaName)}
               <div className="text-2xl font-bold pt-1 ml-1">
                 <IoIosArrowDropdown />
               </div>
@@ -145,11 +147,15 @@ export default function Filter({ select, setSelect }: FilterProps) {
                       }`}
                       key={option.label}
                       onClick={() => {
-                        navigate(`/area/${option.label}/courselist`);
-                        // 지역선택 변경 시 => 필터 값 초기화
+                        navigate(`/area/${option.value}/courselist`);
+                        // 지역선택 변경 시 => 필터 값 초기화 & scroll to top
                         handleSelect([]);
                         handleSelect(0);
                         setAreaSelect(false);
+                        window.scrollTo({
+                          top: 0,
+                          behavior: "smooth",
+                        });
                       }}
                     >
                       {option.label}
@@ -162,14 +168,16 @@ export default function Filter({ select, setSelect }: FilterProps) {
           {/* 코스 유형 선택 */}
           <div
             id="courseOption"
-            className="w-[55%] h-[34px] flex justify-between items-center py-1 px-3 mr-2 my-2 text-md border-[1px] border-white rounded-2xl bg-black/60 break-keep leading-normal sm:w-[65%] cursor-pointer relative"
+            className={`${
+              select.courseOption.length > 1 ? "w-[90%]" : "w-[55%]"
+            } h-[35px] overflow-hidden flex justify-between items-center py-1 px-3 mr-2 my-2 text-md border-[1px] border-white rounded-2xl bg-black/60 break-keep leading-normal sm:w-[65%] cursor-pointer relative`}
             onClick={() => setOpen(!open)}
           >
             {select.courseOption.length > 0 ? (
               <>
                 {/* 코스 유형을 선택했을 경우 보여줌 => 20글자 이상이면, ... 표기 */}
-                {select.courseOption.join(" / ").length > 18
-                  ? select.courseOption.join(" / ").slice(0, 18) + "..."
+                {select.courseOption.join(" / ").length > 30
+                  ? select.courseOption.join(" / ").slice(0, 33) + "..."
                   : select.courseOption.join(" / ")}
               </>
             ) : (
