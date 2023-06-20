@@ -3,30 +3,30 @@ import { AiFillEye, AiFillLike } from "react-icons/ai";
 import { FiShare } from "react-icons/fi";
 import WishBtn from "./WishBtn";
 import copy from "copy-to-clipboard";
+import { changeEnglish } from "../../helper/changeAreaName";
 
 // CourseItem 컴포넌트의 속성 타입을 수정
 interface CourseItemProps {
-  courseList: [
-    {
-      id: string;
-      title: string;
-      writer: string;
-      thumbnail: string;
-      views: number;
-      recommendations: number;
-      distance: number;
-      area: string;
-    }
-  ];
+  courseList: Course[];
+}
+
+interface Course {
+  id: string;
+  title: string;
+  writer: string;
+  thumbnail: string;
+  views: number;
+  recommendations: number;
+  distance: number;
+  area: string;
 }
 
 export default function CourseItem({ courseList }: CourseItemProps) {
   const handleCopy = () => {
-    copy("안녕");
     alert("링크가 복사되었습니다!");
   };
   return (
-    <div className="w-full grid grid-cols-2 gap-4 sm:grid-cols-1 sm:gap-3">
+    <div className="w-full p-3 grid grid-cols-2 gap-4 sm:grid-cols-1 sm:gap-3">
       {/* 각각의 CourseItem */}
       {courseList.map((course) => (
         <div
@@ -47,7 +47,9 @@ export default function CourseItem({ courseList }: CourseItemProps) {
             className="w-[23px] h-[23px] flex items-center justify-center bg-black/20 text-white text-md border-[1px] border-white rounded-full absolute top-2 right-9 cursor-pointer"
             onClick={() => {
               copy(
-                `http://localhost:5173/area/${course.area}/courselist/coursedetail/${course.id}`
+                `http://localhost:5173/area/${changeEnglish(
+                  course.area
+                )}/courselist/coursedetail/${course.id}`
               );
               alert("링크가 복사되었습니다!");
             }}
