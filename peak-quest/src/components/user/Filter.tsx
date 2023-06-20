@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import { IoIosArrowDropdown } from "react-icons/io";
 import SelectCourseOption from "./SelectCourseOption";
-import { changeEnglish, changeKorean } from "../../helper/changeAreaName";
+import { changeKorean } from "../../helper/changeAreaName";
 
 // select, setSelect를 props로 전달받음
 interface FilterProps {
@@ -168,14 +168,16 @@ export default function Filter({ select, setSelect }: FilterProps) {
           {/* 코스 유형 선택 */}
           <div
             id="courseOption"
-            className="w-[55%] h-[34px] flex justify-between items-center py-1 px-3 mr-2 my-2 text-md border-[1px] border-white rounded-2xl bg-black/60 break-keep leading-normal sm:w-[65%] cursor-pointer relative"
+            className={`${
+              select.courseOption.length > 1 ? "w-[90%]" : "w-[55%]"
+            } h-[35px] overflow-hidden flex justify-between items-center py-1 px-3 mr-2 my-2 text-md border-[1px] border-white rounded-2xl bg-black/60 break-keep leading-normal sm:w-[65%] cursor-pointer relative`}
             onClick={() => setOpen(!open)}
           >
             {select.courseOption.length > 0 ? (
               <>
                 {/* 코스 유형을 선택했을 경우 보여줌 => 20글자 이상이면, ... 표기 */}
-                {select.courseOption.join(" / ").length > 18
-                  ? select.courseOption.join(" / ").slice(0, 18) + "..."
+                {select.courseOption.join(" / ").length > 30
+                  ? select.courseOption.join(" / ").slice(0, 33) + "..."
                   : select.courseOption.join(" / ")}
               </>
             ) : (
