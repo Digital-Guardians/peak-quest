@@ -1,10 +1,10 @@
 import { MdArrowDropDown } from "react-icons/md";
-import { Option } from "../../../pages/user/CourseEdit";
+import { AreaOption } from "../Filter";
 
 interface SelectCourseProps {
-  options: Option[];
-  selectedOption: Option | null;
-  handleSelectOption: (option: Option) => void;
+  options: AreaOption[];
+  selectedOption: AreaOption | null;
+  handleSelectOption: (option: AreaOption) => void;
   isOptionsVisible: boolean;
   toggleOptions: () => void;
 }
