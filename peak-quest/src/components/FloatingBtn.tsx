@@ -19,14 +19,20 @@ function FloatingBtn() {
       top: 0,
       behavior: "smooth",
     });
+    // courseList page scroll 올리기 위해 설정
+    const content = document.getElementById("courseList");
+    content?.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   return (
-    <div className="fixed bottom-4 right-4">
+    <div className="fixed bottom-4 right-4 z-50">
       <button
         onClick={scrollToTop}
         className={`
-      bg-blue-500 rounded-full text-white w-14 h-14 flex items-center justify-center shadow-lg
+      bg-blue-500 rounded-full text-white w-12 h-12 flex items-center justify-center shadow-lg
       ${
         showFloatingBtn ? "translate-y-0" : "translate-y-[126px]"
       } transition-all duration-500`}
@@ -34,7 +40,7 @@ function FloatingBtn() {
         <ArrowUpBtn />
       </button>
       <button
-        className={`bg-[#FAE300] my-2 rounded-full w-14 h-14 flex items-center justify-center shadow-lg ${
+        className={`bg-[#FAE300] my-3 rounded-full w-12 h-12 flex items-center justify-center shadow-lg ${
           showFloatingBtn ? "translate-y-0" : "translate-y-[999px]"
         } transition-all duration-700`}
       >
@@ -42,7 +48,7 @@ function FloatingBtn() {
       </button>
       <Link to={"/area"}>
         <button
-          className={`bg-blue-500 rounded-full w-14 h-14 flex items-center justify-center shadow-lg ${
+          className={`bg-blue-500 rounded-full w-12 h-12 flex items-center justify-center shadow-lg ${
             showFloatingBtn ? "translate-y-0" : "translate-y-[999px]"
           } transition-all duration-700`}
         >
@@ -50,7 +56,7 @@ function FloatingBtn() {
         </button>
       </Link>
       <button
-        className="bg-blue-500 rounded-full mt-2 w-14 h-14 flex items-center justify-center shadow-lg"
+        className="bg-blue-500 rounded-full mt-3 w-12 h-12 flex items-center justify-center shadow-lg"
         onClick={toggleFloatingBtn}
       >
         <MoreBtn />

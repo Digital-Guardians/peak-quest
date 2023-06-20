@@ -1,18 +1,18 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BsFillPersonFill } from "react-icons/bs";
-import { Link, useParams } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 
 function Header() {
-  // 코스목록 페이지 header 변경
   const { AreaName } = useParams();
+  const location = useLocation();
 
   return (
     <div
-      className={
-        AreaName
-          ? "w-full max-w-[430px] text-white h-[48px] flex justify-between items-center px-[16px] fixed top-0 z-50"
-          : "text-black h-[48px] flex justify-between items-center px-[16px]"
-      }
+      className={`w-full max-w-[430px] h-[48px] flex justify-between items-center px-[16px] ${
+        location.pathname === `/area/${AreaName}/courselist`
+          ? "text-white fixed top-0 z-50"
+          : "text-black"
+      }`}
     >
       <Link to={"/"}>
         <div>logo</div>
