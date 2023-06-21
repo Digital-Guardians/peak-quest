@@ -3,9 +3,9 @@ import { MdOutlineIosShare } from "react-icons/md";
 
 export default function Header() {
   return (
-    <header className="flex justify-between items-center w-full h-[60px] bg-purple">
-      <div className="ml-5 bg-white">로고입니다</div>
-      <div className="flex text-base leading-6 font-light mr-5">
+    <header className="fixed flex justify-between items-center w-full h-[60px] bg-purple z-10">
+      <div className="ml-5 min-w-[100px] bg-white">⭐️</div>
+      <div className="flex min-w-[453px] text-base leading-6 font-light mr-5">
         <button className="border px-4 py-[5px] mr-3 text-white border-white rounded-lg">
           위젯 수정
         </button>
