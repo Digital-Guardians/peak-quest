@@ -1,4 +1,3 @@
-
 interface propBanner {
   banner: bannerData;
 }

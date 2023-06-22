@@ -8,11 +8,11 @@ export default {
         sm: { max: "320px" },
       },
       colors: {
+        red: "#BA1A1A",
         mint: "#13CBBF",
         turquoise: "#16CABD",
         green: "#009288",
         lightGreen: "#ECFFFE",
-        turquoise: "#006259",
         purple: "#6B4BFB",
         lightPurple: "#F2EFFF",
         black: "#202220",
@@ -33,6 +33,7 @@ export default {
       screens: {
         md: { max: "430px" },
         sm: { max: "320px" },
+        half: { max: "960px" },
       },
       boxShadow: {
         "3xl": "0px 3px 20px rgb(0 0 0 / 0.1)",
