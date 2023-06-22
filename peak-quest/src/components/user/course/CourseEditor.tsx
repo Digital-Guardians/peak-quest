@@ -1,8 +1,11 @@
 import { useCallback, useRef } from "react";
+// 에디터 라이브러리
 import { Editor } from "@toast-ui/react-editor";
+// 글자 색 관련 플러그인
 import colorSyntax from "@toast-ui/editor-plugin-color-syntax";
 import "@toast-ui/editor/dist/toastui-editor.css";
 import "tui-color-picker/dist/tui-color-picker.css";
+// 툴바 커스텀
 import "./CourseEditor.css";
 
 interface CourseEditorProp {
@@ -13,6 +16,8 @@ export default function CourseEditor({
   setCourseEditorText,
 }: CourseEditorProp) {
   const editorRef = useRef<Editor | null>(null);
+
+  // 툴바 항목
   const toolbarItems = [
     ["heading", "bold", "italic", "strike"],
     ["hr", "quote"],
@@ -22,6 +27,7 @@ export default function CourseEditor({
     ["scrollSync"],
   ];
 
+  // 사용자가 에디터에 쓴 모든 컨텐츠를 html로 변환한 후, setCourseEditorText에 담기
   const onChange = useCallback(() => {
     const editorIns = editorRef.current?.getInstance();
     if (editorIns) {
@@ -36,12 +42,12 @@ export default function CourseEditor({
       <Editor
         ref={editorRef}
         placeholder="위험한 지역이나 잘못된 정보는 무통보로 삭제 및 비공개 처리 될 수 있습니다."
-        initialEditType="wysiwyg"
-        hideModeSwitch={true}
-        toolbarItems={toolbarItems}
-        plugins={[colorSyntax]}
-        useCommandShortcut={true}
-        onChange={onChange}
+        initialEditType="wysiwyg" // 편집기 유형
+        hideModeSwitch={true} // 탭 표시줄 숨기기
+        toolbarItems={toolbarItems} // 툴바
+        plugins={[colorSyntax]} // 글자 색
+        useCommandShortcut={true} // 키보드 단축키 허용
+        onChange={onChange} // 사용자가 에디터에 쓴 컨텐츠 담기
       />
     </div>
   );

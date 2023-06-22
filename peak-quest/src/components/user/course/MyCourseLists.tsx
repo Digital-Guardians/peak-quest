@@ -34,7 +34,7 @@ export default function MyCourseLists({
   const handleAmenitiesChange = (amenityType: keyof Amenities) => {
     onAmenitiesChange({
       ...amenities,
-      [amenityType]: !amenities[amenityType],
+      [amenityType]: amenities[amenityType] === "N" ? "Y" : "N",
     });
   };
   return (
@@ -117,7 +117,7 @@ export default function MyCourseLists({
             {/* 코스 장소 입력 */}
             <input
               type="text"
-              className="w-full rounded-t-lg border border-gray p-2 text-center text-darkGray"
+              className="w-full rounded-t-lg border border-gray p-2 text-center text-darkGray focus:outline-none"
               value={place}
               onChange={handlePlaceChange}
             />

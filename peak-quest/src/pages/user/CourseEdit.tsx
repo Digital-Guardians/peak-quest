@@ -41,9 +41,9 @@ export interface ListItem {
 
 // 9. 코스 목록
 export interface Amenities {
-  hasRestroom: boolean;
-  hasFood: boolean;
-  hasWater: boolean;
+  hasRestroom: "Y" | "N" | "";
+  hasFood: "Y" | "N" | "";
+  hasWater: "Y" | "N" | "";
 }
 
 export default function CourseEdit() {
@@ -172,10 +172,11 @@ export default function CourseEdit() {
   const [lists, setLists] = useState<ListItem[]>([]);
   const [place, setPlace] = useState<string>("");
   const [amenities, setAmenities] = useState<Amenities>({
-    hasRestroom: false,
-    hasFood: false,
-    hasWater: false,
+    hasRestroom: "",
+    hasFood: "",
+    hasWater: "",
   });
+
   // 코스 목록 추가
   const handleAddListItem = () => {
     const newItem: ListItem = {
