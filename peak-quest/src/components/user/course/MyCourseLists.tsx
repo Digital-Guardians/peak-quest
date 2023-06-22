@@ -1,4 +1,5 @@
-import { XDeleteBtn } from "../../../assets/icon";
+import { useState } from "react";
+import { IoClose } from "react-icons/io5";
 import { Amenities, ListItem } from "../../../pages/user/CourseEdit";
 
 // Tailwind CSS classes
@@ -27,16 +28,41 @@ export default function MyCourseLists({
   onPlaceChange,
   onAmenitiesChange,
 }: MyCourseListsProps) {
+  // 삭제 팝업
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
+
+  const handleOpenPopup = (itemId: number) => {
+    setIsPopupOpen(true); // 팝업 열기
+    setSelectedItemId(itemId); // 선택된 아이템 아이디 설정
+  };
+
+  const handleClosePopup = () => {
+    setIsPopupOpen(false); // 팝업 닫기
+  };
+
+  const handleDelete = () => {
+    // 선택된 아이템 삭제 로직
+    if (selectedItemId) {
+      onRemoveListItem(selectedItemId); // 선택된 아이템 삭제 콜백 호출
+      setIsPopupOpen(false); // 팝업 닫기
+      setSelectedItemId(null); // 선택된 아이템 초기화
+    }
+  };
+
+  // 장소 입력
   const handlePlaceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     onPlaceChange(e.target.value);
   };
 
+  // 편의시설 유무 여부
   const handleAmenitiesChange = (amenityType: keyof Amenities) => {
     onAmenitiesChange({
       ...amenities,
       [amenityType]: amenities[amenityType] === "N" ? "Y" : "N",
     });
   };
+
   return (
     <div>
       <h1 className="mb-2 text-xl font-medium text-black">나만의 코스 목록</h1>
@@ -46,6 +72,56 @@ export default function MyCourseLists({
           {/* 코스 리스트 */}
           {lists.map((item) => (
             <li key={item.id} className="relative">
+              {/* 팝업 */}
+              {isPopupOpen && (
+                <div className="fixed inset-0 z-10 flex items-center justify-center">
+                  <div
+                    className="absolute inset-0 bg-black opacity-70"
+                    onClick={handleClosePopup}
+                  />
+                  <div className="relative flex items-center justify-center rounded-lg bg-white p-5 text-center text-black shadow-3xl sm:p-2">
+                    <div className="p-2">
+                      {/* 팝업 내용 */}
+                      <div className="">
+                        <h2 className="text-2xl font-medium text-black sm:mt-4 sm:text-xl">
+                          지점을 <strong className="text-mint">삭제</strong>
+                          할까요?
+                        </h2>
+                        <div className="my-2 text-lg text-darkGray sm:text-md">
+                          <p>삭제하시면 등록하신</p>
+                          <p>편의시설 정보도 사라져요!</p>
+                        </div>
+                      </div>
+                      {/* 버튼 */}
+                      <div className="mt-4 flex items-center justify-center sm:text-md">
+                        <div>
+                          <button
+                            className="mr-2 cursor-pointer rounded-lg bg-mint px-8 py-2 text-white sm:px-4 sm:py-2"
+                            onClick={handleDelete}
+                          >
+                            삭제하기
+                          </button>
+                        </div>
+                        <div>
+                          <button
+                            className="rounded-lg bg-gray px-8 py-2 text-darkGray sm:px-4 sm:py-2"
+                            onClick={handleClosePopup}
+                          >
+                            돌아가기
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    {/* 닫기 버튼 */}
+                    <button
+                      className="absolute right-2 top-2 text-darkGray"
+                      onClick={handleClosePopup}
+                    >
+                      <IoClose size={20} />
+                    </button>
+                  </div>
+                </div>
+              )}
               {/* 코스 장소 입력 */}
               <input
                 type="text"
@@ -54,7 +130,6 @@ export default function MyCourseLists({
                 onChange={handlePlaceChange}
                 readOnly
               />
-
               {/* 편의시설 버튼 */}
               <div className="relative -mt-[1px] mb-3 flex items-center justify-evenly rounded-b-lg border border-gray">
                 {/* 화장실 */}
@@ -103,12 +178,12 @@ export default function MyCourseLists({
                 </button>
               </div>
 
-              {/* 삭제 버튼 */}
+              {/* 삭제 버튼 => 팝업으로 열림 */}
               <button
-                className="absolute right-2 top-2 tracking-widest text-gray "
-                onClick={() => onRemoveListItem(item.id)}
+                className="absolute right-2 top-2 tracking-widest text-darkGray "
+                onClick={() => handleOpenPopup(item.id)}
               >
-                <XDeleteBtn />
+                <IoClose />
               </button>
             </li>
           ))}
