@@ -20,9 +20,6 @@ export default function Profile() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-    getValues,
-    setError,
-    clearErrors,
   } = useForm<FormData>({
     defaultValues: {
       nickname: nickname,

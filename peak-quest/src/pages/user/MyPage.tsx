@@ -37,24 +37,24 @@ export default function MyPage() {
 
   useEffect(() => {
     // myCourse
-    fetch(`/mock/user/myPage_myCourse.json`)
-      .then((res) => res.json())
-      .then((data) => {
-        setMakeCourseList(data.courses);
-      })
-      .catch((error) => {
-        console.error("Error fetching more courses:", error);
-      });
+    // fetch(`/mock/user/myPage_myCourse.json`)
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     setMakeCourseList(data.courses);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error fetching more courses:", error);
+    //   });
 
-    // wishCourse
-    fetch(`/mock/user/myPage_wishCourse.json`)
-      .then((res) => res.json())
-      .then((data) => {
-        setWishCourseList(data.courses);
-      })
-      .catch((error) => {
-        console.error("Error fetching more courses:", error);
-      });
+    // // wishCourse
+    // fetch(`/mock/user/myPage_wishCourse.json`)
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     setWishCourseList(data.courses);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error fetching more courses:", error);
+    //   });
     // 최근 본 코스 테스트용 코드
     saveRecentCourse({
       id: 1,
@@ -113,44 +113,48 @@ export default function MyPage() {
         </div>
         <p>마이페이지</p>
       </div>
-      {/* {requireLogin && (
-        // 로그인 X => 최근 본 코스 제외 블러처리
-        <div>
-          <div>로그인 후 이용 가능합니다.</div>
-        </div>
-      )} */}
-      {/* 프로필 영역 */}
-      <Profile />
-      {/* 내가 만든 코스 */}
-      <div className="w-full bg-white pb-2 mt-3 border-b-[1px] border-lightGray">
-        <div className="flex justify-between items-center pt-[20px] px-[8px]">
-          <div className="flex items-center font-bold">
-            <div className="text-mint mr-2 text-2xl">
-              <MdOutlineRoute />
-            </div>
-            <p className="text-xl sm:text-lg">내가 만든 코스</p>
+      <div className="w-full h-full relative">
+        {requireLogin && (
+          <div className="w-[180px] h-[32px] absolute top-[45%] left-[26%] z-10 flex justify-center items-center text-md text-green font-bold border-[1px] border-green bg-lightGreen rounded-full">
+            로그인 후 이용 가능합니다.
           </div>
-          <button className="w-[26%] h-[32px] sm:w-[24%] sm:h-[28px] text-md text-mint border-[1px] border-mint rounded-full">
-            전체보기
-          </button>
-        </div>
-        <CourseItem courseList={makeCourseList} isMine={true} />
-      </div>
-      {/* 스크랩 */}
-      <div className="w-full bg-white pb-2 border-b-[1px] border-lightGray">
-        <div className="flex justify-between items-center pt-[20px] px-[8px]">
-          <div className="flex items-center font-bold">
-            <div className="text-mint text-2xl mr-2">
-              <MdOutlineBookmarkBorder />
+        )}
+        <div className={requireLogin ? "blur-sm" : ""}>
+          {/* 프로필 영역 */}
+          <Profile />
+          {/* 내가 만든 코스 */}
+          <div className="w-full bg-white pb-2 mt-3 border-b-[1px] border-lightGray">
+            <div className="flex justify-between items-center pt-[20px] px-[8px]">
+              <div className="flex items-center font-bold">
+                <div className="text-mint mr-2 text-2xl">
+                  <MdOutlineRoute />
+                </div>
+                <p className="text-xl sm:text-lg">내가 만든 코스</p>
+              </div>
+              <button className="w-[26%] h-[32px] sm:w-[24%] sm:h-[28px] text-md text-mint border-[1px] border-mint rounded-full">
+                전체보기
+              </button>
             </div>
-            <p className="text-xl sm:text-lg ">스크랩한 코스</p>
+            <CourseItem courseList={makeCourseList} isMine={true} />
           </div>
-          <button className="w-[26%] h-[32px] sm:w-[24%] sm:h-[28px] text-md text-mint border-[1px] border-mint rounded-full">
-            전체보기
-          </button>
+          {/* 스크랩 */}
+          <div className="w-full bg-white pb-2 border-b-[1px] border-lightGray">
+            <div className="flex justify-between items-center pt-[20px] px-[8px]">
+              <div className="flex items-center font-bold">
+                <div className="text-mint text-2xl mr-2">
+                  <MdOutlineBookmarkBorder />
+                </div>
+                <p className="text-xl sm:text-lg ">스크랩한 코스</p>
+              </div>
+              <button className="w-[26%] h-[32px] sm:w-[24%] sm:h-[28px] text-md text-mint border-[1px] border-mint rounded-full">
+                전체보기
+              </button>
+            </div>
+            <CourseItem courseList={wishCourseList} isMine={false} />
+          </div>
         </div>
-        <CourseItem courseList={wishCourseList} isMine={false} />
       </div>
+
       {/* 최근 본 코스 */}
       <div className="w-full bg-white pb-2 mt-3 border-b-[1px] border-lightGray">
         <div className="flex items-center font-bold pt-[20px] px-[8px]">
