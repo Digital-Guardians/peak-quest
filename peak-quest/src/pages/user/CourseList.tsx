@@ -102,7 +102,7 @@ export default function CourseList() {
       >
         {courseList.length > 0 ? (
           <>
-            <CourseItem courseList={courseList} />
+            <CourseItem courseList={courseList} isMine={false} />
             <div className="h-[80px] flex justify-center my-3">
               더이상 불러올 코스가 없습니다.
             </div>

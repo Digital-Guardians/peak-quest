@@ -8,6 +8,7 @@ import { changeEnglish } from "../../helper/changeAreaName";
 // CourseItem 컴포넌트의 속성 타입을 수정
 interface CourseItemProps {
   courseList: Course[];
+  isMine: boolean | void;
 }
 
 interface Course {
@@ -21,10 +22,7 @@ interface Course {
   area: string;
 }
 
-export default function CourseItem({ courseList }: CourseItemProps) {
-  const handleCopy = () => {
-    alert("링크가 복사되었습니다!");
-  };
+export default function CourseItem({ courseList, isMine }: CourseItemProps) {
   return (
     <div className="w-full p-3 grid grid-cols-2 gap-4 sm:grid-cols-1 sm:gap-3">
       {/* 각각의 CourseItem */}
@@ -44,7 +42,9 @@ export default function CourseItem({ courseList }: CourseItemProps) {
           </div>
           {/* 공유 버튼 */}
           <div
-            className="w-[23px] h-[23px] flex items-center justify-center bg-black/20 text-white text-md border-[1px] border-white rounded-full absolute top-2 right-9 cursor-pointer"
+            className={`w-[23px] h-[23px] flex items-center justify-center bg-black/20 text-white text-md border-[1px] border-white rounded-full cursor-pointer absolute top-2 ${
+              isMine ? "right-2" : "right-9 "
+            }`}
             onClick={() => {
               copy(
                 `http://localhost:5173/area/${changeEnglish(
@@ -57,7 +57,7 @@ export default function CourseItem({ courseList }: CourseItemProps) {
             <FiShare />
           </div>
           {/* 스크랩 버튼 */}
-          <WishBtn courseId={Number(course.id)} />
+          {isMine ? <></> : <WishBtn courseId={Number(course.id)} />}
           {/* 코스 설명 */}
           <div className="p-2 w-full h-[96px] flex flex-col items-start justify-evenly sm:h-[86px]">
             <p className="text-lg text-black font-bold">{course.title}</p>
