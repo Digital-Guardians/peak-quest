@@ -19,8 +19,15 @@ export default function Profile() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm<FormData>();
+    formState: { errors, isSubmitting },
+    getValues,
+    setError,
+    clearErrors,
+  } = useForm<FormData>({
+    defaultValues: {
+      nickname: nickname,
+    },
+  });
 
   // 닉네임 변경 submit
   const onSubmit: SubmitHandler<FormData> = (data) => {
@@ -28,11 +35,11 @@ export default function Profile() {
     inputEl.disabled = true;
     setIsEdit(false);
     console.log(data);
-    alert("닉네임이 변경되었습니다.");
+    alert("닉네임 변경이 완료되었습니다.");
   };
 
   return (
-    <div className="w-full mb-5 bg-white">
+    <div className="w-full bg-white">
       {/* 프로필 */}
       <div className="max-h-[108px] flex items-center px-[20px] border-y-[1px] border-lightGray p-5">
         <img
@@ -42,7 +49,7 @@ export default function Profile() {
         />
         <div>
           <form
-            className="w-[80%] sm:w-[85%] relative"
+            className="w-[80%] sm:w-[95%] relative"
             onSubmit={handleSubmit(onSubmit)}
           >
             <div className="relative">
@@ -61,6 +68,7 @@ export default function Profile() {
               <button
                 type="submit"
                 className="text-md text-mint absolute bottom-1 right-0 cursor-pointer"
+                disabled={isSubmitting}
               >
                 확인
               </button>
@@ -82,7 +90,9 @@ export default function Profile() {
             )}
           </form>
           {errors.nickname ? (
-            <span className="text-md text-red">{errors.nickname.message}</span>
+            <p className="p-1 mt-[8px] text-md text-red">
+              {errors.nickname.message}
+            </p>
           ) : (
             <p className="w-[50%] sm:w-[55%] p-1 mt-[8px] text-md text-green font-bold text-center bg-lightGreen rounded-full ">
               PEACKMASTER
@@ -139,7 +149,7 @@ export default function Profile() {
           <div className="w-full h-full bg-gradient-to-l from-white absolute top-0 left-0" />
         </div>
         <button
-          className="w-[25%] h-[32px] sm:w-[23%] sm:h-[30px] text-md text-mint border-[1px] border-mint rounded-full absolute top-5 right-2"
+          className="w-[25%] h-[32px] sm:w-[23%] sm:h-[28px] text-md text-mint border-[1px] border-mint rounded-full absolute top-6 right-2"
           onClick={() => navigate("/mypage/badgelist")}
         >
           전체보기

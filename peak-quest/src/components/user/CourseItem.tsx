@@ -62,7 +62,7 @@ export default function CourseItem({ courseList, isMine }: CourseItemProps) {
           <div className="p-2 w-full h-[96px] flex flex-col items-start justify-evenly sm:h-[86px]">
             <p className="text-lg text-black font-bold">{course.title}</p>
             <p className="text-md text-darkGray mb-1">{course.writer}님</p>
-            <div className="w-full flex justify-start items-center text-xs text-darkGray sm:justify-end">
+            <div className="w-full flex justify-start items-center text-sm text-darkGray sm:justify-end">
               <div className="flex justify-center items-center mr-2">
                 <AiFillEye />
                 <p className="ml-1">{course.views}</p>

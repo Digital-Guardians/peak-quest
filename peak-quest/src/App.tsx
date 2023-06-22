@@ -11,7 +11,6 @@ function App() {
   return (
     <div className="flex justify-center items-center">
       <div className="w-full max-w-[430px]">
-        <Header />
         <FloatingBtn />
         <Outlet />
         {location.pathname !== `/area/${AreaName}/courselist` && <Footer />}

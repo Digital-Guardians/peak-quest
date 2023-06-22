@@ -103,7 +103,7 @@ export default function MyPage() {
   return (
     <div className="w-max-[430px] bg-[#f3f3f3] flex flex-col justify-center items-center">
       {/* header */}
-      <div className="w-full h-[48px] bg-white text-2xl sm:text-xl font-bold text-center leading-loose relative">
+      <div className="w-full h-[50px] pt-1 bg-white text-2xl sm:text-xl font-bold text-center leading-loose relative">
         {/* 뒤로 가기 버튼 */}
         <div
           className="text-2xl absolute top-3 left-3"
