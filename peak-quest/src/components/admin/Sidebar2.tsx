@@ -22,7 +22,7 @@ export default function Sidebar() {
 
   return (
     <div className="sticky top-0 flex h-screen flex-col">
-      <div className="w-[240px] h-3/4 flex flex-col justify-between bg-white rounded-xl">
+      <div className="w-[240px] h-[74%] flex flex-col justify-between mb-[9px] bg-white rounded-xl">
         <div className="flex flex-col w-[224px] mt-[74px] mx-auto text-lg">
           <div
             className={`flex items-center h-[48px] rounded-md mb-3 cursor-pointer  ${
@@ -66,7 +66,7 @@ export default function Sidebar() {
           </div>
         </div>
       </div>
-      <div className="relative h-1/4 flex flex-col justify-center items-center w-[240px] m-1 mx-auto text-lg ">
+      <div className="relative h-[25%] flex flex-col justify-center items-center w-[240px] mx-auto text-lg ">
         <div className="flex flex-col justify-center items-center z-20">
           <img className="w-16 h-16 mt- rounded-full" src="/images/rank/profile.png" alt="" />
           <div className="flex flex-col justify-center items-center text-white font-bold">
@@ -74,9 +74,9 @@ export default function Sidebar() {
             <div>admin@gmail.com</div>
           </div>
         </div>
-        <div className="absolute w-[240px] h-[264px] mt-1 bg-black bg-opacity-90 z-10 rounded-xl" />
+        <div className="absolute w-[240px] h-[240px] mt-1 bg-black bg-opacity-90 z-10 rounded-xl" />
         <img
-          className="absolute w-[240px] h-[264px] mt-1 border-white border rounded-xl"
+          className="absolute w-[240px] h-[240px] mt-1 border-white border rounded-xl"
           src="/images/area/area3.png"
           alt=""
         />

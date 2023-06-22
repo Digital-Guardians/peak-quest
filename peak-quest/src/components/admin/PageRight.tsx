@@ -8,18 +8,24 @@ interface props {
 export default function PageRight({ children, select }: props) {
   return (
     <div
-      className={`flex justify-center  ${
+      className={`flex justify-center ${
         select ? "w-1/2" : "w-0"
-      } h-screen transition-all  duration-[1s] ease-in-out`}
+      } h-screen transition-all duration-[1s] ease-in-out`}
     >
-      {/* radius 왼쪽 지우고 오른쪽만 하기! */}
       <div
-        className="w-[98%] h-[93%] mt-[69px]
-        bg-white rounded-tr-2xl rounded-br-2xl 
-        overflow-y-scroll scrollbar-custom 
-        shadow-3xl ease-out"
+        className={`
+          w-[98%] h-[92%] mt-[69px] pt-5 pl-5
+          bg-white ${select ? "rounded-tl-2xl rounded-bl-2xl" : "rounded-2xl"}
+          overflow-y-scroll scrollbar-custom
+          shadow-3xl`}
       >
-        {children}
+        <div
+          className={`${
+            select ? "" : "p-[1%]"
+          } w-[98%] mx-auto transition-all duration-[1s] ease-in-out`}
+        >
+          {children}
+        </div>
       </div>
     </div>
   );

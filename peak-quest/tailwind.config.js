@@ -32,6 +32,7 @@ export default {
       screens: {
         md: { max: "430px" },
         sm: { max: "320px" },
+        half: { max: "960px" },
       },
       boxShadow: {
         "3xl": "0px 3px 20px rgb(0 0 0 / 0.1)",
