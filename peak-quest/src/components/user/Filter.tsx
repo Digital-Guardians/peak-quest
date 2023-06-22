@@ -4,6 +4,7 @@ import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import { IoIosArrowDropdown } from "react-icons/io";
 import { changeKorean } from "../../helper/changeAreaName";
 import SelectCourseOption from "./SelectCourseOption";
+import { LevelButton } from "../LevelButton";
 
 // select, setSelect를 props로 전달받음
 interface FilterProps {
@@ -39,33 +40,6 @@ export const areaOptions: AreaOption[] = [
   { value: "gyeongsang", label: "경상권" },
   { value: "jeju", label: "제주도" },
 ];
-
-// ** export **
-// 난이도 버튼
-export interface LevelButtonProps {
-  label: string;
-  value: number;
-  onClick: (value: number) => void;
-  activeValue: number;
-}
-
-// ** export **
-export function LevelButton({
-  label,
-  value,
-  onClick,
-  activeValue,
-}: LevelButtonProps) {
-  const isActive = value === activeValue;
-  const buttonStyle = `h-[33px] px-[10px] mr-2 mt-2 text-md text-white font-bold border-[1px] rounded-full sm:h-[30px] sm:text-[10px] sm:px-4 ${
-    isActive ? "bg-mint border-mint" : "bg-black/60 border-white"
-  }`;
-  return (
-    <button className={buttonStyle} onClick={() => onClick(value)}>
-      {label}
-    </button>
-  );
-}
 
 // 코스 선택 버튼
 interface OptionButtonProps {
@@ -211,36 +185,42 @@ export default function Filter({ select, setSelect }: FilterProps) {
               value={0}
               onClick={(value: number) => handleSelect(value)}
               activeValue={level}
+              style="bg-black/60 border-white text-white"
             />
             <LevelButton
               label="⭐ 입문자"
               value={1}
               onClick={(value: number) => handleSelect(value)}
               activeValue={level}
+              style="bg-black/60 border-white text-white"
             />
             <LevelButton
               label="⭐⭐ 초보자"
               value={2}
               onClick={(value: number) => handleSelect(value)}
               activeValue={level}
+              style="bg-black/60 border-white text-white"
             />
             <LevelButton
               label="⭐⭐⭐ 아마추어"
               value={3}
               onClick={(value: number) => handleSelect(value)}
               activeValue={level}
+              style="bg-black/60 border-white text-white"
             />
             <LevelButton
               label="⭐⭐⭐⭐ 박사"
               value={4}
               onClick={(value: number) => handleSelect(value)}
               activeValue={level}
+              style="bg-black/60 border-white text-white"
             />
             <LevelButton
               label="⭐⭐⭐⭐⭐ 달인"
               value={5}
               onClick={(value: number) => handleSelect(value)}
               activeValue={level}
+              style="bg-black/60 border-white text-white"
             />
           </div>
         </div>

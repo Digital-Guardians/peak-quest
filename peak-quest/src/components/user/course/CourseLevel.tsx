@@ -1,5 +1,5 @@
 import { IoMdHelpCircleOutline } from "react-icons/io";
-import { LevelButton } from "../Filter";
+import { LevelButton } from "../../LevelButton";
 
 interface CourseLevelProps {
   level: number;
@@ -23,6 +23,7 @@ export default function CourseLevel({ level, handleLevel }: CourseLevelProps) {
             value={courseLevelInfo.value}
             onClick={(value: number) => handleLevel(courseLevelInfo.value)}
             activeValue={level}
+            style="border-gray text-darkGray"
           />
         ))}
       </div>

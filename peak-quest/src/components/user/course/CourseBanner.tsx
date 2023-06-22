@@ -1,5 +1,3 @@
-import React from "react";
-
 import myCourse from "../../../assets/course/mycourse_icon.png";
 
 export default function CourseBanner() {

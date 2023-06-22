@@ -4,6 +4,8 @@ export interface courseCategoryOption {
   description: string;
 }
 
+// **이슈**
+// 데이터 보내줄 때 id 변경할 것
 export const courseCategoryOptions = [
   {
     id: "one",
