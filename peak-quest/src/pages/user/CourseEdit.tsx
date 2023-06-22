@@ -1,4 +1,6 @@
 import React, { ChangeEvent, useRef, useState } from "react";
+// 0. 메뉴탭
+import { IoIosArrowBack } from "react-icons/io";
 // 1. 배너
 import CourseBanner from "../../components/user/course/CourseBanner";
 // 2. 제목
@@ -24,6 +26,7 @@ import MyCourseLists from "../../components/user/course/MyCourseLists";
 import CourseTags from "../../components/user/course/CourseTags";
 // 12. 코스 상세 설명
 import CourseEditor from "../../components/user/course/CourseEditor";
+import { useNavigate } from "react-router-dom";
 
 // **타입 정의**
 // 7. 소요 시간
@@ -47,6 +50,9 @@ export interface Amenities {
 }
 
 export default function CourseEdit() {
+  // 0.페이지 이동을 위함
+  const navigate = useNavigate();
+
   // 2. 코스 제목
   // myCourseTitle :string
   const [myCourseTitle, setMyCourseTitle] = useState<string>("");
@@ -233,6 +239,17 @@ export default function CourseEdit() {
 
   return (
     <div>
+      {/* 0. 메뉴탭 */}
+      <div className="relative h-[50px] w-full items-center bg-white text-center text-2xl font-bold leading-[48px] text-black sm:text-xl">
+        {/* 뒤로 가기 버튼 */}
+        <div
+          className="absolute left-3 top-3 cursor-pointer text-2xl"
+          onClick={() => navigate(-1)}
+        >
+          <IoIosArrowBack />
+        </div>
+        <div>나만의 코스 등록</div>
+      </div>
       {/* 1. 배너 */}
       <CourseBanner />
       {/* 2. 제목 */}
