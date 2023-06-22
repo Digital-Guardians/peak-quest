@@ -85,7 +85,7 @@ export default function Banner() {
           </div>
         </PageLeft>
         <PageRight select={select}>
-          <div className="flex flex-col w-full">
+          <div className="flex flex-col min-w-[648px]">
             <div
               className="relative flex text-2xl font-bold cursor-pointer"
               onClick={() => {
@@ -120,11 +120,11 @@ export default function Banner() {
               </div>
             </div>
             <div className="relative mt-[28px]">
-              <div className="mb-1 text-xl text-darkGray">베너이미지</div>
+              <div className="mb-1 text-xl text-darkGray">베너 이미지</div>
               <div
-                className={`pl-4 pt-2 pb-2 text-lg border border-[#D9D9D9] mr-[6px] rounded-[10px]`}
+                className={`flex justify-center overflow-hidden pl-4 pt-2 pb-2 text-lg border border-[#D9D9D9] mr-[6px] rounded-[10px]`}
               >
-                <img src={img_url} alt="" />
+                <img className="max-h-[200px]" src={img_url} alt="" />
               </div>
             </div>
             <div className="relative mt-[28px]">
@@ -148,12 +148,12 @@ export default function Banner() {
             <div className="relative mt-[48px] mb-[120px]">
               <div className="flex font-bold">
                 <button
-                  className={`w-1/2 h-[60px] pl-4 pt-2 mr-2 text-lg text-purple bg-white border border-purple rounded-[10px]`}
+                  className={`w-1/2 h-[60px] mr-2 text-lg text-purple bg-white border border-purple rounded-[10px]`}
                 >
                   삭제하기
                 </button>
                 <button
-                  className={`w-1/2 h-[60px] pl-4 pt-2 text-lg text-white bg-purple border border-purple rounded-[10px]`}
+                  className={`w-1/2 h-[60px]text-lg text-white bg-purple border border-purple rounded-[10px]`}
                 >
                   저장하기
                 </button>

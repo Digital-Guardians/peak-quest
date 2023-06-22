@@ -8,6 +8,7 @@ export default {
         sm: { max: "320px" },
       },
       colors: {
+        red: "#BA1A1A",
         mint: "#13CBBF",
         turquoise: "#16CABD",
         green: "#009288",
