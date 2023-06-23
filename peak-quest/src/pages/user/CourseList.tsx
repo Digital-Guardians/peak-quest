@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import CourseItem from "../../components/user/CourseItem";
 import Filter from "../../components/user/Filter";
 import Header from "../../components/Header";

@@ -19,7 +19,7 @@ export default function RecentCourse() {
   return (
     <>
       {recentCourseList.length > 0 ? (
-        <div className="h-[280px] p-3 grid grid-cols-2 grid-rows-2 gap-2 sm:gap-2 ease-linear duration-300">
+        <div className="h-min-[280px] p-3 grid grid-cols-2 grid-rows-2 gap-2 sm:gap-2 ease-linear duration-300">
           {recentCourseList.map((course) => (
             <div
               key={course.id}
