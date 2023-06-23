@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from "react";
 import CourseItem from "../../components/user/CourseItem";
-import { IoIosArrowBack } from "react-icons/io";
+import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { AiOutlineEye } from "react-icons/ai";
 import { MdOutlineRoute, MdOutlineBookmarkBorder } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import Profile from "../../components/user/mypage/Profile";
-import { saveRecentCourse } from "../../helper/saveRecentCourse";
 import RecentCourse from "../../components/user/mypage/RecentCourse";
 
 // 코스 타입 정의
@@ -98,6 +97,24 @@ export default function MyPage() {
       thumbnail: "../../src/assets/user/course_image_2.png",
       area: "강원권",
     });
+    // // myCourse
+    // fetch(`/mock/user/myPage_myCourse.json`)
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     setMakeCourseList(data.courses);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error fetching more courses:", error);
+    //   });
+    // // wishCourse
+    // fetch(`/mock/user/myPage_wishCourse.json`)
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     setWishCourseList(data.courses);
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error fetching more courses:", error);
+    //   });
   }, []);
 
   return (
@@ -135,7 +152,19 @@ export default function MyPage() {
                 전체보기
               </button>
             </div>
-            <CourseItem courseList={makeCourseList} isMine={true} />
+            {makeCourseList.length > 0 ? (
+              <CourseItem courseList={makeCourseList} isMine={true} />
+            ) : (
+              <div className="h-[150px] flex flex-col justify-center items-center p-3 text-[14px]">
+                <p>당신의 멋진 코스들을 기록하러 떠나볼까요?</p>
+                <a
+                  className="flex justify-center items-center text-md text-mint mt-2 border-b-[1px] border-mint"
+                  href="/area/create"
+                >
+                  코스 만들러 가기 <IoIosArrowForward />
+                </a>
+              </div>
+            )}
           </div>
           {/* 스크랩 */}
           <div className="w-full bg-white pb-2 border-b-[1px] border-lightGray">
@@ -150,7 +179,18 @@ export default function MyPage() {
                 전체보기
               </button>
             </div>
-            <CourseItem courseList={wishCourseList} isMine={false} />
+            {wishCourseList.length > 0 ? (
+              <CourseItem courseList={wishCourseList} isMine={false} />
+            ) : (
+              <div className="h-[150px] flex flex-col justify-center items-center p-3 text-[14px]">
+                <p>
+                  마음에 드는{" "}
+                  <span className="text-green font-bold">코스를 저장</span>
+                  하고
+                </p>
+                <p>필요할 때마다 확인할 수 있어요.</p>
+              </div>
+            )}
           </div>
         </div>
       </div>
