@@ -1,3 +1,4 @@
+// 관련 컴포넌트
 import React, { ChangeEvent, useRef, useState } from "react";
 // 0. 메뉴탭
 import { IoIosArrowBack } from "react-icons/io";
@@ -194,9 +195,9 @@ export default function CourseEdit() {
     setLists([...lists, newItem]);
     setPlace("");
     setAmenities({
-      hasRestroom: false,
-      hasFood: false,
-      hasWater: false,
+      hasRestroom: "",
+      hasFood: "",
+      hasWater: "",
     });
   };
   // 코스 삭제
@@ -236,6 +237,32 @@ export default function CourseEdit() {
   // 12. 코스 상세 설명
   // courseEditorText :string
   const [courseEditorText, setCourseEditorText] = useState<string>("");
+
+  // 13. 최종 데이터
+  const data = {
+    myCourseTitle,
+    previewImgUrl,
+    selectedOption,
+    checkedItems,
+    level,
+    totalTimes,
+    totalDistances,
+    lists,
+    tags,
+    courseEditorText,
+  };
+  console.log(data);
+
+  // console.log("myCourseTitle", myCourseTitle);
+  // console.log("previewImgUrl", previewImgUrl);
+  // console.log("selectedOption", selectedOption);
+  // console.log("checkedItems", checkedItems);
+  // console.log("level", level);
+  // console.log("totalTimes", totalTimes);
+  // console.log("totalDistances", totalDistances);
+  // console.log("lists", lists);
+  // console.log("tags", tags);
+  // console.log("courseEditorText", courseEditorText);
 
   return (
     <div>
