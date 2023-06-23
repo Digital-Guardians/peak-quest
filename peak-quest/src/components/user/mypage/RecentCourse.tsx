@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { changeEnglish } from "../../../helper/changeAreaName";
 
 interface RecentCourse {
   id: string;
@@ -8,6 +10,7 @@ interface RecentCourse {
 }
 
 export default function RecentCourse() {
+  const navigte = useNavigate();
   let localStorageData: string | null =
     localStorage.getItem("recent_course") || "{}";
 
@@ -16,9 +19,19 @@ export default function RecentCourse() {
   return (
     <>
       {recentCourseList.length > 0 ? (
-        <div className="p-3 grid grid-cols-2 gap-2 sm:gap-2 ease-linear duration-300">
+        <div className="h-[280px] p-3 grid grid-cols-2 grid-rows-2 gap-2 sm:gap-2 ease-linear duration-300">
           {recentCourseList.map((course) => (
-            <div key={course.id} className="flex flex-col justify-center">
+            <div
+              key={course.id}
+              className="flex flex-col justify-center"
+              onClick={() => {
+                navigte(
+                  `/area/${changeEnglish(
+                    course.area
+                  )}/courselist/coursedetail/${course.id}`
+                );
+              }}
+            >
               <div className="h-[85px] relative">
                 {/* 썸네일 */}
                 <img
@@ -39,13 +52,9 @@ export default function RecentCourse() {
           ))}
         </div>
       ) : (
-        <div className="h-[200px] flex flex-col justify-center items-center p-3 text-[14px]">
+        <div className="h-[282px] flex flex-col justify-center items-center p-3 text-[14px]">
           {/* 이미지 출처 : https://icon-icons.com/ko/download/47538/PNG/512/ */}
-          <img
-            className="h-[35%] "
-            // src="../../src/assets/user/mountains_mountain.png"
-            src="../../src/assets/user/mountain.png"
-          />
+          <img className="h-[35%] " src="../../src/assets/user/mountain.png" />
           <p>아직 확인해 본 코스가 없어요.</p>
           <p>
             <span className="font-bold text-green">픽퀘스트</span>의

@@ -13,7 +13,7 @@ function App() {
       <div className="w-full max-w-[430px]">
         <FloatingBtn />
         <Outlet />
-        {location.pathname !== `/area/${AreaName}/courselist` && <Footer />}
+        {/* {location.pathname !== `/area/${AreaName}/courselist` && <Footer />} */}
       </div>
     </div>
   );

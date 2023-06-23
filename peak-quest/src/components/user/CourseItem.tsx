@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { AiFillEye, AiFillLike } from "react-icons/ai";
 import { FiShare } from "react-icons/fi";
 import WishBtn from "./WishBtn";
 import copy from "copy-to-clipboard";
 import { changeEnglish } from "../../helper/changeAreaName";
+import { useNavigate } from "react-router-dom";
 
 // CourseItem 컴포넌트의 속성 타입을 수정
 interface CourseItemProps {
@@ -23,6 +24,7 @@ interface Course {
 }
 
 export default function CourseItem({ courseList, isMine }: CourseItemProps) {
+  const navigate = useNavigate();
   return (
     <div className="w-full p-3 grid grid-cols-2 gap-4 sm:grid-cols-1 sm:gap-3">
       {/* 각각의 CourseItem */}
@@ -32,7 +34,16 @@ export default function CourseItem({ courseList, isMine }: CourseItemProps) {
           className="max-w-full h-[196px] flex flex-col justify-center border-[2px] border-[#f2f2f2] rounded-lg box-border relative"
         >
           {/* 코스 이미지 */}
-          <div className="max-w-full h-[100px] relative sm:h-[110px]">
+          <div
+            className="max-w-full h-[100px] relative sm:h-[110px]"
+            onClick={() => {
+              navigate(
+                `/area/${changeEnglish(course.area)}/courselist/coursedetail/${
+                  course.id
+                }`
+              );
+            }}
+          >
             <img
               className="w-full h-full rounded-t-lg "
               src={`${course.thumbnail}`}
@@ -59,7 +70,16 @@ export default function CourseItem({ courseList, isMine }: CourseItemProps) {
           {/* 스크랩 버튼 */}
           {isMine ? <></> : <WishBtn courseId={Number(course.id)} />}
           {/* 코스 설명 */}
-          <div className="p-2 w-full h-[96px] flex flex-col items-start justify-evenly sm:h-[86px]">
+          <div
+            className="p-2 w-full h-[96px] flex flex-col items-start justify-evenly sm:h-[86px]"
+            onClick={() => {
+              navigate(
+                `/area/${changeEnglish(course.area)}/courselist/coursedetail/${
+                  course.id
+                }`
+              );
+            }}
+          >
             <p className="text-lg text-black font-bold">{course.title}</p>
             <p className="text-md text-darkGray mb-1">{course.writer}님</p>
             <div className="w-full flex justify-start items-center text-sm text-darkGray sm:justify-end">
