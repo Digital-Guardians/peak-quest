@@ -36,7 +36,7 @@ export default function MyPage() {
 
   useEffect(() => {
     // myCourse
-    // fetch(`/mock/user/myPage_myCourse.json`)
+    // fetch(`/mock/user/myPage_myCourse_2.json`)
     //   .then((res) => res.json())
     //   .then((data) => {
     //     setMakeCourseList(data.courses);
@@ -58,10 +58,10 @@ export default function MyPage() {
   return (
     <div className="w-max-[430px] bg-[#f3f3f3] flex flex-col justify-center items-center">
       {/* header */}
-      <div className="w-full h-[50px] pt-1 bg-white text-2xl sm:text-xl font-bold text-center leading-loose relative">
+      <div className="w-full h-[50px] sm:h-[48px] pt-1 sm:pt-2 bg-white text-xl sm:text-lg font-bold text-center leading-loose ease-linear duration-300 relative">
         {/* 뒤로 가기 버튼 */}
         <div
-          className="text-2xl absolute top-3 left-3"
+          className="text-2xl sm:text-xl ease-linear duration-300 absolute top-3 left-3"
           onClick={() => navigate(-1)}
         >
           <IoIosArrowBack />
@@ -143,7 +143,7 @@ export default function MyPage() {
         </div>
       </div>
       {/* 최근 본 코스 */}
-      <div className="w-full bg-white pb-2 mt-3 border-b-[1px] border-lightGray">
+      <div className="w-full h-full bg-white pb-2 mt-3 border-b-[1px] border-lightGray">
         <div className="flex items-center font-bold pt-[15px] px-[8px]">
           <div className="text-mint mr-2 text-2xl">
             <AiOutlineEye />
