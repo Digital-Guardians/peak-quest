@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
+import { IoClose } from "react-icons/io5";
 import { useNavigate } from "react-router";
 
 // 뱃지 인증 여부
@@ -8,6 +9,16 @@ type BadgeStatus = "Y" | "N";
 // 뱃지 인증 상태 타입 정의
 interface HasBadgeProp {
   hasBadge: BadgeStatus;
+}
+
+// 클릭한 뱃지 타입
+interface BadgeInfoProps {
+  name: string;
+  shortName: string;
+  image: string;
+  activeColor: string;
+  activeTextColor: string;
+  popupText: string;
 }
 
 // badgeStatus 초기값
@@ -38,6 +49,16 @@ export default function BadgeList() {
     }[]
   >(hasBadgeInfos);
 
+  // 클릭한 뱃지 정보 담기
+  const [badgeInfo, setBadgeInfo] = useState<BadgeInfoProps>({
+    name: "",
+    shortName: "",
+    image: "",
+    activeColor: "",
+    activeTextColor: "",
+    popupText: "",
+  });
+
   // 인증된 뱃지 필터링
   const isBadgeAuth = badgeStatus
     .filter((badge) => {
@@ -48,6 +69,17 @@ export default function BadgeList() {
 
   // 뱃지 개수
   const activeBadgeCount = isBadgeAuth.length ? isBadgeAuth.length - 1 : 0;
+
+  // 클릭 시 팝업
+  const [isClickPopUpOpen, setIsClickPopUpOpen] = useState(false);
+  // 팝업 열기
+  const hanleOpenPopUp = () => {
+    setIsClickPopUpOpen(true);
+  };
+  // 팝업 닫기
+  const handleClosePopUp = () => {
+    setIsClickPopUpOpen(false);
+  };
 
   return (
     <div className="bg-lightGray">
@@ -81,6 +113,7 @@ export default function BadgeList() {
                 inActiveColor,
                 activeTextColor,
                 inActiveTextColor,
+                popupText,
               } = badgeColorInfo;
 
               return (
@@ -99,6 +132,9 @@ export default function BadgeList() {
                       ? activeTextColor
                       : inActiveTextColor
                   }
+                  handleOpenPopUp={hanleOpenPopUp}
+                  setBadgeInfo={setBadgeInfo}
+                  popupText={popupText}
                 />
               );
             })}
@@ -106,13 +142,20 @@ export default function BadgeList() {
         </div>
         {/* 버튼 */}
         <div className="px-8">
-          <button className="w-full bg-mint text-white py-2 rounded-lg text-md mt-3 mb-10 font-medium sm:py-2 sm:mt-4 sm:mb-7">
+          <button className="cursor-auto w-full bg-mint text-white py-2 rounded-lg text-md mt-3 mb-10 font-medium sm:py-2 sm:mt-4 sm:mb-7">
             {window.innerWidth <= 345
               ? "더 많은 뱃지를 획득해 보세요!"
               : "다양한 활동을 통해 더 많은 뱃지를 획득해 보세요!"}
           </button>
         </div>
       </div>
+      {/* 팝업 */}
+      {isClickPopUpOpen && (
+        <BadgePopupComponent
+          badgeInfo={badgeInfo}
+          handleClosePopUp={handleClosePopUp}
+        />
+      )}
     </div>
   );
 }
@@ -129,6 +172,8 @@ const badgeColorInfos: BadgeColorInfo[] = [
     activeTextColor: "#776B13",
     inActiveColor: "#dfdfdf",
     inActiveTextColor: "#727272",
+    popupText:
+      "내 코스가 랭킹 1위가 되면 얻을 수 있어요. 지금 바로 나만의 코스를 등록하고 랭킹 1위를 노려보세요!",
   },
   {
     // 2. 랭킹 2위
@@ -140,6 +185,8 @@ const badgeColorInfos: BadgeColorInfo[] = [
     activeTextColor: "#636363",
     inActiveColor: "#cecece",
     inActiveTextColor: "#636363",
+    popupText:
+      "내 코스가 랭킹 2위가 되면 얻을 수 있어요.\n 지금 바로 나만의 코스를 등록하고 랭킹 2위를 노려보세요!",
   },
   {
     // 3. 랭킹 3위
@@ -151,6 +198,8 @@ const badgeColorInfos: BadgeColorInfo[] = [
     activeTextColor: "#FFE6D7",
     inActiveColor: "#7A7A7A",
     inActiveTextColor: "#dedede",
+    popupText:
+      "내 코스가 랭킹 3위가 되면 얻을 수 있어요. 지금 바로 나만의 코스를 등록하고 랭킹 3위를 노려보세요!",
   },
   {
     // 4. 이 구역의 정복왕
@@ -162,6 +211,7 @@ const badgeColorInfos: BadgeColorInfo[] = [
     activeTextColor: "#335833",
     inActiveColor: "#c6c6c6",
     inActiveTextColor: "#272727",
+    popupText: "모든 지역에 코스를 등록하면 얻을 수 있어요!",
   },
   {
     // 5. 시작이 반이다
@@ -173,6 +223,8 @@ const badgeColorInfos: BadgeColorInfo[] = [
     activeTextColor: "#FFFFFF",
     inActiveColor: "#767676",
     inActiveTextColor: "#f1f1f1",
+    popupText:
+      "코스를 하나만 등록해도 뱃지가 따라와요! 시작이 반이라는 말처럼 열심히 코스를 등록해 보세요.",
   },
   {
     // 6. 도움의 시작
@@ -184,6 +236,7 @@ const badgeColorInfos: BadgeColorInfo[] = [
     activeTextColor: "#765742",
     inActiveColor: "#CCCCCC",
     inActiveTextColor: "#373737",
+    popupText: "내가 등록한 코스가 처음으로 스크랩받으면 주어지는 뱃지에요!",
   },
   {
     // 7. 소중한 첫 추천
@@ -195,6 +248,7 @@ const badgeColorInfos: BadgeColorInfo[] = [
     activeTextColor: "#FFFFFF",
     inActiveColor: "#777777",
     inActiveTextColor: "#e1e1e1",
+    popupText: "내가 등록한 코스가 처음으로 추천받으면 주어지는 뱃지에요!",
   },
   {
     // 8. 공유하는 기쁨
@@ -206,6 +260,8 @@ const badgeColorInfos: BadgeColorInfo[] = [
     activeTextColor: "#FFFFFF",
     inActiveColor: "#7B7B7B",
     inActiveTextColor: "#e2e2e2",
+    popupText:
+      "다른 트래커가 내가 등록한 코스를 처음으로 공유하면 주어지는 뱃지에요!",
   },
   {
     // 9. 소문난 트래커
@@ -217,6 +273,7 @@ const badgeColorInfos: BadgeColorInfo[] = [
     activeTextColor: "#636363",
     inActiveColor: "#c9c9c9",
     inActiveTextColor: "#656565",
+    popupText: "내가 등록한 코스가 30회 이상 스크랩 되면 주어지는 뱃지에요!",
   },
   {
     // 10. 트래킹 정보통
@@ -228,6 +285,7 @@ const badgeColorInfos: BadgeColorInfo[] = [
     activeTextColor: "#FFFFFF",
     inActiveColor: "#929292",
     inActiveTextColor: "#e4e4e4",
+    popupText: "내가 등록한 코스가 100회 이상 스크랩 되면 주어지는 뱃지에요!",
   },
   {
     // 11. 트래킹 트렌드세터
@@ -239,6 +297,7 @@ const badgeColorInfos: BadgeColorInfo[] = [
     activeTextColor: "#FFFFFF",
     inActiveColor: "#686868",
     inActiveTextColor: "#f2f4f2",
+    popupText: "내가 등록한 코스가 100회 이상 추천을 받으면 주어지는 뱃지에요!",
   },
   {
     // 12. 픽퀘스트 마스터
@@ -251,6 +310,8 @@ const badgeColorInfos: BadgeColorInfo[] = [
     activeTextColor: "#FFFFFF",
     inActiveColor: "#5a5a5a",
     inActiveTextColor: "#f7f7f7",
+    popupText:
+      "픽퀘스트의 모든 뱃지를 획득하신 “진정한 픽퀘스트 마스터”에게만 주어지는 뱃지에요!",
   },
 ];
 
@@ -264,6 +325,7 @@ interface BadgeColorInfo {
   activeTextColor: string;
   inActiveColor: string;
   inActiveTextColor: string;
+  popupText: string;
 }
 
 // 뱃지 컴포넌트
@@ -273,6 +335,11 @@ interface BadgeComponentProps {
   image: string;
   activeColor: string;
   activeTextColor: string;
+  popupText: string;
+  handleOpenPopUp?: (() => void) | undefined;
+  setBadgeInfo?:
+    | React.Dispatch<React.SetStateAction<BadgeInfoProps>>
+    | undefined;
 }
 
 function BadgeComponent({
@@ -281,6 +348,9 @@ function BadgeComponent({
   image,
   activeColor,
   activeTextColor,
+  handleOpenPopUp,
+  setBadgeInfo,
+  popupText,
 }: BadgeComponentProps) {
   // 브라우저 가로 사이즈가 작아질 수록 뱃지명이 짧아짐.
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
@@ -297,8 +367,22 @@ function BadgeComponent({
     };
   }, [windowWidth]);
 
+  const handleBadgePopUp = () => {
+    if (handleOpenPopUp && setBadgeInfo) {
+      handleOpenPopUp();
+      setBadgeInfo({
+        name,
+        shortName,
+        image,
+        activeColor,
+        activeTextColor,
+        popupText,
+      });
+    }
+  };
+
   return (
-    <div>
+    <div onClick={handleBadgePopUp}>
       <div
         style={{ borderColor: activeColor }}
         className="rounded-full border-4 bg-white flex justify-center items-center m-auto w-24 h-24 sm:w-16 sm:h-16 mb-2 sm:my-0 relative"
@@ -321,6 +405,52 @@ function BadgeComponent({
             {window.innerWidth <= 345 ? shortName : name}
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+interface BadgePopupComponentProps {
+  badgeInfo: BadgeInfoProps;
+  handleClosePopUp: () => void;
+}
+
+function BadgePopupComponent({
+  badgeInfo,
+  handleClosePopUp,
+}: BadgePopupComponentProps) {
+  return (
+    <div className="fixed inset-0 z-10 flex items-end justify-center">
+      <div
+        onClick={handleClosePopUp}
+        className="absolute inset-0 bg-black opacity-70"
+      />
+      <div className="w-full relative flex items-center justify-center rounded-t-lg bg-white p-5 text-center text-black shadow-3xl sm:p-2">
+        <div className="py-5 px-2">
+          <BadgeComponent
+            name={badgeInfo.name}
+            shortName={badgeInfo.shortName}
+            image={badgeInfo.image}
+            activeColor={badgeInfo.activeColor}
+            activeTextColor={badgeInfo.activeTextColor}
+            popupText={badgeInfo.popupText}
+          />
+          <div>
+            {/* 팝업 내용 */}
+            <div>
+              <div className="mt-5 my-2 text-lg text-darkGray sm:text-md">
+                {badgeInfo.popupText}
+              </div>
+            </div>
+          </div>
+        </div>
+        {/* 닫기 버튼 */}
+        <button
+          onClick={handleClosePopUp}
+          className="absolute right-2 top-2 text-gray"
+        >
+          <IoClose size={20} />
+        </button>
       </div>
     </div>
   );
