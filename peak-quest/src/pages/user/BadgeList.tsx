@@ -1,10 +1,10 @@
-import { SetStateAction, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
+import { Link } from "react-router-dom";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
-import { useNavigate } from "react-router";
 import congratulations from "../../assets/congratulations.png";
 import "./BadgeList.css";
-import { Link } from "react-router-dom";
 
 // 뱃지 인증 여부
 type BadgeStatus = "Y" | "N";
