@@ -12,7 +12,7 @@ export default function Main() {
       <div className="flex py-5 justify-center items-center text-xl md:text-lg md:leading-4 sm:text-md sm:leading-3 font-bold leading-7">
         <Link to={"/area"}>
           <div className="mr-2 relative">
-            <p className="absolute top-3 left-3">
+            <p className="absolute top-3 left-3 text-[#006259]">
               나만의
               <br />
               코스 만들기
@@ -26,7 +26,7 @@ export default function Main() {
         </Link>
         <Link to={"/area"}>
           <div className="ml-2 relative">
-            <p className="absolute top-3 left-3">
+            <p className="absolute top-3 left-3 text-[#006259]">
               코스
               <br />
               둘러보기
