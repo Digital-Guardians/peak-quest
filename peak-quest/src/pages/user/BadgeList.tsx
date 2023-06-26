@@ -1,7 +1,10 @@
-import { useEffect, useState } from "react";
+import { SetStateAction, useEffect, useRef, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 import { useNavigate } from "react-router";
+import congratulations from "../../assets/congratulations.png";
+import "./BadgeList.css";
+import { Link } from "react-router-dom";
 
 // 뱃지 인증 여부
 type BadgeStatus = "Y" | "N";
@@ -11,7 +14,7 @@ interface HasBadgeProp {
   hasBadge: BadgeStatus;
 }
 
-// 클릭한 뱃지 타입
+// 뱃지 전체보기에서 클릭한 뱃지 타입 정의
 interface BadgeInfoProps {
   name: string;
   shortName: string;
@@ -21,7 +24,9 @@ interface BadgeInfoProps {
   popupText: string;
 }
 
-// badgeStatus 초기값
+// 뱃지 인증 여부 -> "Y" or "N" 구분
+// **이슈**
+// badgeStatus 초기값 임의 설정 해줌
 // 나중에는 데이터 불러와서 저장해주어야 한다
 const hasBadgeInfos: { [key: string]: HasBadgeProp }[] = [
   { gold: { hasBadge: "N" } },
@@ -37,6 +42,9 @@ const hasBadgeInfos: { [key: string]: HasBadgeProp }[] = [
   { bestRecommand: { hasBadge: "N" } },
   { peakQuestMaster: { hasBadge: "N" } },
 ];
+
+// 1. 뱃지 리스트 컴포넌트
+// -----------------------------------------------------------
 
 export default function BadgeList() {
   // 페이지 이동을 위함
@@ -70,15 +78,28 @@ export default function BadgeList() {
   // 뱃지 개수
   const activeBadgeCount = isBadgeAuth.length ? isBadgeAuth.length - 1 : 0;
 
-  // 클릭 시 팝업
+  // 클릭 한 뱃지 팝업
   const [isClickPopUpOpen, setIsClickPopUpOpen] = useState(false);
-  // 팝업 열기
+  // 클릭 한 뱃지 열기
   const hanleOpenPopUp = () => {
     setIsClickPopUpOpen(true);
   };
-  // 팝업 닫기
+  // 클릭 한 뱃지 닫기
   const handleClosePopUp = () => {
     setIsClickPopUpOpen(false);
+  };
+
+  // **이슈**
+  // 상태를 전역에 저장해 두어야함
+  // 획득 한 뱃지 팝업
+  const [isGetPopUpOpen, setIsGetPopUpOpen] = useState(false);
+  // 획득 한 뱃지 열기
+  const hanleOpenGetPopUp = () => {
+    setIsGetPopUpOpen(true);
+  };
+  // 획득 한 뱃지 닫기
+  const handleCloseGetPopUp = () => {
+    setIsGetPopUpOpen(false);
   };
 
   return (
@@ -150,21 +171,24 @@ export default function BadgeList() {
         </div>
       </div>
       {/* 팝업 */}
-      {/* {isClickPopUpOpen && (
-        <BadgePopupComponent
-          isClickPopUpOpen={isClickPopUpOpen}
-          badgeInfo={badgeInfo}
-          handleClosePopUp={handleClosePopUp}
-        />
-      )} */}
       <BadgePopupComponent
         isClickPopUpOpen={isClickPopUpOpen}
         badgeInfo={badgeInfo}
         handleClosePopUp={handleClosePopUp}
       />
+      {/* 뱃지 획득 팝업 */}
+      {isGetPopUpOpen && (
+        <GetBadgePopupComponent
+          getBadgeInfo={filterGetBadgeInfo!}
+          handleCloseGetPopUp={handleCloseGetPopUp}
+        />
+      )}
     </div>
   );
 }
+
+// 2. 뱃지 컴포넌트
+// -----------------------------------------------------------
 
 // 뱃지 정보
 const badgeColorInfos: BadgeColorInfo[] = [
@@ -321,6 +345,9 @@ const badgeColorInfos: BadgeColorInfo[] = [
   },
 ];
 
+// 획득한 뱃지 정보만 담기
+const filterGetBadgeInfo = badgeColorInfos.find((v) => v.id === "gold");
+
 // 뱃지 정보 타입 정의
 interface BadgeColorInfo {
   id: string;
@@ -334,7 +361,7 @@ interface BadgeColorInfo {
   popupText: string;
 }
 
-// 뱃지 컴포넌트
+// 뱃지 컴포넌트 타입 정의ㅏ
 interface BadgeComponentProps {
   name: string;
   shortName: string;
@@ -348,6 +375,7 @@ interface BadgeComponentProps {
     | undefined;
 }
 
+// 뱃지 컴포넌트
 function BadgeComponent({
   name,
   shortName,
@@ -416,12 +444,17 @@ function BadgeComponent({
   );
 }
 
+// 3. 클릭한 뱃지 팝업
+// -----------------------------------------------------------
+
+// 뱃지 팝업 타입 정의
 interface BadgePopupComponentProps {
   isClickPopUpOpen: boolean;
   badgeInfo: BadgeInfoProps;
   handleClosePopUp: () => void;
 }
 
+// 뱃지 팝업 컴포넌트
 function BadgePopupComponent({
   isClickPopUpOpen,
   badgeInfo,
@@ -465,6 +498,94 @@ function BadgePopupComponent({
         {/* 닫기 버튼 */}
         <button
           onClick={handleClosePopUp}
+          className="absolute right-2 top-2 text-gray"
+        >
+          <IoClose size={20} />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// 4. 획득한 뱃지 팝업
+// -----------------------------------------------------------
+
+// 뱃지 획득 팝업 타입 정의
+interface GetBadgePopupComponentProps {
+  // NonNullable
+  // - TypeScript의 타입 유틸리티 중 하나
+  // - null 및 undefined를 제거하여 새로운 타입을 생성
+  getBadgeInfo: NonNullable<BadgeColorInfo>;
+  handleCloseGetPopUp: () => void;
+}
+
+// 뱃지 획특 팝업 컴포넌트
+function GetBadgePopupComponent({
+  getBadgeInfo,
+  handleCloseGetPopUp,
+}: GetBadgePopupComponentProps) {
+  return (
+    <div className="fixed inset-0 z-10 flex items-center justify-center">
+      <div
+        onClick={handleCloseGetPopUp}
+        className="absolute inset-0 bg-black opacity-70"
+      />
+      <div className="max-w-[430px] relative flex items-center justify-center rounded-lg bg-white p-5 text-center text-black shadow-3xl sm:p-2">
+        <div className="relative">
+          {/* 랜덤한 도형 */}
+          <div className="absolute top-0 right-0">
+            <img
+              className="animate-float"
+              src={congratulations}
+              alt="축하 효과"
+            />
+          </div>
+          {/* 팝업 내용 */}
+          <div className="">
+            <h2 className="text-2xl font-semibold text-black sm:mt-4 sm:text-xl">
+              <p>축하해요!</p>
+              <p>
+                <strong className="text-mint">{getBadgeInfo.name}</strong>{" "}
+                획득했어요
+              </p>
+            </h2>
+            {/* 뱃지 */}
+            <div className="my-5">
+              <BadgeComponent
+                name={getBadgeInfo.name}
+                shortName={getBadgeInfo.shortName}
+                image={getBadgeInfo.image}
+                activeColor={getBadgeInfo.activeColor}
+                activeTextColor={getBadgeInfo.activeTextColor}
+                popupText={getBadgeInfo.popupText}
+              />
+            </div>
+            <div className="text-center p-2 my-2 text-md text-darkGray bg-[#f8f8f8] py-2 rounded-lg">
+              트레킹 정보통 , 트레킹 트랜드세터 뱃지도 모아 보세요!
+            </div>
+          </div>
+          {/* 버튼 */}
+          <div className="mt-4 flex items-center space-x-3 justify-center sm:text-md">
+            <div className="w-1/2">
+              <Link to="/mypage/badgelist">
+                <button className="p-2 w-full cursor-pointer rounded-lg bg-mint text-white">
+                  내 뱃지 둘러보기
+                </button>
+              </Link>
+            </div>
+            <div className="w-1/2">
+              <button
+                onClick={handleCloseGetPopUp}
+                className="py-2 w-full rounded-lg bg-gray text-darkGray"
+              >
+                돌아가기
+              </button>
+            </div>
+          </div>
+        </div>
+        {/* 닫기 버튼 */}
+        <button
+          onClick={handleCloseGetPopUp}
           className="absolute right-2 top-2 text-gray"
         >
           <IoClose size={20} />
