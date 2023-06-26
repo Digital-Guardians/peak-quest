@@ -150,12 +150,18 @@ export default function BadgeList() {
         </div>
       </div>
       {/* 팝업 */}
-      {isClickPopUpOpen && (
+      {/* {isClickPopUpOpen && (
         <BadgePopupComponent
+          isClickPopUpOpen={isClickPopUpOpen}
           badgeInfo={badgeInfo}
           handleClosePopUp={handleClosePopUp}
         />
-      )}
+      )} */}
+      <BadgePopupComponent
+        isClickPopUpOpen={isClickPopUpOpen}
+        badgeInfo={badgeInfo}
+        handleClosePopUp={handleClosePopUp}
+      />
     </div>
   );
 }
@@ -411,21 +417,33 @@ function BadgeComponent({
 }
 
 interface BadgePopupComponentProps {
+  isClickPopUpOpen: boolean;
   badgeInfo: BadgeInfoProps;
   handleClosePopUp: () => void;
 }
 
 function BadgePopupComponent({
+  isClickPopUpOpen,
   badgeInfo,
   handleClosePopUp,
 }: BadgePopupComponentProps) {
   return (
-    <div className="fixed inset-0 z-10 flex items-end justify-center">
+    <div
+      className={`fixed inset-0 z-10 flex items-end justify-center ${
+        isClickPopUpOpen ? "translate-y-0" : "translate-y-[999px]"
+      }`}
+    >
       <div
         onClick={handleClosePopUp}
         className="absolute inset-0 bg-black opacity-70"
       />
-      <div className="w-full relative flex items-center justify-center rounded-t-lg bg-white p-5 text-center text-black shadow-3xl sm:p-2">
+      <div
+        className={`w-full max-w-[430px] relative flex items-center justify-center rounded-t-lg bg-white p-5 text-center text-black shadow-3xl sm:p-2 ${
+          isClickPopUpOpen
+            ? "translate-y-0 transition duration-500"
+            : "translate-y-[300px] transition duration-500"
+        }`}
+      >
         <div className="py-5 px-2">
           <BadgeComponent
             name={badgeInfo.name}
