@@ -1,10 +1,15 @@
-import React, { useEffect, useState } from "react";
+import { useContext } from "react";
 import { BsFillPersonFill } from "react-icons/bs";
 import { Link, useLocation, useParams } from "react-router-dom";
+import { useUserContext } from "../context/userContext";
+import Login from "./Login";
 
 function Header() {
   const { AreaName } = useParams();
   const location = useLocation();
+
+  // useUserContext에서 가져온 값 사용
+  const { handleOpenLoginPopup } = useUserContext();
 
   return (
     <div
@@ -14,11 +19,21 @@ function Header() {
           : "text-black"
       }`}
     >
+      {/* 로고 */}
       <Link to={"/"}>
         <div>logo</div>
       </Link>
-      <div className="flex items-center space-x-[16px]">
-        <div className="font-bold">로그인</div>
+      <div className="flex items-center space-x-2">
+        {/* 로그인 */}
+        <div
+          className="font-bold cursor-pointer"
+          onClick={handleOpenLoginPopup}
+        >
+          로그인
+        </div>
+        <Login />
+
+        {/* 마이페이지 */}
         <div>
           <BsFillPersonFill />
         </div>
