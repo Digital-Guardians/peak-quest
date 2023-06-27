@@ -113,7 +113,7 @@ export default function MyPage() {
             )}
           </div>
           {/* 스크랩 */}
-          <div className="w-full bg-white pb-2 border-b-[1px] border-lightGray">
+          <div className="w-full bg-white pb-2 mt-3 border-b-[1px] border-lightGray">
             <div className="flex justify-between items-center pt-[15px] px-[8px]">
               <div className="flex items-center font-bold">
                 <div className="text-mint text-2xl mr-2">
@@ -157,7 +157,7 @@ export default function MyPage() {
         로그아웃
       </button>
       {/* 회원탈퇴 */}
-      <button className="mb-4 p-1 text-md text-[#A4A4A4] font-bold border-b-[1px] border-gray sm:text-sm ease-linear duration-300">
+      <button className="mt-1 mb-4 p-1 text-md text-[#A4A4A4] font-bold border-b-[1px] border-gray sm:text-sm ease-linear duration-300">
         회원탈퇴
       </button>
     </div>
