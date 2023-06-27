@@ -65,7 +65,7 @@ export default function SelectCourseOption({
   };
 
   return (
-    <div className="w-[91%] max-h-[200px] flex flex-col justify-around px-3 py-3 text-md text-darkGray font-bold sm:font-medium shadow-lg bg-white rounded-lg absolute top-[80px] z-50">
+    <div className="w-[91%] min-h-[160px] flex flex-col justify-around px-3 py-3 text-md text-darkGray font-bold sm:font-medium shadow-lg bg-white rounded-lg absolute top-[80px] z-50">
       <div>
         <OptionButton
           value={"편의시설이 있는"}

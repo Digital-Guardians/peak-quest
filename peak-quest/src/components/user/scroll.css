@@ -1,0 +1,13 @@
+/* 스크롤바 안보이게 하기 => 코스목록 페이지 */
+.scrollbar-custom {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  &::-webkit-scrollbar-track {
+    display: none;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    display: none;
+  }
+}
