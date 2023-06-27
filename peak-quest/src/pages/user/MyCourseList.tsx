@@ -62,20 +62,20 @@ export default function MyCourseList() {
 
   const moreMyCourses = () => {
     // myCourse
-    fetch(`/mock/user/myPage_myCourseList.json`)
-      .then((res) => res.json())
-      .then((data) => {
-        setMyCourseList((prevCourseList) => [
-          ...prevCourseList,
-          ...data.courses,
-        ]);
-        if (data.courses.length === 0) {
-          document.body.style.overflow = "hidden";
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching more courses:", error);
-      });
+    // fetch(`/mock/user/myPage_myCourseList.json`)
+    //   .then((res) => res.json())
+    //   .then((data) => {
+    //     setMyCourseList((prevCourseList) => [
+    //       ...prevCourseList,
+    //       ...data.courses,
+    //     ]);
+    //     if (data.courses.length === 0) {
+    //       document.body.style.overflow = "hidden";
+    //     }
+    //   })
+    //   .catch((error) => {
+    //     console.error("Error fetching more courses:", error);
+    //   });
     isFetching = false;
   };
 
@@ -111,7 +111,7 @@ export default function MyCourseList() {
         ) : (
           <div className="h-screen flex flex-col justify-center items-center p-3 text-lg sm:text-md">
             <img
-              className="w-[40px] h-[55px] mb-3"
+              className="w-[45px] h-[60px] mb-3"
               src="../../src/assets/user/trophy.png"
             />
             <p className="mb-1">앗 ! 아직 만들어진 코스가 없어요.</p>
@@ -121,10 +121,13 @@ export default function MyCourseList() {
               도전하세요.
             </p>
             <a
-              className="font-bold flex justify-center items-center text-md text-mint mt-4 sm:mt-2 border-b-[1px] border-mint"
+              className="w-[43%] sm:w-[51%] h-[30px] sm:h-[25px] flex justify-center items-center font-bold text-md text-white bg-mint mt-4 sm:mt-2 border-b-[1px] border-mint  rounded-lg"
               href="/area/create"
             >
-              코스 만들러 가기 <IoIosArrowForward />
+              지금 코스 만들러 가기
+              <div className="text-lg">
+                <IoIosArrowForward />
+              </div>
             </a>
           </div>
         )}
