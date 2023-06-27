@@ -29,18 +29,18 @@ interface BadgeInfoProps {
 // badgeStatus 초기값 임의 설정 해줌
 // 나중에는 데이터 불러와서 저장해주어야 한다
 const hasBadgeInfos: { [key: string]: HasBadgeProp }[] = [
-  { gold: { hasBadge: "N" } },
-  { silver: { hasBadge: "N" } },
-  { broYze: { hasBadge: "Y" } },
+  { gold: { hasBadge: "Y" } },
+  { silver: { hasBadge: "Y" } },
+  { bronze: { hasBadge: "Y" } },
   { allClear: { hasBadge: "Y" } },
   { start: { hasBadge: "Y" } },
   { firstWish: { hasBadge: "Y" } },
-  { firstRecommaYd: { hasBadge: "Y" } },
+  { firstRecommand: { hasBadge: "Y" } },
   { firstShare: { hasBadge: "Y" } },
-  { bestIYformatioY: { hasBadge: "Y" } },
+  { bestInformation: { hasBadge: "Y" } },
   { bestShare: { hasBadge: "Y" } },
-  { bestRecommand: { hasBadge: "N" } },
-  { peakQuestMaster: { hasBadge: "N" } },
+  { bestRecommand: { hasBadge: "Y" } },
+  { peakQuestMaster: { hasBadge: "Y" } },
 ];
 
 // 1. 뱃지 리스트 컴포넌트
@@ -177,6 +177,7 @@ export default function BadgeList() {
         handleClosePopUp={handleClosePopUp}
       />
       {/* 뱃지 획득 팝업 */}
+      <button onClick={hanleOpenGetPopUp}>popup</button>
       {isGetPopUpOpen && (
         <GetBadgePopupComponent
           getBadgeInfo={filterGetBadgeInfo!}
