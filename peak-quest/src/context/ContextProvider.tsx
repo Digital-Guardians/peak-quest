@@ -1,12 +1,5 @@
 import { Dispatch, ReactNode, SetStateAction, createContext, useContext, useState } from "react";
-
-interface bannerData {
-  img_url: string;
-  link: string;
-  tags: string;
-  content: string;
-  title: string;
-}
+import { bannerData } from "../types/type";
 
 interface reportData {
   id: number;
@@ -20,6 +13,7 @@ interface reportData {
 }
 
 const defaultBannerData: bannerData = {
+  id: "",
   img_url: "",
   link: "",
   tags: "",
