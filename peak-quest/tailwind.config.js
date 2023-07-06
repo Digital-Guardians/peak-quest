@@ -6,6 +6,7 @@ export default {
       screens: {
         md: { max: "430px" },
         sm: { max: "320px" },
+        half: { max: "960px" },
       },
       colors: {
         mint: "#13CBBF",

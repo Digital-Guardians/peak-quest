@@ -1,19 +1,12 @@
 import React, { Dispatch, SetStateAction, useEffect } from "react";
 import { useService } from "../../context/ContextProvider";
+import { bannerData } from "../../types/type";
 
 interface propBanner {
   index: number;
   info: bannerData;
   select: boolean;
   setSelect: Dispatch<SetStateAction<boolean>>;
-}
-
-interface bannerData {
-  img_url: string;
-  link: string;
-  tags: string;
-  content: string;
-  title: string;
 }
 
 export default function BannerItem({ info, index, select, setSelect }: propBanner) {
