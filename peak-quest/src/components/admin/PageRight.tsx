@@ -14,15 +14,15 @@ export default function PageRight({ children, select }: props) {
     >
       <div
         className={`
-          w-[98%] h-[92%] mt-[69px] pt-5 pl-5
+          w-[98%] h-[92%] mt-[69px] pt-5 pl-4
           bg-white ${select ? "rounded-tl-2xl rounded-bl-2xl" : "rounded-2xl"}
           overflow-y-scroll scrollbar-custom
           shadow-3xl`}
       >
         <div
           className={`${
-            select ? "" : "p-[1%]"
-          } w-[98%] mx-auto transition-all duration-[1s] ease-in-out`}
+            select ? "px-[1%]" : "px-[10%]"
+          } w-[98%] h-full max-h-[990px] mx-auto transition-all duration-[1s] ease-in-out`}
         >
           {children}
         </div>

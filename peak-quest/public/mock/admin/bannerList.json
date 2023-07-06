@@ -1,0 +1,14 @@
+{
+  "banner": [
+    {
+      "key": "1",
+      "id": "banner-1",
+      "img_url": "/images/banner/banner1.png"
+    },
+    {
+      "key": "2",
+      "id": "banner-2",
+      "img_url": "/images/banner/banner2.png"
+    }
+  ]
+}

@@ -6,28 +6,91 @@ import { useEffect, useState } from "react";
 import BannerItem from "./BannerItem";
 import { useService } from "../../context/ContextProvider";
 import { IoIosArrowBack } from "react-icons/io";
+import { DragDropContext, Draggable, DropResult, Droppable } from "react-beautiful-dnd";
+import { bannerData } from "../../types/type";
+import { TiMediaStopOutline } from "react-icons/ti";
+
+interface banner {
+  key: string;
+  id: string;
+  img_url: string;
+}
 
 export default function Banner() {
   const [select, setSelect] = useState(false);
-  const [banner, setBanner] = useState([]);
+  const [banner, setBanner] = useState<bannerData[]>([]);
+  const [list, setList] = useState<banner[]>([]);
 
   const { bannerInfo } = useService();
 
   const { img_url, link, tags, title, content } = bannerInfo;
 
   useEffect(() => {
+    1;
     fetch("/mock/admin/banner.json")
       .then((res) => res.json())
       .then((data) => {
-        console.log(data);
-
-        setBanner(data.banner);
+        setBanner(data.bannerItems);
       });
   }, []);
 
+  useEffect(() => {
+    1;
+    fetch("/mock/admin/bannerList.json")
+      .then((res) => res.json())
+      .then((data) => {
+        setList(data.banner);
+      });
+  }, []);
+
+  const onDragEnd = (result: DropResult) => {
+    const { source, destination, draggableId } = result;
+
+    if (
+      !destination ||
+      (destination.droppableId === source.droppableId && source.index === destination.index)
+    )
+      return;
+
+    if (source.droppableId === "bannerItems" && destination.droppableId === "banner") {
+      const selectItem = banner.at(source.index); // 없으면 und
+
+      if (selectItem) {
+        const add = list.find((item) => item.id === selectItem.id);
+
+        if (!add) {
+          const newList = [
+            ...list,
+            {
+              key: selectItem.id.split("-")[1],
+              id: selectItem.id,
+              img_url: selectItem.img_url,
+            },
+          ];
+
+          setList(newList);
+        }
+      }
+    } else if (source.droppableId === "banner") {
+      const selectItem = list.at(source.index); // 없으면 und
+      const newList = Array.from(list);
+
+      if (destination.droppableId === "banner" && selectItem !== undefined) {
+        newList.splice(source.index, 1);
+        newList.splice(destination.index, 0, selectItem);
+
+        console.log(newList);
+        setList(newList);
+      } else {
+      }
+    }
+  };
+
+  //저장할때는 시퀸스 번호만 넘긴다
   return (
     <>
       <OutletContainer>
+        ß
         <PageLeft select={select}>
           <div className="flex w-full">
             {/* inputContainer */}
@@ -53,36 +116,87 @@ export default function Banner() {
             </div>
           </div>
           {/* bannerContainer */}
-          <div className="flex flex-col w-full h-4/5">
-            <div className="w-full h-1/3 mb-9">
-              <div className="text-xl font-bold mb-[13px] ml-[5px]">
-                메인 배너를 최대 5개까지 선택해주세요.
+          <DragDropContext onDragEnd={onDragEnd}>
+            <div className="flex flex-col w-full h-4/5">
+              <div className="w-full h-1/3 mb-9">
+                <div className="text-xl font-bold mb-[13px] ml-[5px]">
+                  메인 배너를 최대 5개까지 선택해주세요.
+                </div>
+                <Droppable droppableId="banner" direction="horizontal">
+                  {(provided) => (
+                    <div
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      className="flex justify-center items-center w-full h-[186px] border border-purple rounded-[10px]"
+                    >
+                      {list &&
+                        list.map((item, i) => (
+                          <Draggable draggableId={item.key} index={i} key={item.key}>
+                            {(provided) => (
+                              <div
+                                {...provided.dragHandleProps}
+                                {...provided.draggableProps}
+                                ref={provided.innerRef}
+                              >
+                                <img
+                                  className="w-[86px] h-[86px] ml-2 rounded-xl"
+                                  src={item.img_url}
+                                />
+                              </div>
+                            )}
+                          </Draggable>
+                        ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
               </div>
-              <div className="w-full h-[186px] border border-purple rounded-[10px]">{}</div>
-            </div>
-            <div className="w-full h-2/3">
-              <div className="flex text-xl text-darkGray font-bold">
-                <div className="w-[12%] text-center pb-[13px] border-b border-gray">선택</div>
-                <div className="w-[15%] text-center pb-[13px] border-b border-gray">이미지</div>
-                <div className="w-[58%] text-center pb-[13px] border-b border-gray">제목/설명</div>
-                <div className="w-[15%] text-center pb-[13px] border-b border-gray">관리</div>
+              <div className="w-full h-2/3">
+                <div className="flex text-xl text-darkGray font-bold">
+                  <div className="w-[12%] text-center pb-[13px] border-b border-gray">선택</div>
+                  <div className="w-[15%] text-center pb-[13px] border-b border-gray">이미지</div>
+                  <div className="w-[58%] text-center pb-[13px] border-b border-gray">
+                    제목/설명
+                  </div>
+                  <div className="w-[15%] text-center pb-[13px] border-b border-gray">관리</div>
+                </div>
               </div>
+              <Droppable droppableId="bannerItems">
+                {(provided) => (
+                  <div
+                    className="flex flex-col text-xl text-darkGray font-bold"
+                    {...provided.droppableProps}
+                    ref={provided.innerRef}
+                  >
+                    {banner &&
+                      banner.map((info, i) => {
+                        return (
+                          // <Draggable draggableId={info.id} index={i}>
+                          //   {(provided: any, snapshot: any) => (
+                          //     <div
+                          //       {...provided.dragHandleProps}
+                          //       {...provided.draggableProps}
+                          //       ref={provided.innerRef}
+                          //       className={`${snapshot.isDragging ? "w-[80px]" : "w-full"}`}
+                          //     >
+                          <BannerItem
+                            key={Math.random()}
+                            index={i}
+                            info={info}
+                            select={select}
+                            setSelect={setSelect}
+                          />
+                          //     </div>
+                          //   )}
+                          // </Draggable>
+                        );
+                      })}
+                    {provided.placeholder}
+                  </div>
+                )}
+              </Droppable>
             </div>
-            <div className="flex flex-col text-xl text-darkGray font-bold">
-              {banner &&
-                banner.map((info, i) => {
-                  return (
-                    <BannerItem
-                      key={Math.random()}
-                      index={i}
-                      info={info}
-                      select={select}
-                      setSelect={setSelect}
-                    />
-                  );
-                })}
-            </div>
-          </div>
+          </DragDropContext>
         </PageLeft>
         {/* 확인하기 648px */}
         <PageRight select={select}>
@@ -121,11 +235,11 @@ export default function Banner() {
               </div>
             </div>
             <div className="relative mt-[28px]">
-              <div className="mb-1 text-xl text-darkGray">베너이미지</div>
+              <div className="mb-1 text-xl text-darkGray">베너 이미지</div>
               <div
-                className={`pl-4 pt-2 pb-2 text-lg border border-[#D9D9D9] mr-[6px] rounded-[10px]`}
+                className={`flex justify-center overflow-hidden pl-4 pt-2 pb-2 text-lg border border-[#D9D9D9] mr-[6px] rounded-[10px]`}
               >
-                <img src={img_url} alt="" />
+                <img className="max-h-[200px]" src={img_url} alt="" />
               </div>
             </div>
             <div className="relative mt-[28px]">
@@ -149,12 +263,12 @@ export default function Banner() {
             <div className="relative mt-[48px] mb-[120px]">
               <div className="flex font-bold">
                 <button
-                  className={`w-1/2 h-[60px] pl-4 pt-2 mr-2 text-lg text-purple bg-white border border-purple rounded-[10px]`}
+                  className={`w-1/2 h-[60px] mr-2 text-lg text-purple bg-white border border-purple rounded-[10px]`}
                 >
                   삭제하기
                 </button>
                 <button
-                  className={`w-1/2 h-[60px] pl-4 pt-2 text-lg text-white bg-purple border border-purple rounded-[10px]`}
+                  className={`w-1/2 h-[60px]text-lg text-white bg-purple border border-purple rounded-[10px]`}
                 >
                   저장하기
                 </button>

@@ -4,7 +4,6 @@ import PageRight from "../../components/admin/PageRight";
 import "./page.css";
 import OutletContainer from "../../components/admin/OutletContainer";
 import ReportItem from "./ReportItem";
-import { IoIosArrowBack } from "react-icons/io";
 import { useService } from "../../context/ContextProvider";
 import { reportData } from "../../types/type";
 
@@ -29,7 +28,7 @@ export default function Report() {
   const [reportState, setReportState] = useState(defaultReportData);
 
   const { all, notRead, checked, pending } = reportState;
-
+  
   const { reportInfo, setReportInfo } = useService();
 
   const { id, user_name, state, report_type, report_date, content, url } = reportInfo;
@@ -132,7 +131,73 @@ export default function Report() {
                 setSelect((prev) => !prev);
               }}
             >
-              selectBtn
+              <IoIosArrowBack className="mt-[5px] mr-1 text-[28px]" />
+              <div className="">신고 관리</div>
+            </div>
+            <div>
+              <div className="mt-[22px] mb-1 text-xl text-darkGray">신고 날짜</div>
+              <input
+                className={`w-full  h-[56px] ${
+                  select ? "pl-2 text-lg" : ""
+                } border border-[#D9D9D9] mr-[6px] pl-4 rounded-[10px] half:mx-1`}
+                value={`${reportInfo ? report_date : ""}`}
+              />
+            </div>
+            <div>
+              <div className="mt-[22px] mb-1 text-xl text-darkGray">유저 닉네임</div>
+              <input
+                className={`w-full  h-[56px] ${
+                  select ? "pl-2 text-lg" : ""
+                } border border-[#D9D9D9] mr-[6px] pl-4 rounded-[10px] half:mx-1`}
+                value={`${reportInfo ? user_name : ""}`}
+              />
+            </div>
+            <div>
+              <div className="mt-[22px] mb-1 text-xl text-darkGray">신고 유형</div>
+              <input
+                className={`w-full  h-[56px] ${
+                  select ? "pl-2 text-lg" : ""
+                } border border-[#D9D9D9] mr-[6px] pl-4 rounded-[10px] half:mx-1`}
+                value={`${reportInfo ? report_type : ""}`}
+              />
+            </div>
+            <div>
+              <div className="mt-[22px] mb-1 text-xl text-darkGray">신고사유</div>
+              <textarea
+                className={`w-full h-[207px] pl-4 pt-2 text-lg border border-[#D9D9D9] mr-[6px] rounded-[10px]`}
+                value={content}
+              />
+            </div>
+            <div>
+              <div className="mt-[22px] mb-1 text-xl text-darkGray">신고 게시글 링크</div>
+              <div className="flex">
+                <input
+                  className={`w-3/4  h-[56px] ${
+                    select ? "pl-2 text-lg" : ""
+                  } border border-[#D9D9D9] mr-[6px] pl-4 rounded-[10px] half:mx-1`}
+                  value={`${reportInfo ? url : ""}`}
+                />
+                <button
+                  className="w-1/4 bg-white text-purple border border-purple rounded-[10px]"
+                  onClick={() => window.open(`${url}`)}
+                >
+                  바로가기
+                </button>
+              </div>
+            </div>
+            <div className="relative mt-[118px] mb-[120px]">
+              <div className="flex font-bold">
+                <button
+                  className={`w-1/2 h-[60px] mr-2 text-lg text-purple bg-white border border-purple rounded-[10px]`}
+                >
+                  삭제하기
+                </button>
+                <button
+                  className={`w-1/2 h-[60px]text-lg text-white bg-purple border border-purple rounded-[10px]`}
+                >
+                  신고확인
+                </button>
+              </div>
             </div>
           </div>
         </PageRight>

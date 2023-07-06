@@ -11,6 +11,7 @@ import { bannerData, reportData, userData } from "../types/type";
 import { useLocation } from "react-router-dom";
 
 const defaultBannerData: bannerData = {
+  id: "",
   img_url: "",
   link: "",
   tags: "",
