@@ -6,6 +6,7 @@ import OutletContainer from "../../components/admin/OutletContainer";
 import ReportItem from "./ReportItem";
 import { useService } from "../../context/ContextProvider";
 import { reportData } from "../../types/type";
+import { IoIosArrowBack } from "react-icons/io";
 
 interface ReportState {
   all: Report[];
@@ -28,7 +29,7 @@ export default function Report() {
   const [reportState, setReportState] = useState(defaultReportData);
 
   const { all, notRead, checked, pending } = reportState;
-  
+
   const { reportInfo, setReportInfo } = useService();
 
   const { id, user_name, state, report_type, report_date, content, url } = reportInfo;
