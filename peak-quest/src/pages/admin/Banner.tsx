@@ -198,7 +198,8 @@ export default function Banner() {
             </div>
           </DragDropContext>
         </PageLeft>
-        {/* <PageRight select={select}>
+        {/* 확인하기 648px */}
+        <PageRight select={select}>
           <div className="flex flex-col min-w-[648px]">
             <div
               className="relative flex text-2xl font-bold cursor-pointer"
@@ -274,7 +275,7 @@ export default function Banner() {
               </div>
             </div>
           </div>
-        </PageRight> */}
+        </PageRight>
       </OutletContainer>
     </>
   );

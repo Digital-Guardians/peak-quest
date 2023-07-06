@@ -4,8 +4,8 @@ import PageRight from "../../components/admin/PageRight";
 import "./page.css";
 import OutletContainer from "../../components/admin/OutletContainer";
 import ReportItem from "./ReportItem";
-import { IoIosArrowBack } from "react-icons/io";
 import { useService } from "../../context/ContextProvider";
+import { reportData } from "../../types/type";
 
 interface ReportState {
   all: Report[];
@@ -15,31 +15,20 @@ interface ReportState {
   deleted?: Report[];
 }
 
-const reportType: ReportState = {
+const defaultReportData: ReportState = {
   all: [],
   notRead: [],
   checked: [],
   pending: [],
 };
 
-interface Report {
-  id: number;
-  user_name: string;
-  state: string;
-  report_type: string;
-  report_date: string;
-  content: string;
-  url: string;
-  delete: string;
-}
-
 export default function Report() {
   const [select, setSelect] = useState(false);
   const [reportSelect, setReportSelect] = useState("all");
-  const [reportState, setReportState] = useState(reportType);
+  const [reportState, setReportState] = useState(defaultReportData);
 
-  const { all, notRead, checked, pending, deleted } = reportState;
-
+  const { all, notRead, checked, pending } = reportState;
+  
   const { reportInfo, setReportInfo } = useService();
 
   const { id, user_name, state, report_type, report_date, content, url } = reportInfo;
@@ -48,10 +37,10 @@ export default function Report() {
     fetch("/mock/admin/report.json")
       .then((res) => res.json())
       .then((data) => {
-        const notRead = data.report.filter((report: Report) => report.state === "notRead");
-        const checked = data.report.filter((report: Report) => report.state === "checked");
-        const pending = data.report.filter((report: Report) => report.state === "pending");
-        const deleted = data.report.filter((report: Report) => report.delete === "Y");
+        const notRead = data.report.filter((report: reportData) => report.state === "notRead");
+        const checked = data.report.filter((report: reportData) => report.state === "checked");
+        const pending = data.report.filter((report: reportData) => report.state === "pending");
+        const deleted = data.report.filter((report: reportData) => report.delete === "Y");
 
         return setReportState({
           all: [...data.report],
@@ -77,18 +66,6 @@ export default function Report() {
           <div className="flex flex-col w-full">
             {/* inputContainer */}
             <div className="flex w-full h-1/5 pb-2">
-              {/* <select
-                className={`w-1/5  h-[60px] ${
-                  select ? "pr-2 text-lg" : ""
-                } border border-[#D9D9D9] mr-[6px] pl-4 rounded-[10px] half:mx-1`}
-              >
-                <option value="" disabled className="hidden">
-                  처리상태
-                </option>
-                <option value="notRead">안 읽음</option>
-                <option value="checked">읽음</option>
-                <option value="pending">보류</option>
-              </select> */}
               <input
                 className={`w-full  h-[56px] ${
                   select ? "pl-2 text-lg" : ""
@@ -125,16 +102,6 @@ export default function Report() {
                   {checked.length}
                 </div>
                 <div className="text-lg font-normal">확인 완료</div>
-              </div>
-              <div
-                className="flex flex-col w-1/6 h-[72px] justify-center items-center px-5 py-8 cursor-pointer"
-                data-id="pending"
-                onClick={selectReport}
-              >
-                <div className={`${reportSelect === "pending" ? "text-red" : "text-darkGray"}`}>
-                  {pending.length}
-                </div>
-                <div className="text-lg font-normal">삭제 처리</div>
               </div>
             </div>
             {/* reportList  */}

@@ -1,12 +1,7 @@
+import { bannerData } from "../../types/type";
+
 interface propBanner {
   banner: bannerData;
-}
-
-interface bannerData {
-  img_url: string;
-  link: string;
-  tags: string;
-  title: string;
 }
 
 export default function BannerItem({ banner }: propBanner) {

@@ -1,25 +1,14 @@
 import React, { Dispatch, SetStateAction } from "react";
 import { useService } from "../../context/ContextProvider";
-
-interface Report {
-  id: number;
-  user_name: string;
-  state: string;
-  report_type: string;
-  report_date: string;
-  content: string;
-  url: string;
-  delete: string;
-}
+import { reportData } from "../../types/type";
 
 interface props {
   select: boolean;
   setSelect: Dispatch<SetStateAction<boolean>>;
-  report: Report;
+  report: reportData;
 }
 
 export default function ReportItem({ select, setSelect, report }: props) {
-  console.log(report);
   const { id, user_name, state, report_type } = report;
 
   const { setReportInfo } = useService();
@@ -53,7 +42,7 @@ export default function ReportItem({ select, setSelect, report }: props) {
               }
             }}
           >
-            수정
+            상세 보기
           </button>
         }
       </div>
