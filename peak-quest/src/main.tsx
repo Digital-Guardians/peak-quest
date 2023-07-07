@@ -18,6 +18,8 @@ import BannerEdit from "./pages/admin/BannerEdit";
 import User from "./pages/admin/User";
 import Report from "./pages/admin/Report";
 import BadgeList from "./pages/user/BadgeList";
+import DashBoard from "./pages/admin/DashBoard";
+
 
 const router = createBrowserRouter([
   {
@@ -46,6 +48,7 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
     children: [
       { index: true, element: <AdminLogin /> },
+      { path: "/admin/dashboard", element: <DashBoard /> },
       { path: "/admin/banner", element: <Banner /> },
       { path: "/admin/banner/edit", element: <BannerEdit /> },
       { path: "/admin/banner/edit/:bannerId", element: <BannerEdit /> },

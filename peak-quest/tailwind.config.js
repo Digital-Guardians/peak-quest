@@ -29,6 +29,7 @@ export default {
         md: "12px",
         sm: "10px",
       },
+      // 중복 삭제 해야함
       screens: {
         md: { max: "430px" },
         sm: { max: "320px" },
