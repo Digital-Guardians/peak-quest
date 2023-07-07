@@ -40,26 +40,6 @@ const areaOptions: AreaOption[] = [
   { value: "jeju", label: "제주도" },
 ];
 
-// // 난이도 버튼
-// interface LevelButtonProps {
-//   label: string;
-//   value: number;
-//   onClick: (value: number) => void;
-//   activeValue: number;
-// }
-
-// function LevelButton({ label, value, onClick, activeValue }: LevelButtonProps) {
-//   const isActive = value === activeValue;
-//   const buttonStyle = `h-[33px] px-[10px] mr-2 mt-2 text-md text-white font-bold border-[1px] rounded-full sm:h-[30px] sm:text-[10px] sm:px-4 ${
-//     isActive ? "bg-mint border-mint" : "bg-black/60 border-white"
-//   }`;
-//   return (
-//     <button className={buttonStyle} onClick={() => onClick(value)}>
-//       {label}
-//     </button>
-//   );
-// }
-
 // 코스 선택 버튼
 interface OptionButtonProps {
   value: string;
