@@ -2,8 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import { IoIosArrowDropdown } from "react-icons/io";
-import SelectCourseOption from "./SelectCourseOption";
 import { changeKorean } from "../../helper/changeAreaName";
+import SelectCourseOption from "./SelectCourseOption";
+import { LevelButton } from "../LevelButton";
 
 // select, setSelect를 props로 전달받음
 interface FilterProps {
@@ -23,13 +24,14 @@ interface FilterProps {
   >;
 }
 
+
 // 지역 변경 버튼
-interface AreaOption {
+export interface AreaOption {
   value: string;
   label: string;
 }
 
-const areaOptions: AreaOption[] = [
+export const areaOptions: AreaOption[] = [
   { value: "capital", label: "수도권" },
   { value: "gangwon", label: "강원권" },
   { value: "chungcheong", label: "충청권" },
