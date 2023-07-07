@@ -1,10 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { BsFillPersonFill } from "react-icons/bs";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 
 function Header() {
+  const { AreaName } = useParams();
+  const location = useLocation();
+
   return (
-    <div className="text-black h-[48px] flex justify-between items-center px-[16px]">
+    <div
+      className={`w-full max-w-[430px] h-[48px] flex justify-between items-center px-[16px] ${
+        location.pathname === `/area/${AreaName}/courselist`
+          ? "text-white fixed top-0 z-50"
+          : "text-black"
+      }`}
+    >
       <Link to={"/"}>
         <div>logo</div>
       </Link>

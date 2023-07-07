@@ -24,14 +24,13 @@ interface FilterProps {
   >;
 }
 
-// ** export **
+
 // 지역 변경 버튼
 export interface AreaOption {
   value: string;
   label: string;
 }
 
-// ** export **
 export const areaOptions: AreaOption[] = [
   { value: "capital", label: "수도권" },
   { value: "gangwon", label: "강원권" },
@@ -40,6 +39,26 @@ export const areaOptions: AreaOption[] = [
   { value: "gyeongsang", label: "경상권" },
   { value: "jeju", label: "제주도" },
 ];
+
+// 난이도 버튼
+interface LevelButtonProps {
+  label: string;
+  value: number;
+  onClick: (value: number) => void;
+  activeValue: number;
+}
+
+function LevelButton({ label, value, onClick, activeValue }: LevelButtonProps) {
+  const isActive = value === activeValue;
+  const buttonStyle = `h-[33px] px-[10px] mr-2 mt-2 text-md text-white font-bold border-[1px] rounded-full sm:h-[30px] sm:text-[10px] sm:px-4 ${
+    isActive ? "bg-mint border-mint" : "bg-black/60 border-white"
+  }`;
+  return (
+    <button className={buttonStyle} onClick={() => onClick(value)}>
+      {label}
+    </button>
+  );
+}
 
 // 코스 선택 버튼
 interface OptionButtonProps {
@@ -103,29 +122,29 @@ export default function Filter({ select, setSelect }: FilterProps) {
         <div className="overflow-hidden">
           {/* 지역 이미지 */}
           <img
-            className="h-[400px] w-full max-w-[430px] translate-y-[-10%] scale-x-125"
+            className="w-full max-w-[430px] h-[400px] translate-y-[-10%] scale-x-125"
             src={`../../src/assets/user/${changeKorean(AreaName)}.png`}
           />
           {/* 이미지 그라데이션 */}
-          <div className="absolute left-0 top-0 h-full w-full bg-gradient-to-b from-black/90 to-black/50" />
+          <div className="w-full h-full bg-gradient-to-b from-black/90 to-black/50 absolute top-0 left-0" />
         </div>
-        <div className="absolute bottom-32 left-3 w-full max-w-[430px] text-white">
-          <div className="flex items-center justify-start">
+        <div className="w-full max-w-[430px] text-white absolute bottom-32 left-3">
+          <div className="flex justify-start items-center">
             {/* 지역 이름 */}
             <div
-              className="relative ml-2 flex items-center justify-center text-xl font-bold"
+              className="flex justify-center items-center text-xl font-bold ml-2 relative"
               onClick={() => setAreaSelect(!areaSelect)}
             >
               {changeKorean(AreaName)}
-              <div className="ml-1 pt-1 text-2xl font-bold">
+              <div className="text-2xl font-bold pt-1 ml-1">
                 <IoIosArrowDropdown />
               </div>
               {/* 지역 변경 */}
               {areaSelect && (
-                <div className="absolute left-[-10px] top-[35px] z-50 w-[110px] rounded-lg bg-white py-1 text-center text-lg font-medium text-darkGray shadow-lg">
+                <div className="w-[110px] text-darkGray text-lg text-center font-medium bg-white py-1 rounded-lg shadow-lg absolute top-[35px] left-[-10px] z-50">
                   {areaOptions.map((option) => (
                     <p
-                      className={`border-b-[1px] border-gray py-2 last:border-none ${
+                      className={`py-2 border-b-[1px] last:border-none border-gray ${
                         select.areaName === option.label ? "text-green" : ""
                       }`}
                       key={option.label}
@@ -153,7 +172,7 @@ export default function Filter({ select, setSelect }: FilterProps) {
             id="courseOption"
             className={`${
               select.courseOption.length > 1 ? "w-[90%]" : "w-[55%]"
-            } relative my-2 mr-2 flex h-[35px] cursor-pointer items-center justify-between overflow-hidden break-keep rounded-2xl border-[1px] border-white bg-black/60 px-3 py-1 text-md leading-normal sm:w-[65%]`}
+            } h-[35px] overflow-hidden flex justify-between items-center py-1 px-3 mr-2 my-2 text-md border-[1px] border-white rounded-2xl bg-black/60 break-keep leading-normal sm:w-[65%] cursor-pointer relative`}
             onClick={() => setOpen(!open)}
           >
             {select.courseOption.length > 0 ? (
@@ -185,42 +204,36 @@ export default function Filter({ select, setSelect }: FilterProps) {
               value={0}
               onClick={(value: number) => handleSelect(value)}
               activeValue={level}
-              style="bg-black/60 border-white text-white"
             />
             <LevelButton
               label="⭐ 입문자"
               value={1}
               onClick={(value: number) => handleSelect(value)}
               activeValue={level}
-              style="bg-black/60 border-white text-white"
             />
             <LevelButton
               label="⭐⭐ 초보자"
               value={2}
               onClick={(value: number) => handleSelect(value)}
               activeValue={level}
-              style="bg-black/60 border-white text-white"
             />
             <LevelButton
               label="⭐⭐⭐ 아마추어"
               value={3}
               onClick={(value: number) => handleSelect(value)}
               activeValue={level}
-              style="bg-black/60 border-white text-white"
             />
             <LevelButton
               label="⭐⭐⭐⭐ 박사"
               value={4}
               onClick={(value: number) => handleSelect(value)}
               activeValue={level}
-              style="bg-black/60 border-white text-white"
             />
             <LevelButton
               label="⭐⭐⭐⭐⭐ 달인"
               value={5}
               onClick={(value: number) => handleSelect(value)}
               activeValue={level}
-              style="bg-black/60 border-white text-white"
             />
           </div>
         </div>

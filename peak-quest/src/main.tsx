@@ -17,6 +17,9 @@ import Banner from "./pages/admin/Banner";
 import BannerEdit from "./pages/admin/BannerEdit";
 import User from "./pages/admin/User";
 import Report from "./pages/admin/Report";
+import BadgeList from "./pages/user/BadgeList";
+import DashBoard from "./pages/admin/DashBoard";
+
 
 const router = createBrowserRouter([
   {
@@ -27,12 +30,16 @@ const router = createBrowserRouter([
       { index: true, element: <Main /> },
       { path: "/area", element: <SelectArea /> },
       { path: "/area/:AreaName/courselist", element: <CourseList /> },
-      { path: "/area/:AreaName/courselist/coursedetail/:courseId", element: <CourseDetail /> },
+      {
+        path: "/area/:AreaName/courselist/coursedetail/:courseId",
+        element: <CourseDetail />,
+      },
       { path: "/area/create", element: <CourseEdit /> },
       { path: "/area/create/:courseId", element: <CourseEdit /> },
       { path: "/mypage", element: <MyPage /> },
       { path: "/mypage/mycourselist", element: <MyCourseList /> },
       { path: "/mypage/wishlist", element: <WishList /> },
+      { path: "/mypage/badgelist", element: <BadgeList /> },
     ],
   },
   {
@@ -41,6 +48,7 @@ const router = createBrowserRouter([
     errorElement: <NotFound />,
     children: [
       { index: true, element: <AdminLogin /> },
+      { path: "/admin/dashboard", element: <DashBoard /> },
       { path: "/admin/banner", element: <Banner /> },
       { path: "/admin/banner/edit", element: <BannerEdit /> },
       { path: "/admin/banner/edit/:bannerId", element: <BannerEdit /> },
