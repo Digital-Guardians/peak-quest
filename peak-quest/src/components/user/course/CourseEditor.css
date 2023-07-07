@@ -1,0 +1,10 @@
+.toastui-editor-toolbar-divider {
+  display: none;
+}
+
+.toastui-editor-dropdown-toolbar {
+  width: 250px;
+  height: inherit;
+  flex-wrap: wrap;
+  justify-content: center;
+}

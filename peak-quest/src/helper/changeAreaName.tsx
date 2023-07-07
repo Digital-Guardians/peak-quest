@@ -42,3 +42,4 @@ export const changeEnglish = (areaName: string | undefined) => {
       return "area/notfound";
   }
 };
+
