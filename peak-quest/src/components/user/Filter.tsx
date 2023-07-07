@@ -2,10 +2,9 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import { IoIosArrowDropdown } from "react-icons/io";
+import SelectCourseOption from "./SelectCourseOption";
 import { changeKorean } from "../../helper/changeAreaName";
 import { LevelButton } from "../LevelButton";
-import LevelModal from "./LevelModal";
-import SelectCourseOption from "./SelectCourseOption";
 
 // select, setSelect를 props로 전달받음
 interface FilterProps {
@@ -24,7 +23,6 @@ interface FilterProps {
     }>
   >;
 }
-
 
 // 지역 변경 버튼
 export interface AreaOption {
@@ -103,29 +101,29 @@ export default function Filter({ select, setSelect }: FilterProps) {
         <div className="overflow-hidden">
           {/* 지역 이미지 */}
           <img
-            className="w-full max-w-[430px] h-[400px] translate-y-[-10%] scale-x-125"
+            className="h-[400px] w-full max-w-[430px] translate-y-[-10%] scale-x-125"
             src={`../../src/assets/user/${changeKorean(AreaName)}.png`}
           />
           {/* 이미지 그라데이션 */}
-          <div className="w-full h-full bg-gradient-to-b from-black/90 to-black/50 absolute top-0 left-0" />
+          <div className="absolute left-0 top-0 h-full w-full bg-gradient-to-b from-black/90 to-black/50" />
         </div>
-        <div className="w-full max-w-[430px] text-white absolute bottom-32 left-3">
-          <div className="flex justify-start items-center">
+        <div className="absolute bottom-32 left-3 w-full max-w-[430px] text-white">
+          <div className="flex items-center justify-start">
             {/* 지역 이름 */}
             <div
-              className="flex justify-center items-center text-xl font-bold ml-2 relative"
+              className="relative ml-2 flex items-center justify-center text-xl font-bold"
               onClick={() => setAreaSelect(!areaSelect)}
             >
               {changeKorean(AreaName)}
-              <div className="text-2xl font-bold pt-1 ml-1">
+              <div className="ml-1 pt-1 text-2xl font-bold">
                 <IoIosArrowDropdown />
               </div>
               {/* 지역 변경 */}
               {areaSelect && (
-                <div className="w-[110px] text-darkGray text-lg text-center font-medium bg-white py-1 rounded-lg shadow-lg absolute top-[35px] left-[-10px] z-50">
+                <div className="absolute left-[-10px] top-[35px] z-50 w-[110px] rounded-lg bg-white py-1 text-center text-lg font-medium text-darkGray shadow-lg">
                   {areaOptions.map((option) => (
                     <p
-                      className={`py-2 border-b-[1px] last:border-none border-gray ${
+                      className={`border-b-[1px] border-gray py-2 last:border-none ${
                         select.areaName === option.label ? "text-green" : ""
                       }`}
                       key={option.label}
@@ -155,7 +153,7 @@ export default function Filter({ select, setSelect }: FilterProps) {
               select.courseOption.length > 1
                 ? "w-[90%] sm:w-[90%]"
                 : "w-[55%] sm:w-[90%]"
-            } h-[35px] overflow-hidden flex justify-between items-center py-1 px-3 mr-2 my-2 text-md border-[1px] border-white rounded-2xl bg-black/60 break-keep leading-normal sm:w-[65%] cursor-pointer relative`}
+            } relative my-2 mr-2 flex h-[35px] cursor-pointer items-center justify-between overflow-hidden break-keep rounded-2xl border-[1px] border-white bg-black/60 px-3 py-1 text-md leading-normal sm:w-[65%]`}
             onClick={() => setOpen(!open)}
           >
             {select.courseOption.length > 0 ? (
