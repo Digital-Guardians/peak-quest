@@ -3,8 +3,9 @@ import { useNavigate, useParams } from "react-router";
 import { TiArrowSortedDown, TiArrowSortedUp } from "react-icons/ti";
 import { IoIosArrowDropdown } from "react-icons/io";
 import { changeKorean } from "../../helper/changeAreaName";
-import SelectCourseOption from "./SelectCourseOption";
 import { LevelButton } from "../LevelButton";
+import LevelModal from "./LevelModal";
+import SelectCourseOption from "./SelectCourseOption";
 
 // select, setSelect를 props로 전달받음
 interface FilterProps {
@@ -39,26 +40,6 @@ export const areaOptions: AreaOption[] = [
   { value: "gyeongsang", label: "경상권" },
   { value: "jeju", label: "제주도" },
 ];
-
-// 난이도 버튼
-interface LevelButtonProps {
-  label: string;
-  value: number;
-  onClick: (value: number) => void;
-  activeValue: number;
-}
-
-function LevelButton({ label, value, onClick, activeValue }: LevelButtonProps) {
-  const isActive = value === activeValue;
-  const buttonStyle = `h-[33px] px-[10px] mr-2 mt-2 text-md text-white font-bold border-[1px] rounded-full sm:h-[30px] sm:text-[10px] sm:px-4 ${
-    isActive ? "bg-mint border-mint" : "bg-black/60 border-white"
-  }`;
-  return (
-    <button className={buttonStyle} onClick={() => onClick(value)}>
-      {label}
-    </button>
-  );
-}
 
 // 코스 선택 버튼
 interface OptionButtonProps {
@@ -171,7 +152,9 @@ export default function Filter({ select, setSelect }: FilterProps) {
           <div
             id="courseOption"
             className={`${
-              select.courseOption.length > 1 ? "w-[90%]" : "w-[55%]"
+              select.courseOption.length > 1
+                ? "w-[90%] sm:w-[90%]"
+                : "w-[55%] sm:w-[90%]"
             } h-[35px] overflow-hidden flex justify-between items-center py-1 px-3 mr-2 my-2 text-md border-[1px] border-white rounded-2xl bg-black/60 break-keep leading-normal sm:w-[65%] cursor-pointer relative`}
             onClick={() => setOpen(!open)}
           >
@@ -179,7 +162,7 @@ export default function Filter({ select, setSelect }: FilterProps) {
               <>
                 {/* 코스 유형을 선택했을 경우 보여줌 => 20글자 이상이면, ... 표기 */}
                 {select.courseOption.join(" / ").length > 30
-                  ? select.courseOption.join(" / ").slice(0, 33) + "..."
+                  ? select.courseOption.join(" / ").slice(0, 30) + "..."
                   : select.courseOption.join(" / ")}
               </>
             ) : (
@@ -204,36 +187,42 @@ export default function Filter({ select, setSelect }: FilterProps) {
               value={0}
               onClick={(value: number) => handleSelect(value)}
               activeValue={level}
+              style="bg-black/60 border-white text-white"
             />
             <LevelButton
               label="⭐ 입문자"
               value={1}
               onClick={(value: number) => handleSelect(value)}
               activeValue={level}
+              style="bg-black/60 border-white text-white"
             />
             <LevelButton
               label="⭐⭐ 초보자"
               value={2}
               onClick={(value: number) => handleSelect(value)}
               activeValue={level}
+              style="bg-black/60 border-white text-white"
             />
             <LevelButton
               label="⭐⭐⭐ 아마추어"
               value={3}
               onClick={(value: number) => handleSelect(value)}
               activeValue={level}
+              style="bg-black/60 border-white text-white"
             />
             <LevelButton
               label="⭐⭐⭐⭐ 박사"
               value={4}
               onClick={(value: number) => handleSelect(value)}
               activeValue={level}
+              style="bg-black/60 border-white text-white"
             />
             <LevelButton
               label="⭐⭐⭐⭐⭐ 달인"
               value={5}
               onClick={(value: number) => handleSelect(value)}
               activeValue={level}
+              style="bg-black/60 border-white text-white"
             />
           </div>
         </div>
