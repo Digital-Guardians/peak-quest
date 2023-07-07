@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import CourseItem from "../../components/user/CourseItem";
 import Filter from "../../components/user/Filter";
 import Header from "../../components/Header";
@@ -103,7 +103,7 @@ export default function CourseList() {
       >
         {courseList.length > 0 ? (
           <>
-            <CourseItem courseList={courseList} />
+            <CourseItem courseList={courseList} isMine={false} />
             <div className="h-[80px] flex justify-center my-3">
               더이상 불러올 코스가 없습니다.
             </div>

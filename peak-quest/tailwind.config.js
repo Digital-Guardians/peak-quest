@@ -8,6 +8,7 @@ export default {
         sm: { max: "320px" },
       },
       colors: {
+        red: "#BA1A1A",
         mint: "#13CBBF",
         turquoise: "#16CABD",
         green: "#009288",
@@ -26,10 +27,9 @@ export default {
         xl: "20px",
         lg: "16px",
         md: "12px",
-        sm: "9px",
-        xs: "8px",
-        xxs: "4px",
+        sm: "10px",
       },
+      // 중복 삭제 해야함
       screens: {
         md: { max: "430px" },
         sm: { max: "320px" },

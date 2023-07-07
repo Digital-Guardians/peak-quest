@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 
 export const changeKorean = (areaName: string | undefined) => {
   areaName = areaName?.toLocaleLowerCase();
@@ -17,10 +16,9 @@ export const changeKorean = (areaName: string | undefined) => {
       return "경상권";
     case "jeju":
       return "제주도";
-    // 없는 경우 => NotFound로 이동
+    // 없는 경우 => NotFound
     default:
-      const navigate = useNavigate();
-      navigate("/NotFound"); // "Not Found" 페이지로 이동
+      return "area/notfound";
   }
 };
 
@@ -39,9 +37,9 @@ export const changeEnglish = (areaName: string | undefined) => {
       return "gyeongsang";
     case "제주도":
       return "jeju";
-    // 없는 경우 => NotFound로 이동
+    // 없는 경우 => NotFound
     default:
-      const navigate = useNavigate();
-      navigate("/NotFound"); // "Not Found" 페이지로 이동
+      return "area/notfound";
   }
 };
+
