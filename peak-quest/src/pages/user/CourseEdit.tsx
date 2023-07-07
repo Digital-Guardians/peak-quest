@@ -28,6 +28,8 @@ import CourseTags from "../../components/user/course/CourseTags";
 // 12. 코스 상세 설명
 import CourseEditor from "../../components/user/course/CourseEditor";
 import { useNavigate } from "react-router-dom";
+import KakaoMap from "../../components/user/course/KakaoMap";
+import KakaoMapLine from "../../components/user/course/KakaoMapLine";
 
 // **타입 정의**
 // 7. 소요 시간
@@ -41,6 +43,8 @@ export interface ListItem {
   id: number;
   place: string;
   amenities: Amenities;
+  position: { lat: string; lng: string };
+  address_name: string;
 }
 
 // 9. 코스 목록
@@ -175,21 +179,34 @@ export default function CourseEdit() {
   };
 
   // 9. 나만의 코스 목록
-  // lists : [{ id :number, place :string, amenities : { hasFood :boolean, hasRestroom :boolean, hasWater :boolean } }]
+  // 키워드 검색 결과 리스트
   const [lists, setLists] = useState<ListItem[]>([]);
+  // 키워드 input Value
   const [place, setPlace] = useState<string>("");
+  // 편의시설 유무
   const [amenities, setAmenities] = useState<Amenities>({
     hasRestroom: "",
     hasFood: "",
     hasWater: "",
   });
 
-  // 코스 목록 추가
-  const handleAddListItem = () => {
+  console.log("lists", lists);
+
+  // 새로운 입력창을 추가하는 함수
+  const handleAddNewInput = () => {
     const newItem: ListItem = {
-      id: Date.now(),
-      place,
-      amenities: { ...amenities },
+      id: Math.random(),
+      place: "",
+      amenities: {
+        hasRestroom: "",
+        hasFood: "",
+        hasWater: "",
+      },
+      position: {
+        lat: "",
+        lng: "",
+      },
+      address_name: "",
     };
 
     setLists([...lists, newItem]);
@@ -200,6 +217,7 @@ export default function CourseEdit() {
       hasWater: "",
     });
   };
+
   // 코스 삭제
   const handleRemoveListItem = (id: number) => {
     const updatedLists = lists.filter((item) => item.id !== id);
@@ -216,7 +234,7 @@ export default function CourseEdit() {
           ...list,
           amenities: {
             ...list.amenities,
-            [amenityType]: !list.amenities[amenityType],
+            [amenityType]: list.amenities[amenityType] === "Y" ? "N" : "Y",
           },
         };
       }
@@ -251,7 +269,7 @@ export default function CourseEdit() {
     tags,
     courseEditorText,
   };
-  console.log(data);
+  // console.log("total data", data);
 
   // console.log("myCourseTitle", myCourseTitle);
   // console.log("previewImgUrl", previewImgUrl);
@@ -330,9 +348,10 @@ export default function CourseEdit() {
       <div className="mb-8 px-3">
         <MyCourseLists
           lists={lists}
+          setLists={setLists}
           place={place}
           amenities={amenities}
-          onAddListItem={handleAddListItem}
+          onAddNewInput={handleAddNewInput}
           onRemoveListItem={handleRemoveListItem}
           onToggleAmenity={handleToggleAmenity}
           onPlaceChange={setPlace}
@@ -341,6 +360,7 @@ export default function CourseEdit() {
       </div>
       {/* 10. 기존 코스 정보 */}
       <div className="mb-8 px-3">기존 코스 정보</div>
+      <KakaoMapLine />
       {/* 11. 해시 태그 */}
       <div className="mb-8 px-3">
         <CourseTags tags={tags} handleTagsChange={handleTagsChange} />

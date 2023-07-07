@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { Amenities, ListItem } from "../../../pages/user/CourseEdit";
+import KakaoMap from "./KakaoMap";
+import { MapBtn } from "../../../assets/icon";
+import React from "react";
 
 // Tailwind CSS classes
 const buttonClasses = "w-1/3 h-10 transition-colors duration-300";
@@ -9,9 +12,10 @@ const activeButtonClasses = "text-white bg-mint";
 
 interface MyCourseListsProps {
   lists: ListItem[];
+  setLists: Dispatch<SetStateAction<ListItem[]>>;
   place: string;
   amenities: Amenities;
-  onAddListItem: () => void;
+  onAddNewInput: () => void;
   onRemoveListItem: (id: number) => void;
   onToggleAmenity: (itemId: number, amenityType: keyof Amenities) => void;
   onPlaceChange: (place: string) => void;
@@ -20,9 +24,10 @@ interface MyCourseListsProps {
 
 export default function MyCourseLists({
   lists,
+  setLists,
   place,
   amenities,
-  onAddListItem,
+  onAddNewInput,
   onRemoveListItem,
   onToggleAmenity,
   onPlaceChange,
@@ -50,8 +55,24 @@ export default function MyCourseLists({
     }
   };
 
+  // 카카오맵 팝업
+  const [isMapOpen, setIsMapOpen] = useState(false);
+
+  // 카카오맵 팝업 열기
+  const handleOpenMapPopup = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (place.trim() === "") return;
+    setIsMapOpen(true);
+  };
+
+  // 카카오맵 팝업 닫기
+  const handleCloseMapPopup = () => {
+    setIsMapOpen(false);
+  };
+
   // 장소 입력
   const handlePlaceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value.trim() === "") return;
     onPlaceChange(e.target.value);
   };
 
@@ -74,7 +95,7 @@ export default function MyCourseLists({
             <li key={item.id} className="relative">
               {/* 팝업 */}
               {isPopupOpen && (
-                <div className="fixed inset-0 z-10 flex items-center justify-center">
+                <div className="fixed inset-0 z-30 flex items-center justify-center">
                   <div
                     className="absolute inset-0 bg-black opacity-70"
                     onClick={handleClosePopup}
@@ -127,7 +148,6 @@ export default function MyCourseLists({
                 type="text"
                 className="w-full rounded-t-lg border border-gray p-2 text-center font-medium text-darkGray"
                 value={item.place}
-                onChange={handlePlaceChange}
                 readOnly
               />
               {/* 편의시설 버튼 */}
@@ -135,7 +155,7 @@ export default function MyCourseLists({
                 {/* 화장실 */}
                 <button
                   className={`${buttonClasses} ${
-                    item.amenities.hasRestroom
+                    item.amenities.hasRestroom === "Y"
                       ? activeButtonClasses
                       : defaultButtonClasses
                   } whitespace-nowrap rounded-bl-lg`}
@@ -146,7 +166,7 @@ export default function MyCourseLists({
                 {/* 음식점 */}
                 <button
                   className={`${buttonClasses} ${
-                    item.amenities.hasFood
+                    item.amenities.hasFood === "Y"
                       ? activeButtonClasses
                       : defaultButtonClasses
                   } whitespace-nowrap `}
@@ -157,18 +177,18 @@ export default function MyCourseLists({
                 {/* border */}
                 <div
                   className={`absolute bottom-0 right-1/3 h-full w-[1px] ${
-                    item.amenities.hasFood ? " bg-white" : "bg-gray"
+                    item.amenities.hasFood === "Y" ? " bg-white" : "bg-gray"
                   }`}
                 />
                 <div
                   className={`absolute bottom-0 left-1/3 h-full w-[1px] ${
-                    item.amenities.hasFood ? " bg-white" : "bg-gray"
+                    item.amenities.hasFood === "Y" ? " bg-white" : "bg-gray"
                   }`}
                 />
                 {/* 식수대 */}
                 <button
                   className={`${buttonClasses} ${
-                    item.amenities.hasWater
+                    item.amenities.hasWater === "Y"
                       ? activeButtonClasses
                       : defaultButtonClasses
                   } whitespace-nowrap rounded-br-lg`}
@@ -190,19 +210,26 @@ export default function MyCourseLists({
           {/* 코스 입력창 */}
           <div className="relative">
             {/* 코스 장소 입력 */}
-            <input
-              type="text"
-              className="w-full rounded-t-lg border border-gray p-2 text-center text-darkGray focus:outline-none"
-              value={place}
-              onChange={handlePlaceChange}
-            />
-
+            <form onSubmit={handleOpenMapPopup}>
+              <input
+                type="text"
+                className="w-full rounded-t-lg border border-gray px-11 py-2 text-center text-darkGray focus:outline-none"
+                value={place}
+                onChange={handlePlaceChange}
+              />
+            </form>
+            <div
+              onClick={handleOpenMapPopup}
+              className="absolute right-[16px] top-[10px] cursor-pointer opacity-70 transition-all duration-200 hover:opacity-100"
+            >
+              <MapBtn />
+            </div>
             {/* 편의시설 버튼 */}
             <div className="relative -mt-[1px] mb-3 flex items-center justify-evenly rounded-b-lg border border-gray">
               {/* 화장실 */}
               <button
                 className={`${buttonClasses} ${
-                  amenities.hasRestroom
+                  amenities.hasRestroom === "Y"
                     ? activeButtonClasses
                     : defaultButtonClasses
                 } whitespace-nowrap rounded-bl-lg`}
@@ -213,7 +240,9 @@ export default function MyCourseLists({
               {/* 음식점 */}
               <button
                 className={`${buttonClasses} ${
-                  amenities.hasFood ? activeButtonClasses : defaultButtonClasses
+                  amenities.hasFood === "Y"
+                    ? activeButtonClasses
+                    : defaultButtonClasses
                 } whitespace-nowrap `}
                 onClick={() => handleAmenitiesChange("hasFood")}
               >
@@ -222,18 +251,18 @@ export default function MyCourseLists({
               {/* border */}
               <div
                 className={`absolute bottom-0 right-1/3 h-full w-[1px] ${
-                  amenities.hasFood ? " bg-white" : "bg-gray"
+                  amenities.hasFood === "Y" ? " bg-white" : "bg-gray"
                 }`}
               />
               <div
                 className={`absolute bottom-0 left-1/3 h-full w-[1px] ${
-                  amenities.hasFood ? " bg-white" : "bg-gray"
+                  amenities.hasFood === "Y" ? " bg-white" : "bg-gray"
                 }`}
               />
               {/* 식수대 */}
               <button
                 className={`${buttonClasses} ${
-                  amenities.hasWater
+                  amenities.hasWater === "Y"
                     ? activeButtonClasses
                     : defaultButtonClasses
                 } whitespace-nowrap rounded-br-lg`}
@@ -247,19 +276,27 @@ export default function MyCourseLists({
       ) : (
         <div className="relative">
           {/* 코스 장소 입력 */}
-          <input
-            type="text"
-            className="w-full rounded-t-lg border border-gray p-2 text-center text-darkGray"
-            value={place}
-            onChange={handlePlaceChange}
-          />
+          <form onSubmit={handleOpenMapPopup}>
+            <input
+              type="text"
+              className="w-full rounded-t-lg border border-gray p-2 text-center text-darkGray"
+              value={place}
+              onChange={handlePlaceChange}
+            />
+          </form>
+          <div
+            onClick={handleOpenMapPopup}
+            className="absolute right-[16px] top-[10px] cursor-pointer opacity-70 transition-all duration-200 hover:opacity-100"
+          >
+            <MapBtn />
+          </div>
 
           {/* 편의시설 버튼 */}
           <div className="relative -mt-[1px] mb-3 flex items-center justify-evenly rounded-b-lg border border-gray">
             {/* 화장실 */}
             <button
               className={`${buttonClasses} ${
-                amenities.hasRestroom
+                amenities.hasRestroom === "Y"
                   ? activeButtonClasses
                   : defaultButtonClasses
               } whitespace-nowrap rounded-bl-lg`}
@@ -270,7 +307,9 @@ export default function MyCourseLists({
             {/* 음식점 */}
             <button
               className={`${buttonClasses} ${
-                amenities.hasFood ? activeButtonClasses : defaultButtonClasses
+                amenities.hasFood === "Y"
+                  ? activeButtonClasses
+                  : defaultButtonClasses
               } whitespace-nowrap `}
               onClick={() => handleAmenitiesChange("hasFood")}
             >
@@ -279,18 +318,20 @@ export default function MyCourseLists({
             {/* border */}
             <div
               className={`absolute bottom-0 right-1/3 h-full w-[1px] ${
-                amenities.hasFood ? " bg-white" : "bg-gray"
+                amenities.hasFood === "Y" ? " bg-white" : "bg-gray"
               }`}
             />
             <div
               className={`absolute bottom-0 left-1/3 h-full w-[1px] ${
-                amenities.hasFood ? " bg-white" : "bg-gray"
+                amenities.hasFood === "Y" ? " bg-white" : "bg-gray"
               }`}
             />
             {/* 식수대 */}
             <button
               className={`${buttonClasses} ${
-                amenities.hasWater ? activeButtonClasses : defaultButtonClasses
+                amenities.hasWater === "Y"
+                  ? activeButtonClasses
+                  : defaultButtonClasses
               } whitespace-nowrap rounded-br-lg`}
               onClick={() => handleAmenitiesChange("hasWater")}
             >
@@ -302,11 +343,40 @@ export default function MyCourseLists({
       {/* 추가 버튼 */}
       <button
         className="borer-gray w-full cursor-pointer rounded-lg border py-1 text-xl text-gray hover:bg-mint hover:text-white"
-        onClick={onAddListItem}
+        onClick={onAddNewInput}
         disabled={!place}
       >
         +
       </button>
+      {/* 카카오맵 팝업 */}
+      {isMapOpen && (
+        <div className="fixed inset-0 z-30 m-auto flex max-w-[430px] items-center justify-center px-5">
+          <div
+            className="absolute inset-0 bg-black opacity-70"
+            onClick={handleCloseMapPopup}
+          />
+          <div className="relative flex w-full items-center justify-center rounded-lg bg-white p-5 text-center text-black shadow-3xl sm:p-2">
+            <div className="w-full p-4">
+              <KakaoMap
+                place={place}
+                lists={lists}
+                setLists={setLists}
+                onPlaceChange={onPlaceChange}
+                onAddNewInput={onAddNewInput}
+                handleCloseMapPopup={handleCloseMapPopup}
+                amenities={amenities}
+              />
+            </div>
+            {/* 닫기 버튼 */}
+            <button
+              className="absolute right-2 top-2 text-darkGray"
+              onClick={handleCloseMapPopup}
+            >
+              <IoClose size={20} />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
