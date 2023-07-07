@@ -1,5 +1,5 @@
 import { IoClose } from "react-icons/io5";
-import { GoogleLoginBtn } from "../assets/icon";
+import { GoogleLoginBtn, PeakQuestLogo } from "../assets/icon";
 import { useUserContext } from "../context/userContext";
 
 export default function Login() {
@@ -14,25 +14,27 @@ export default function Login() {
             onClick={handleCloseLoginPopup}
             className="absolute inset-0 bg-black opacity-70"
           />
-          <div className="max-w-[430px] relative flex items-center justify-center rounded-lg bg-white p-10 text-center text-black shadow-3xl">
-            <div className="sm:w-full">
+          <div className="relative flex max-w-[430px] items-center justify-center rounded-lg bg-white p-10 text-center text-black shadow-3xl">
+            <div className="flex flex-col items-center justify-center">
               {/* 로고 */}
-              <div>logo</div>
+              <div>
+                <PeakQuestLogo />
+              </div>
               {/* 내용 */}
-              <h2 className="text-black my-4">
+              <h2 className="my-4 text-black">
                 <p className="text-lg sm:text-md">구글 로그인으로 간편하게</p>
                 <p className="text-lg sm:text-md">
                   나만의 코스를 만들고, 공유해보세요.
                 </p>
               </h2>
               {/* 버튼 */}
-              <button className="mb-4 w-full cursor-pointer rounded-lg border border-gray hover:shadow-md transition-shadow duration-300">
-                <div className="flex justify-center space-x-2 py-2 items-center">
+              <button className="mb-4 w-full cursor-pointer rounded-lg border border-gray transition-shadow duration-300 hover:shadow-md">
+                <div className="flex items-center justify-center space-x-2 py-2">
                   <GoogleLoginBtn />
                   <div className="text-[14px] font-medium">구글로 시작하기</div>
                 </div>
               </button>
-              <div className="text-md text-[#939393] font-light">
+              <div className="text-md font-light text-[#939393]">
                 더 많은 로그인 채널을 준비중입니다.
               </div>
             </div>
