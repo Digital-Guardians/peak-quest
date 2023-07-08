@@ -61,6 +61,12 @@ interface State {
   setOuterWidth: Dispatch<SetStateAction<number>>;
   select: string;
   setSelect: Dispatch<SetStateAction<string>>;
+  user: any;
+  setUser: any;
+  admin: any;
+  setAdmin: any;
+  test: any;
+  setTest: any;
 }
 
 const ApiContext = createContext<State | null>(null);
@@ -72,17 +78,15 @@ export default function ContextProvider({ children }: { children: ReactNode }) {
   const [toggle, setToggle] = useState(true);
   const [outerWidth, setOuterWidth] = useState(window.outerWidth);
 
-  //sidebar
   const [select, setSelect] = useState("");
+  const [admin, setAdmin] = useState();
+  const [test, setTest] = useState(false);
 
   const location = useLocation();
 
   useEffect(() => {
     const pathName = location.pathname.split("/");
     setSelect(pathName[2]);
-  }, []);
-
-  useEffect(() => {
     const handleResize = () => {
       setOuterWidth(window.outerWidth);
     };
@@ -113,6 +117,10 @@ export default function ContextProvider({ children }: { children: ReactNode }) {
     setOuterWidth,
     select,
     setSelect,
+    admin,
+    setAdmin,
+    test,
+    setTest,
   };
 
   return <ApiContext.Provider value={value}>{children}</ApiContext.Provider>;

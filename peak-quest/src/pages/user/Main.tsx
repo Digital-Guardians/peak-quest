@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import createCourse from "../../assets/create-course.png";
 import courseList from "../../assets/course-lists.png";
 import { Link } from "react-router-dom";
@@ -17,11 +17,7 @@ export default function Main() {
               <br />
               코스 만들기
             </p>
-            <img
-              className="shadow-3xl"
-              src={createCourse}
-              alt="create-course"
-            />
+            <img className="shadow-3xl" src={createCourse} alt="create-course" />
           </div>
         </Link>
         <Link to={"/area"}>
