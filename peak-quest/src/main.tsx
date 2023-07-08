@@ -18,6 +18,7 @@ import BannerEdit from "./pages/admin/BannerEdit";
 import User from "./pages/admin/User";
 import Report from "./pages/admin/Report";
 import DashBoard from "./pages/admin/DashBoard";
+import ProtectedRoute from "./pages/admin/ProtectedRoute";
 
 const router = createBrowserRouter([
   {
@@ -41,13 +42,58 @@ const router = createBrowserRouter([
     element: <Admin />,
     errorElement: <NotFound />,
     children: [
-      { index: true, element: <AdminLogin /> },
-      { path: "/admin/dashboard", element: <DashBoard /> },
-      { path: "/admin/banner", element: <Banner /> },
-      { path: "/admin/banner/edit", element: <BannerEdit /> },
-      { path: "/admin/banner/edit/:bannerId", element: <BannerEdit /> },
-      { path: "/admin/report", element: <Report /> },
-      { path: "/admin/user", element: <User /> },
+      {
+        index: true,
+        element: <AdminLogin />,
+      },
+      {
+        path: "/admin/dashboard",
+        element: (
+          <ProtectedRoute requireAdmin>
+            <DashBoard />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/admin/banner",
+        element: (
+          <ProtectedRoute requireAdmin>
+            <Banner />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/admin/banner/edit",
+        element: (
+          <ProtectedRoute requireAdmin>
+            <BannerEdit />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/admin/banner/edit/:bannerId",
+        element: (
+          <ProtectedRoute requireAdmin>
+            <BannerEdit />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/admin/report",
+        element: (
+          <ProtectedRoute requireAdmin>
+            <Report />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "/admin/user",
+        element: (
+          <ProtectedRoute requireAdmin>
+            <User />
+          </ProtectedRoute>
+        ),
+      },
     ],
   },
 ]);
