@@ -32,22 +32,22 @@ export default function Nearby() {
   }, [distance]);
 
   return (
-    <div className="p-3 ease-linear duration-300">
+    <div className="p-3 duration-300 ease-linear">
       {/* 제목 & 위치 */}
-      <div className="flex justify-between items-center pl-1 sm:flex-col sm:items-start ">
-        <p className="text-xl text-black font-bold sm:mb-1">내 근처에 있어요</p>
-        <div className="flex justify-center items-center text-darkGray text-md sm:pl-1">
+      <div className="flex items-center justify-between pl-1 sm:flex-col sm:items-start ">
+        <p className="text-xl font-bold text-black sm:mb-1">내 근처에 있어요</p>
+        <div className="flex items-center justify-center text-md text-darkGray sm:pl-1">
           <MdMyLocation />
           <p className="ml-1">서울특별시 서대문구</p>
         </div>
       </div>
       {/* km 버튼 */}
-      <div className="mt-3 mb-4">
+      <div className="mb-4 mt-3">
         <button
           className={
             distance === 10
-              ? "w-[64px] h-[30px] bg-mint  text-md text-white border-0 font-bold rounded-3xl mr-2"
-              : "w-[64px] h-[30px] text-md text-darkGray border-[1px] border-gray rounded-3xl mr-2"
+              ? "mr-2 h-[30px] w-[64px]  rounded-3xl border-0 bg-mint text-md font-bold text-white"
+              : "mr-2 h-[30px] w-[64px] rounded-3xl border-[1px] border-gray text-md text-darkGray"
           }
           onClick={() => setDistance(10)}
         >
@@ -56,8 +56,8 @@ export default function Nearby() {
         <button
           className={
             distance === 30
-              ? "w-[64px] h-[30px] bg-mint  text-md text-white border-0 font-bold rounded-3xl mr-2"
-              : "w-[64px] h-[30px] text-md text-darkGray border-[1px] border-gray rounded-3xl mr-2"
+              ? "mr-2 h-[30px] w-[64px]  rounded-3xl border-0 bg-mint text-md font-bold text-white"
+              : "mr-2 h-[30px] w-[64px] rounded-3xl border-[1px] border-gray text-md text-darkGray"
           }
           onClick={() => setDistance(30)}
         >
@@ -66,8 +66,8 @@ export default function Nearby() {
         <button
           className={
             distance === 50
-              ? "w-[64px] h-[30px] bg-mint  text-md text-white border-0 font-bold rounded-3xl mr-2"
-              : "w-[64px] h-[30px] text-md text-darkGray border-[1px] border-gray rounded-3xl mr-2"
+              ? "mr-2 h-[30px] w-[64px]  rounded-3xl border-0 bg-mint text-md font-bold text-white"
+              : "mr-2 h-[30px] w-[64px] rounded-3xl border-[1px] border-gray text-md text-darkGray"
           }
           onClick={() => setDistance(50)}
         >
@@ -75,7 +75,9 @@ export default function Nearby() {
         </button>
       </div>
       {/* course 목록 */}
-      {nearCourseList && <CourseItem courseList={nearCourseList} />}
+      {nearCourseList && (
+        <CourseItem courseList={nearCourseList} isMine={false} />
+      )}
     </div>
   );
 }
