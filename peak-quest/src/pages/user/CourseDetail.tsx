@@ -15,9 +15,10 @@ import {
   AiFillQuestionCircle,
 } from "react-icons/ai";
 import { BsShieldFillExclamation } from "react-icons/bs";
-import water from "../../assets/user/bookmark.png";
+import water from "../../assets/user/water.png";
 import restroom from "../../assets/user/restroom.png";
 import restaurant from "../../assets/user/restroom.png";
+import KakaoMapLine from "../../components/user/course/KakaoMapLine";
 
 // 코스 타입 정의
 interface Course {
@@ -205,7 +206,7 @@ export default function CourseDetail() {
             <div className="my-5 text-xl font-bold text-black sm:text-lg">
               <p className="border-b-[1px] border-gray pb-3">코스 소개</p>
               <div className="mt-8 h-[270px] w-full rounded-lg bg-gray">
-                kakao map
+                <KakaoMapLine />
               </div>
               <div className="mt-10 ">
                 {/* <div className="w-[8px] min-h-[210px] bg-mint absolute left-3 " /> */}
