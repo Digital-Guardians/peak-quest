@@ -1,0 +1,51 @@
+{
+  "course": {
+    "id": 1,
+    "writer": "하늘을 나는 트래커",
+    "title": "강원도 주민이 추천하는 코스코스코스코스코스",
+    "area": "강원권",
+    "detail_area": "강원도 인제군",
+    "thumbnail": "../../../../src/assets/user/course_image_1.png",
+    "course_option": {
+      "go_alone": "Y",
+      "day_to_day": "N",
+      "with_pet": "Y",
+      "with_amenities": "N",
+      "can_bike": "Y"
+    },
+    "time": 180,
+    "distance": 12,
+    "level": 1,
+    "info": [
+      {
+        "id": 1,
+        "place": "설악산",
+        "amenities": {
+          "water": "Y",
+          "restaurant": "N",
+          "restroom": "N"
+        }
+      },
+      {
+        "id": 2,
+        "place": "설악산 휴게소",
+        "amenities": {
+          "water": "N",
+          "restaurant": "Y",
+          "restroom": "Y"
+        }
+      },
+      {
+        "id": 3,
+        "place": "대관령 양떼목장",
+        "amenities": {
+          "water": "Y",
+          "restaurant": "N",
+          "restroom": "N"
+        }
+      }
+    ],
+    "content": "balhblah ... editor 내용",
+    "tag": ["강원도 즐기기", "설악산 트래킹", "한국 트래킹"]
+  }
+}
