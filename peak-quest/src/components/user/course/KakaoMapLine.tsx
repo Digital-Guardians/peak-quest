@@ -1,4 +1,4 @@
-import { Map, Polyline } from "react-kakao-maps-sdk";
+import { Map, Polyline, MapInfoWindow } from "react-kakao-maps-sdk";
 
 export default function KakaoMapLine() {
   const filterLists = lists.map((v) => v.position);
@@ -18,23 +18,67 @@ export default function KakaoMapLine() {
         }))
       : [];
 
+  const startPosition = lists[0]?.position;
+  const endPosition = lists[lists.length - 1].position;
+
+  console.log(startPosition);
+
   return (
     <Map // 지도를 표시할 Container
       center={center}
       style={{
         // 지도의 크기
         width: "100%",
-        height: "450px",
+        height: "100%",
       }}
-      level={7} // 지도의 확대 레벨
+      level={8} // 지도의 확대 레벨
     >
       <Polyline
         path={[path]}
         strokeWeight={5} // 선의 두께
-        strokeColor={"#ff0000"} // 선의 색깔
+        strokeColor={"#6B4BFB"} // 선의 색깔
         strokeOpacity={0.7} // 선의 불투명도
         strokeStyle={"solid"} // 선의 스타일
       />
+
+      <MapInfoWindow
+        position={{
+          lat: +startPosition.lat,
+          lng: +startPosition.lng,
+        }}
+        removable={true} // 인포윈도우를 닫을 수 있는 x버튼
+      >
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            fontSize: "12px",
+            padding: "5px",
+            color: "#009288",
+          }}
+        >
+          코스 시작 !
+        </div>
+      </MapInfoWindow>
+      <MapInfoWindow
+        position={{
+          lat: +endPosition.lat,
+          lng: +endPosition.lng,
+        }}
+        removable={true} // 인포윈도우를 닫을 수 있는 x버튼
+      >
+        <div
+          style={{
+            width: "100%",
+            height: "100%",
+            fontSize: "12px",
+            padding: "5px",
+            color: "#009288",
+          }}
+        >
+          코스 완주 !
+        </div>
+      </MapInfoWindow>
     </Map>
   );
 }

@@ -61,7 +61,7 @@ export default function Nearby() {
           }
           onClick={() => setDistance(30)}
         >
-          30km
+          10~30km
         </button>
         <button
           className={
