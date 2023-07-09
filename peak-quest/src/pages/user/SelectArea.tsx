@@ -24,7 +24,7 @@ export default function SelectArea() {
             </h1>
             <img
               className="relative translate-y-[-25%]"
-              src={`./images/area/area1.png`}
+              src={`./images/area/capital.png`}
             ></img>
           </div>
           <div
@@ -39,7 +39,7 @@ export default function SelectArea() {
             </h1>
             <img
               className="relative translate-y-[-30%]"
-              src={`./images/area/area2.png`}
+              src={`./images/area/gangwon.png`}
             ></img>
           </div>
           <div
@@ -54,7 +54,7 @@ export default function SelectArea() {
             </h1>
             <img
               className="relative translate-y-[-35%]"
-              src={`./images/area/area3.png`}
+              src={`./images/area/chungcheong.png`}
             ></img>
           </div>
           <div
@@ -69,7 +69,7 @@ export default function SelectArea() {
             </h1>
             <img
               className="relative translate-y-[-39%]"
-              src={`./images/area/area4.png`}
+              src={`./images/area/jeolla.png`}
             ></img>
           </div>
           <div
@@ -84,7 +84,7 @@ export default function SelectArea() {
             </h1>
             <img
               className="relative translate-y-[-27%]"
-              src={`./images/area/area5.png`}
+              src={`./images/area/gyeongsang.png`}
             ></img>
           </div>
           <div
@@ -99,7 +99,7 @@ export default function SelectArea() {
             </h1>
             <img
               className="relative translate-y-[-26%]"
-              src={`./images/area/area6.png`}
+              src={`./images/area/jeju.png`}
             ></img>
           </div>
         </div>

@@ -13,7 +13,7 @@ export default function Main() {
     <div className="bg-lightGray text-black">
       <Header />
       <div className="flex items-center justify-center py-5 text-xl font-bold leading-7 sm:text-md sm:leading-3 md:text-lg md:leading-4">
-        <Link to={"/area"}>
+        <Link to={"/area/create"}>
           <div className="relative mr-2">
             <p className="absolute left-3 top-3">
               나만의

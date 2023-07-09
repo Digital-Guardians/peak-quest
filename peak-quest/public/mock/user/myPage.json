@@ -7,37 +7,42 @@
       "thumbnail": "/images/course/course1.png",
       "views": 112,
       "recommendations": 394,
-      "distance": 10,
+      "area": "수도권"
+    },
+    {
+      "id": 2,
+      "title": "자전거 트래킹",
+      "writer": "트래킹 고수 진희",
+      "thumbnail": "/images/course/course4.png",
+      "views": 100,
+      "recommendations": 200,
       "area": "수도권"
     },
     {
       "id": 3,
-      "title": "자전거 트래킹",
-      "writer": "트래킹 고수 진희",
-      "thumbnail": "/images/course/course2.png",
-      "views": 100,
-      "recommendations": 200,
-      "distance": 8,
-      "area": "수도권"
-    },
-    {
-      "id": 29,
-      "title": "관악산 트래킹 코스",
-      "writer": "트래킹 고수 진희",
+      "title": "템플스테이, 어떠세요?",
+      "writer": "대머리 깎은 홍길동",
       "thumbnail": "/images/course/course3.png",
       "views": 226,
       "recommendations": 168,
-      "distance": 10,
       "area": "수도권"
     },
     {
-      "id": 41,
-      "title": "관악산을 올라보자",
+      "id": 4,
+      "title": "관악산을 올라보자1",
       "writer": "발 빠른 정재",
-      "thumbnail": "/images/course/course4.png",
+      "thumbnail": "/images/course/course6.png",
       "views": 113,
       "recommendations": 226,
-      "distance": 10,
+      "area": "수도권"
+    },
+    {
+      "id": 5,
+      "title": "관악산을 올라보자2",
+      "writer": "발 빠른 정재",
+      "thumbnail": "/images/course/course2.png",
+      "views": 113,
+      "recommendations": 226,
       "area": "수도권"
     }
   ]

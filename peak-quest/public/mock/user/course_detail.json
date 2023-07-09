@@ -5,7 +5,7 @@
     "title": "강원도 주민이 추천하는 코스코스코스코스코스",
     "area": "강원권",
     "detail_area": "강원도 인제군",
-    "thumbnail": "../../../../src/assets/user/course_image_1.png",
+    "thumbnail": "/images/course/course1.png",
     "course_option": {
       "go_alone": "Y",
       "day_to_day": "N",

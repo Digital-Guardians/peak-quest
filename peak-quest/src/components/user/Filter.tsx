@@ -102,7 +102,7 @@ export default function Filter({ select, setSelect }: FilterProps) {
           {/* 지역 이미지 */}
           <img
             className="h-[400px] w-full max-w-[430px] translate-y-[-10%] scale-x-125"
-            src={`../../src/assets/user/${changeKorean(AreaName)}.png`}
+            src={`/images/area/${AreaName}.png`}
           />
           {/* 이미지 그라데이션 */}
           <div className="absolute left-0 top-0 h-full w-full bg-gradient-to-b from-black/90 to-black/50" />

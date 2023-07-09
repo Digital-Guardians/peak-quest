@@ -15,6 +15,9 @@ import {
   AiFillQuestionCircle,
 } from "react-icons/ai";
 import { BsShieldFillExclamation } from "react-icons/bs";
+import water from "../../assets/user/bookmark.png";
+import restroom from "../../assets/user/restroom.png";
+import restaurant from "../../assets/user/restroom.png";
 
 // 코스 타입 정의
 interface Course {
@@ -79,13 +82,13 @@ export default function CourseDetail() {
     saveRecentCourse({
       id: 1,
       title: "최근adsfa sfsafaㅇㅁㄹㄴㅁ ㅇㄹㄴㄻㄹㅇㄴ",
-      thumbnail: "../../src/assets/user/course_image_2.png",
+      thumbnail: "/images/course/course2.png",
       area: "제주도",
     });
     saveRecentCourse({
       id: 2,
       title: "서울 속 시원한 숲 ㅇㅇㅇㅇ",
-      thumbnail: "../../src/assets/user/course_image_2.png",
+      thumbnail: "/images/course/course2.png",
       area: "수도권",
     });
   }, []);
@@ -93,12 +96,12 @@ export default function CourseDetail() {
   return (
     <>
       {course && (
-        <div className="w-full relative">
+        <div className="relative w-full">
           {/* header */}
-          <div className="w-full h-[50px] sm:h-[48px] pt-1 sm:pt-2 text-white text-xl sm:text-lg font-bold text-center leading-loose ease-linear duration-300 absolute top-0 z-50">
+          <div className="absolute top-0 z-50 h-[50px] w-full pt-1 text-center text-xl font-bold leading-loose text-white duration-300 ease-linear sm:h-[48px] sm:pt-2 sm:text-lg">
             {/* 뒤로 가기 버튼 */}
             <div
-              className="text-2xl sm:text-xl ease-linear duration-300 absolute top-3 left-3"
+              className="absolute left-3 top-3 text-2xl duration-300 ease-linear sm:text-xl"
               onClick={() => navigate(-1)}
             >
               <IoIosArrowBack />
@@ -106,7 +109,7 @@ export default function CourseDetail() {
             <p>{course.writer} 님의 코스</p>
             {/* 공유버튼 */}
             <div
-              className="flex items-center justify-center text-xl sm:text-lg  cursor-pointer absolute top-3 right-3"
+              className="absolute right-3 top-3 flex cursor-pointer  items-center justify-center text-xl sm:text-lg"
               onClick={() => {
                 copy(
                   `http://localhost:5173/area/${changeEnglish(
@@ -120,43 +123,43 @@ export default function CourseDetail() {
             </div>
           </div>
           {/* 썸네일 */}
-          <div className="w-full max-w-[430px] h-[450px] sm:h-[380px] text-white overflow-hidden relative">
+          <div className="relative h-[450px] w-full max-w-[430px] overflow-hidden text-white sm:h-[380px]">
             <img
-              className="w-full h-full"
+              className="h-full w-full"
               src={`${course.thumbnail}`}
               alt={`${course.title}`}
             />
             {/* 그라데이션 */}
-            <div className="w-full h-full bg-gradient-to-b from-black/60 to-black/0 absolute top-0 left-0" />
+            <div className="absolute left-0 top-0 h-full w-full bg-gradient-to-b from-black/60 to-black/0" />
             {/* 코스 필터 */}
-            <div className="absolute left-3 bottom-5 flex flex-col justify-center pr-2">
+            <div className="absolute bottom-5 left-3 flex flex-col justify-center pr-2">
               <p className="text-2xl font-bold sm:text-xl">{course.title}</p>
-              <div className="flex justify-start items-center flex-wrap">
-                <div className="mt-2 mr-2 text-md font-bold p-2  sm:py-1 border-[1px] border-white rounded-full">
+              <div className="flex flex-wrap items-center justify-start">
+                <div className="mr-2 mt-2 rounded-full border-[1px] border-white  p-2 text-md font-bold sm:py-1">
                   {course.area}
                 </div>
                 {course.course_option.go_alone === "Y" && (
-                  <div className="mt-2 mr-2 text-md font-bold p-2 sm:py-1 border-[1px] border-white rounded-full">
+                  <div className="mr-2 mt-2 rounded-full border-[1px] border-white p-2 text-md font-bold sm:py-1">
                     혼자서도 가능한
                   </div>
                 )}
                 {course.course_option.can_bike === "Y" && (
-                  <div className="mt-2 mr-2 text-md font-bold p-2 sm:py-1 border-[1px] border-white rounded-full">
+                  <div className="mr-2 mt-2 rounded-full border-[1px] border-white p-2 text-md font-bold sm:py-1">
                     자전거 타고 갈 수 있는
                   </div>
                 )}
                 {course.course_option.day_to_day === "Y" && (
-                  <div className="mt-2 mr-2 text-md font-bold p-2 sm:py-1 border-[1px] border-white rounded-full">
+                  <div className="mr-2 mt-2 rounded-full border-[1px] border-white p-2 text-md font-bold sm:py-1">
                     당일치기 가능한
                   </div>
                 )}
                 {course.course_option.with_amenities === "Y" && (
-                  <div className="mt-2 mr-2 text-md font-bold p-2 sm:py-1 border-[1px] border-white rounded-full">
+                  <div className="mr-2 mt-2 rounded-full border-[1px] border-white p-2 text-md font-bold sm:py-1">
                     편의시설이 있는
                   </div>
                 )}
                 {course.course_option.with_pet === "Y" && (
-                  <div className="mt-2 mr-2 text-md font-bold p-2 sm:py-1 border-[1px] border-white rounded-full">
+                  <div className="mr-2 mt-2 rounded-full border-[1px] border-white p-2 text-md font-bold sm:py-1">
                     반려동물과 함께 갈 수 있는
                   </div>
                 )}
@@ -165,32 +168,32 @@ export default function CourseDetail() {
           </div>
           <div className="px-3">
             {/* 지역, 시간, km */}
-            <div className="w-full h-[60px] sm:h-[55px] flex justify-start items-center text-md text-darkGray  border-b-[1px] border-gray">
-              <div className="flex justify-start items-center mr-2">
-                <div className="text-xl sm:text-lg mr-1">
+            <div className="flex h-[60px] w-full items-center justify-start border-b-[1px] border-gray text-md  text-darkGray sm:h-[55px]">
+              <div className="mr-2 flex items-center justify-start">
+                <div className="mr-1 text-xl sm:text-lg">
                   <MdOutlineLocationOn />
                 </div>
                 {course.detail_area}
               </div>
-              <div className="flex justify-start items-center mr-2">
-                <div className="text-xl  sm:text-lg mr-1">
+              <div className="mr-2 flex items-center justify-start">
+                <div className="mr-1  text-xl sm:text-lg">
                   <WiTime7 />
                 </div>
                 {course.time}시간
               </div>
-              <div className="flex justify-start items-center">
-                <div className="text-xl  sm:text-lg mr-1">
+              <div className="flex items-center justify-start">
+                <div className="mr-1  text-xl sm:text-lg">
                   <BiCurrentLocation />
                 </div>
                 {course.distance}km
               </div>
             </div>
             {/* 신고 */}
-            <div className="h-[40px] flex justify-start items-center text-md text-darkGray bg-[#f1f1f1] mt-3 px-3 rounded-lg relative">
+            <div className="relative mt-3 flex h-[40px] items-center justify-start rounded-lg bg-[#f1f1f1] px-3 text-md text-darkGray">
               <BsShieldFillExclamation />
               <p className="ml-2">이 코스 정보에 문제가 있나요?</p>
               <button
-                className="flex justify-center items-center absolute right-3 font-bold"
+                className="absolute right-3 flex items-center justify-center font-bold"
                 onClick={() => setOpen(true)}
               >
                 신고하기
@@ -199,9 +202,9 @@ export default function CourseDetail() {
             </div>
 
             {/* 코스소개 */}
-            <div className="my-5 text-black text-xl sm:text-lg font-bold">
-              <p className="pb-3 border-b-[1px] border-gray">코스 소개</p>
-              <div className="w-full h-[270px] bg-gray mt-8 rounded-lg">
+            <div className="my-5 text-xl font-bold text-black sm:text-lg">
+              <p className="border-b-[1px] border-gray pb-3">코스 소개</p>
+              <div className="mt-8 h-[270px] w-full rounded-lg bg-gray">
                 kakao map
               </div>
               <div className="mt-10 ">
@@ -210,31 +213,31 @@ export default function CourseDetail() {
                   {course.info.map((el, idx) => (
                     <div
                       key={idx}
-                      className="w-full h-[50px] flex items-center mb-5"
+                      className="mb-5 flex h-[50px] w-full items-center"
                     >
-                      <div className="w-[30px] sm:w-[25px] h-[30px] sm:h-[25px] bg-white mr-2 flex justify-center items-center border-4 sm:border-[3px] border-mint rounded-full text-md text-mint font-bold">
+                      <div className="mr-2 flex h-[30px] w-[30px] items-center justify-center rounded-full border-4 border-mint bg-white text-md font-bold text-mint sm:h-[25px] sm:w-[25px] sm:border-[3px]">
                         {idx + 1}
                       </div>
                       <div className="text-darkGray">{el.place}</div>
                       {/* 편의시설 */}
                       {el.amenities && (
-                        <div className="w-[100px] flex justify-start items-center ml-3">
+                        <div className="ml-3 flex w-[100px] items-center justify-start">
                           {el.amenities.restaurant === "Y" && (
                             <img
-                              className="w-[25px] sm:w-[20px] mr-3 sm:mr-2"
-                              src="../../../../src/assets/user/restaurant.png"
+                              className="mr-3 w-[25px] sm:mr-2 sm:w-[20px]"
+                              src={restaurant}
                             />
                           )}
                           {el.amenities.restroom === "Y" && (
                             <img
-                              className="w-[25px] sm:w-[20px] mr-3 sm:mr-2"
-                              src="../../../../src/assets/user/restroom.png"
+                              className="mr-3 w-[25px] sm:mr-2 sm:w-[20px]"
+                              src={restroom}
                             />
                           )}
                           {el.amenities.water === "Y" && (
                             <img
-                              className="w-[25px] sm:w-[20px] mr-3"
-                              src="../../../../src/assets/user/water.png"
+                              className="mr-3 w-[25px] sm:w-[20px]"
+                              src={water}
                             />
                           )}
                         </div>
@@ -243,7 +246,7 @@ export default function CourseDetail() {
                   ))}
                 </div>
                 {/* 관련 코스 */}
-                <div className="h-[40px] sm:h-[55px] flex justify-start items-center text-md text-green font-normal bg-lightGreen mt-3 px-3 rounded-lg relative">
+                <div className="relative mt-3 flex h-[40px] items-center justify-start rounded-lg bg-lightGreen px-3 text-md font-normal text-green sm:h-[55px]">
                   <div className="text-lg">
                     <AiFillQuestionCircle />
                   </div>
@@ -253,7 +256,7 @@ export default function CourseDetail() {
                     궁금하신가요?
                   </p>
                   <button
-                    className="flex justify-center items-center absolute right-3 font-bold"
+                    className="absolute right-3 flex items-center justify-center font-bold"
                     onClick={() => setOpen(true)}
                   >
                     보러가기
@@ -263,19 +266,19 @@ export default function CourseDetail() {
               </div>
             </div>
             {/* 코스설명 */}
-            <div className="my-10 text-black text-xl sm:text-lg font-bold">
-              <p className="mb-8 sm:mb-5 pb-3 border-b-[1px] border-gray">
+            <div className="my-10 text-xl font-bold text-black sm:text-lg">
+              <p className="mb-8 border-b-[1px] border-gray pb-3 sm:mb-5">
                 코스 설명
               </p>
               <div className="my-8 sm:my-8">
-                <div className="flex justify-start items-center">
-                  <div className="w-[30px] sm:w-[25px] h-[30px] sm:h-[25px] bg-white mr-2 flex justify-center items-center border-4 sm:border-[3px] border-mint rounded-full text-md text-mint font-bold">
+                <div className="flex items-center justify-start">
+                  <div className="mr-2 flex h-[30px] w-[30px] items-center justify-center rounded-full border-4 border-mint bg-white text-md font-bold text-mint sm:h-[25px] sm:w-[25px] sm:border-[3px]">
                     1
                   </div>
                   <div className="text-darkGray ">설악산</div>
                 </div>
                 <img
-                  className="w-full h-[270px] bg-gray mt-5 rounded-lg"
+                  className="mt-5 h-[270px] w-full rounded-lg bg-gray"
                   src="#"
                 />
                 <div className="mt-5 text-md font-normal">
@@ -283,14 +286,14 @@ export default function CourseDetail() {
                 </div>
               </div>
               <div className="my-8 sm:my-8">
-                <div className="flex justify-start items-center">
-                  <div className="w-[30px] sm:w-[25px] h-[30px] sm:h-[25px] bg-white mr-2 flex justify-center items-center border-4 sm:border-[3px] border-mint rounded-full text-md text-mint font-bold">
+                <div className="flex items-center justify-start">
+                  <div className="mr-2 flex h-[30px] w-[30px] items-center justify-center rounded-full border-4 border-mint bg-white text-md font-bold text-mint sm:h-[25px] sm:w-[25px] sm:border-[3px]">
                     2
                   </div>
                   <div className="text-darkGray">설악산 휴게소</div>
                 </div>
                 <img
-                  className="w-full h-[270px] bg-gray mt-5 rounded-lg"
+                  className="mt-5 h-[270px] w-full rounded-lg bg-gray"
                   src="#"
                 />
                 <div className="mt-5 text-md font-normal">
@@ -298,14 +301,14 @@ export default function CourseDetail() {
                 </div>
               </div>
               <div className="my-10 sm:my-8">
-                <div className="flex justify-start items-center">
-                  <div className="w-[30px] sm:w-[25px] h-[30px] sm:h-[25px] bg-white mr-2 flex justify-center items-center border-4 sm:border-[3px] border-mint rounded-full text-md text-mint font-bold">
+                <div className="flex items-center justify-start">
+                  <div className="mr-2 flex h-[30px] w-[30px] items-center justify-center rounded-full border-4 border-mint bg-white text-md font-bold text-mint sm:h-[25px] sm:w-[25px] sm:border-[3px]">
                     3
                   </div>
                   <div className="text-darkGray">대관령 양떼목장</div>
                 </div>
                 <img
-                  className="w-full h-[270px] bg-gray mt-5 rounded-lg"
+                  className="mt-5 h-[270px] w-full rounded-lg bg-gray"
                   src="#"
                 />
                 <div className="mt-5 text-md font-normal">
@@ -315,10 +318,10 @@ export default function CourseDetail() {
             </div>
             {/* hashtag */}
             {course.tag && (
-              <div className="flex justify-start items-center mb-8 pb-5 border-b-[1px] border-gray">
+              <div className="mb-8 flex items-center justify-start border-b-[1px] border-gray pb-5">
                 {course.tag.map((el, idx) => (
                   <div
-                    className="text-sm text-green bg-lightGreen py-2 px-3 sm:py-1 sm:px-2 rounded-lg sm:rounded-md mr-3"
+                    className="mr-3 rounded-lg bg-lightGreen px-3 py-2 text-sm text-green sm:rounded-md sm:px-2 sm:py-1"
                     key={idx}
                   >
                     # {el}
@@ -327,13 +330,13 @@ export default function CourseDetail() {
               </div>
             )}
             {/* 추천 & 스크랩 btn */}
-            <div className="w-full h-[60px] sm:h-[50px] my-5 flex justify-evenly items-center text-lg sm:text-md font-bold">
+            <div className="my-5 flex h-[60px] w-full items-center justify-evenly text-lg font-bold sm:h-[50px] sm:text-md">
               <div
-                className={`w-[45%] h-full flex flex-col justify-center items-center rounded-lg cursor-pointer 
+                className={`flex h-full w-[45%] cursor-pointer flex-col items-center justify-center rounded-lg 
               ${
                 isRecommend
-                  ? "text-green bg-lightGreen"
-                  : "text-darkGray bg-[#f1f1f1]"
+                  ? "bg-lightGreen text-green"
+                  : "bg-[#f1f1f1] text-darkGray"
               }`}
                 onClick={() => {
                   setIsRecommend(!isRecommend);
@@ -346,8 +349,8 @@ export default function CourseDetail() {
                 </div>
                 추천하기
               </div>
-              <div className="w-[1px] h-full bg-white" />
-              <div className="w-[45%] h-full">
+              <div className="h-full w-[1px] bg-white" />
+              <div className="h-full w-[45%]">
                 <WishBtn courseId={course.id} isDetail={true} />
               </div>
             </div>
