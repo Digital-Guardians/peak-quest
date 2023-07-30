@@ -22,7 +22,7 @@ function getStyle(style: any, snapshot: any) {
 }
 
 export default function BannerItem({ info, index, select, setSelect }: propBanner) {
-  const { img_url, link, tags, title } = info;
+  const { url, tags, title } = info;
 
   const { setBannerInfo } = useService();
 
@@ -43,14 +43,14 @@ export default function BannerItem({ info, index, select, setSelect }: propBanne
               style={getStyle(provided.draggableProps.style, snapshot)}
               className="flex justify-center items-center w-[15%]"
             >
-              <img className="w-24 h-24 rounded-md" src={img_url} alt="" />
+              <img className="w-24 h-24 rounded-md" src={url} alt="" />
             </div>
             <div className="w-[58%] text-center">
               <div>{title}</div>
               <div className="text-lg font-normal">
-                {tags.split(",").map((tag) => {
+                {/* {tags.split(",").map((tag) => {
                   return <span className="ml-2">#{tag}</span>;
-                })}
+                })} */}
               </div>
             </div>
             <div className="flex justify-center w-[15%] font-normal">

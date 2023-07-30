@@ -1,5 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getDatabase, ref, get } from "firebase/database";
+import { v4 as uuid } from "uuid";
+import { getDatabase, ref, get, set } from "firebase/database";
 import {
   getAuth,
   signInWithPopup,
@@ -48,4 +49,44 @@ async function adminUser(user: any) {
       }
       return user;
     });
+}
+
+//이미지 등록
+export async function addBannerImage(bannerData: any, imgUrl: any) {
+  get(ref(database, "bannerItem")).then((res) => {
+    const data = res.val();
+    console.log(data);
+    if (!data) {
+      set(ref(database, "bannerItem"), "");
+    }
+
+    const id = Object.keys(data).length + 1;
+
+    console.log(id);
+
+    set(ref(database, `bannerItem/${bannerData.title}`), {
+      ...bannerData,
+      id: `banner-${id}`,
+      url: imgUrl,
+    });
+  });
+}
+
+export function getBannerList() {
+  return get(ref(database, "banner")).then((res) => res.val());
+}
+
+export function getBannerItemList() {
+  return get(ref(database, "bannerItem")).then((res) => res.val());
+}
+
+export function addBanner(bannerList: any) {
+  get(ref(database, "bannerItem")).then((res) => {
+    const data = res.val();
+    if (!data) {
+      set(ref(database, "bannerItem"), "");
+    } else {
+      return set(ref(database, "banner"), { ...bannerList });
+    }
+  });
 }
