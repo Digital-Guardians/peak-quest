@@ -8,39 +8,151 @@ import { useService } from "../../context/ContextProvider";
 import { IoIosArrowBack } from "react-icons/io";
 import { DragDropContext, Draggable, DropResult, Droppable } from "react-beautiful-dnd";
 import { bannerData } from "../../types/type";
-import { useNavigate } from "react-router-dom";
+import { uploadImage } from "../../service/imageUpLoader";
+import {
+  addBanner,
+  addBannerImage,
+  getBannerItemList,
+  getBannerList,
+} from "../../service/firebase";
 
 interface banner {
   key: string;
   id: string;
-  img_url: string;
+  url: string;
 }
+
+const defaultBannerData: bannerData = {
+  id: "",
+  url: "",
+  link: "",
+  tags: "",
+  content: "",
+  title: "",
+  tag: "",
+  date1: "",
+  date2: "",
+};
+
+interface formData {
+  title: string;
+  content: string;
+  url: string | ArrayBuffer | null;
+  link: string;
+  date1: string;
+  date2: string;
+}
+
+const defaultFormData: formData = {
+  title: "",
+  content: "",
+  url: null, // SelectImg가 아닌 null로 수정
+  link: "",
+  date1: "",
+  date2: "",
+};
 
 export default function Banner() {
   const [select, setSelect] = useState(false);
   const [banner, setBanner] = useState<bannerData[]>([]);
   const [list, setList] = useState<banner[]>([]);
+  const [test, setTest] = useState<banner[]>([]);
+  const [selectImg, setSelectImg] = useState<File | null>(null);
+  const [formData, setFormData] = useState<formData>(defaultFormData);
 
-  const { bannerInfo, admin } = useService();
+  const { bannerInfo, setBannerInfo, admin } = useService();
+  const { url, link, title, content, tag, date1, date2 } = bannerInfo;
 
-  const { img_url, link, title, content } = bannerInfo;
+  const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
+
+  // useEffect(() => {
+  //   fetch("/mock/admin/banner.json")
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setBanner(data.bannerItems);
+  //     });
+  // }, []);
+
+  // useEffect(() => {
+  //   fetch("/mock/admin/bannerList.json")
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       setList(data.banner);
+  //     });
+  // }, []);
 
   useEffect(() => {
-    fetch("/mock/admin/banner.json")
-      .then((res) => res.json())
+    getBannerList() //
       .then((data) => {
-        setBanner(data.bannerItems);
+        const banner = Object.keys(data).map((key) => data[key]);
+        console.log(banner);
+
+        setList(banner);
       });
   }, []);
 
   useEffect(() => {
-    1;
-    fetch("/mock/admin/bannerList.json")
-      .then((res) => res.json())
+    getBannerItemList() //
       .then((data) => {
-        setList(data.banner);
+        console.log(data);
+        const dataArray = Object.keys(data).map((key) => data[key]);
+        setTest(dataArray);
       });
   }, []);
+
+  function handleInput(event: any) {
+    const target = event.target.dataset.id;
+    switch (target) {
+      case "title":
+        setFormData((prev) => ({ ...prev, [target]: event.target.value }));
+        break;
+      case "content":
+        setFormData((prev) => ({ ...prev, [target]: event.target.value }));
+        break;
+      case "tag":
+        setFormData((prev) => ({ ...prev, [target]: event.target.value }));
+        break;
+      case "link":
+        setFormData((prev) => ({ ...prev, [target]: event.target.value }));
+        break;
+      case "date1":
+        setFormData((prev) => ({ ...prev, [target]: event.target.value }));
+        break;
+      case "date2":
+        setFormData((prev) => ({ ...prev, [target]: event.target.value }));
+        break;
+    }
+  }
+
+  function handleSubmit(event: any) {
+    console.log(formData);
+
+    if (event.target.dataset.id === "button") {
+      event.preventDefault();
+
+      console.log("이미지");
+      uploadImage(selectImg).then((url) => addBannerImage(formData, url));
+
+      console.log("업로드 완료");
+    }
+  }
+
+  const handleImageChange = (event: any) => {
+    const { files, name, value } = event.target;
+
+    // if (files.size > MAX_IMAGE_SIZE) {
+    //   alert("이미지 크기가 너무 큽니다. 5MB 이하의 이미지를 선택해주세요.");
+    //   setSelectImg(null);
+    //   return;
+    // }
+
+    if (name === "file") {
+      setSelectImg(files && files[0]);
+      return;
+    } else {
+      setSelectImg(null);
+    }
+  };
 
   const onDragEnd = (result: DropResult) => {
     const { source, destination, draggableId } = result;
@@ -48,11 +160,12 @@ export default function Banner() {
     if (
       !destination ||
       (destination.droppableId === source.droppableId && source.index === destination.index)
-    )
+    ) {
       return;
+    }
 
     if (source.droppableId === "bannerItems" && destination.droppableId === "banner") {
-      const selectItem = banner.at(source.index); // 없으면 und
+      const selectItem = test.at(source.index); // 없으면 und
       if (selectItem) {
         const add = list.find((item) => item.id === selectItem.id);
         if (!add) {
@@ -61,10 +174,12 @@ export default function Banner() {
             {
               key: selectItem.id.split("-")[1],
               id: selectItem.id,
-              img_url: selectItem.img_url,
+              url: selectItem.url,
             },
           ];
           setList(newList);
+        } else {
+          alert("이미 등록된 아이탬입니다.");
         }
       }
     } else if (source.droppableId === "banner") {
@@ -82,6 +197,16 @@ export default function Banner() {
     }
   };
 
+  function handleAddBannerItem() {
+    if (select) {
+      setBannerInfo(defaultBannerData);
+    }
+    setBannerInfo(defaultBannerData);
+    setSelect(true);
+  }
+
+  console.log(list);
+
   //저장할때는 시퀸스 번호만 넘긴다
   return (
     <>
@@ -90,7 +215,7 @@ export default function Banner() {
           <PageLeft select={select}>
             <div className="flex w-full">
               {/* inputContainer */}
-              <div className="flex w-full h-1/5 pb-9">
+              {/* <div className="flex w-full h-1/5 pb-9">
                 <input
                   className={`w-1/5  h-[60px] ${
                     select ? "pl-2 text-lg" : ""
@@ -109,14 +234,27 @@ export default function Banner() {
                   } border border-[#D9D9D9] mx-[6px] pl-4 rounded-[10px] half:mx-1`}
                   placeholder="검색창"
                 />
-              </div>
+              </div> */}
             </div>
             {/* bannerContainer */}
             <DragDropContext onDragEnd={onDragEnd}>
-              <div className="flex flex-col w-full h-4/5">
+              <div className="flex flex-col w-full h-4/5 transition-all duration-[1s]">
                 <div className="w-full h-1/3 mb-9">
-                  <div className="text-xl font-bold mb-[13px] ml-[5px]">
-                    메인 배너를 최대 5개까지 선택해주세요.
+                  <div className="flex justify-between">
+                    <div className="text-xl font-bold mb-[24px] ml-[5px]">
+                      메인 배너를 최대 5개까지 선택해주세요.
+                    </div>
+                    <div
+                      className={`cursor-pointer ${
+                        select ? "w-12" : ""
+                      } w-20 h-10 py-[6px] text-center text-lg text-purple border border-purple rounded-[10px] ease-in-out hover:text-white hover:bg-purple`}
+                      onClick={() => {
+                        addBanner(list);
+                        alert("저장되었습니다.");
+                      }}
+                    >
+                      저장
+                    </div>
                   </div>
                   <Droppable droppableId="banner" direction="horizontal">
                     {(provided) => (
@@ -136,12 +274,29 @@ export default function Banner() {
                                 >
                                   <img
                                     className="w-[86px] h-[86px] ml-2 rounded-xl"
-                                    src={item.img_url}
+                                    src={item.url}
                                   />
                                 </div>
                               )}
                             </Draggable>
                           ))}
+                        {/* {list &&
+                          list.map((item, i) => (
+                            <Draggable draggableId={item.key} index={i} key={item.key}>
+                              {(provided) => (
+                                <div
+                                  {...provided.dragHandleProps}
+                                  {...provided.draggableProps}
+                                  ref={provided.innerRef}
+                                >
+                                  <img
+                                    className="w-[86px] h-[86px] ml-2 rounded-xl"
+                                    src={item.img_url}
+                                  />
+                                </div>
+                              )}
+                            </Draggable>
+                          ))} */}
                         {provided.placeholder}
                       </div>
                     )}
@@ -164,8 +319,8 @@ export default function Banner() {
                       {...provided.droppableProps}
                       ref={provided.innerRef}
                     >
-                      {banner &&
-                        banner.map((info, i) => {
+                      {test &&
+                        test.map((info, i) => {
                           return (
                             <BannerItem
                               key={Math.random()}
@@ -176,7 +331,27 @@ export default function Banner() {
                             />
                           );
                         })}
+                      {/* {banner &&
+                        banner.map((info, i) => {
+                          return (
+                            <BannerItem
+                              key={Math.random()}
+                              index={i}
+                              info={info}
+                              select={select}
+                              setSelect={setSelect}
+                            />
+                          );
+                        })} */}
                       {provided.placeholder}
+                      <div
+                        className="flex justify-center items-center my-6 cursor-pointer"
+                        onClick={handleAddBannerItem}
+                      >
+                        <div className="flex justify-center items-center w-32 h-12 rounded-xl border-[1px] border-gray hover:bg-gray hover:text-white">
+                          + 추가하기
+                        </div>
+                      </div>
                     </div>
                   )}
                 </Droppable>
@@ -185,7 +360,7 @@ export default function Banner() {
           </PageLeft>
           {/* 확인하기 648px */}
           <PageRight select={select}>
-            <form className="flex flex-col min-w-[648px]">
+            <form data-id="form" className="flex flex-col min-w-[648px]" onClick={handleSubmit}>
               <div
                 className="relative flex text-2xl font-bold cursor-pointer"
                 onClick={() => {
@@ -193,15 +368,17 @@ export default function Banner() {
                 }}
               >
                 <IoIosArrowBack className="mt-[5px] mr-1 text-[28px]" />
-                <div className="">베너 관리하기</div>
+                <div className="">{bannerInfo.id === "" ? "배너 추가하기" : "베너 관리하기"}</div>
               </div>
               <div>
                 <div className="mt-[42px] mb-1 text-xl text-darkGray">배너 제목</div>
                 <input
+                  data-id="title"
                   className={`w-full  h-[60px] ${
                     select ? "pl-2 text-lg" : ""
                   } border border-[#D9D9D9] mr-[6px] pl-4 rounded-[10px] half:mx-1`}
-                  value={title ? title : ""}
+                  onChange={handleInput}
+                  value={title ? title : formData.title}
                   placeholder="이벤트나 행사 내용을 잘 나타낼 수 있는 제목을 적어주세요."
                 />
                 <div className="mt-1 text-md text-darkGray">
@@ -212,7 +389,9 @@ export default function Banner() {
                 <div className="mb-1 text-xl text-darkGray">간단 설명</div>
                 <textarea
                   className={`w-full h-[207px] pl-4 pt-2 text-lg border border-[#D9D9D9] mr-[6px] rounded-[10px]`}
-                  value={content}
+                  data-id="content"
+                  onChange={handleInput}
+                  value={content ? content : formData.content}
                   placeholder="이벤트, 행사에 대한 간단한 설명, 해시태그 등을 적어주세요."
                 />
                 <div className="relative top-[-2px] text-md text-darkGray">
@@ -221,16 +400,47 @@ export default function Banner() {
               </div>
               <div className="relative mt-[28px]">
                 <div className="mb-1 text-xl text-darkGray">베너 이미지</div>
+                {/* {img_url && (
+                  <div
+                    className={`flex justify-center overflow-hidden pl-4 pt-2 pb-2 text-lg border border-[#D9D9D9] mr-[6px] rounded-[10px]`}
+                  >
+                    {img_url && (
+                      <img className="max-h-[200px]" src={img_url ? img_url : ""} alt="" />
+                    )}
+                  </div>
+                )} */}
+                <input
+                  type="file"
+                  name="file"
+                  data-id="img"
+                  onChange={handleImageChange}
+                  className={`flex justify-center overflow-hidden pl-4 pt-2 pb-2 text-lg mr-[6px]`}
+                />
+                <div className="mb-1 text-xl text-darkGray">미리보기</div>
                 <div
                   className={`flex justify-center overflow-hidden pl-4 pt-2 pb-2 text-lg border border-[#D9D9D9] mr-[6px] rounded-[10px]`}
                 >
-                  <img className="max-h-[200px]" src={img_url} alt="" />
+                  <img className="max-h-[200px]" src={url ? url : selectImg} alt="미리보기" />
+                </div>
+              </div>
+              <div className="relative mt-[28px]">
+                <div className="mb-1 text-xl text-darkGray">태그</div>
+                <input
+                  data-id="tag"
+                  value={tag ? tag : formData.tag}
+                  onChange={handleInput}
+                  className={`w-full h-[60px] pl-4 pt-2 text-lg border border-[#D9D9D9] mr-[6px] rounded-[10px]`}
+                />
+                <div className="mt-1 text-md text-darkGray">
+                  글자 사이에 ,를 넣어서 작성해주세요 ex ) 서울,동대문
                 </div>
               </div>
               <div className="relative mt-[28px]">
                 <div className="mb-1 text-xl text-darkGray">링크</div>
                 <input
-                  value={link}
+                  data-id="link"
+                  value={link ? link : formData.link}
+                  onChange={handleInput}
                   className={`w-full h-[60px] pl-4 pt-2 text-lg border border-[#D9D9D9] mr-[6px] rounded-[10px]`}
                 />
               </div>
@@ -238,9 +448,17 @@ export default function Banner() {
                 <div className="mb-1 text-xl text-darkGray">진행 기간</div>
                 <div className="flex">
                   <input
+                    type="date"
+                    data-id="date1"
+                    value={date1 ? date1 : formData.date1}
+                    onChange={handleInput}
                     className={`w-1/2 h-[60px] pl-4 pt-2 text-lg border border-[#D9D9D9] mr-[6px] rounded-[10px]`}
                   />
                   <input
+                    type="date"
+                    data-id="date2"
+                    value={date2 ? date2 : formData.date2}
+                    onChange={handleInput}
                     className={`w-1/2 h-[60px] pl-4 pt-2 text-lg border border-[#D9D9D9] mr-[6px] rounded-[10px]`}
                   />
                 </div>
@@ -248,12 +466,17 @@ export default function Banner() {
               <div className="relative mt-[48px] mb-[120px]">
                 <div className="flex font-bold">
                   <button
-                    className={`w-1/2 h-[60px] mr-2 text-lg text-purple bg-white border border-purple rounded-[10px]`}
+                    className={`${
+                      bannerInfo.id === "" ? "hidden" : ""
+                    } w-1/2 h-[60px] mr-2 text-lg text-purple bg-white border border-purple rounded-[10px]`}
                   >
                     삭제하기
                   </button>
                   <button
-                    className={`w-1/2 h-[60px]text-lg text-white bg-purple border border-purple rounded-[10px]`}
+                    data-id="button"
+                    className={`${
+                      bannerInfo.id === "" ? "w-full" : "w-1/2"
+                    } h-[60px] text-lg text-white bg-purple border border-purple rounded-[10px]`}
                   >
                     저장하기
                   </button>

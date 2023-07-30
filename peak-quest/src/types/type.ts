@@ -1,10 +1,13 @@
 export interface bannerData {
   id: string;
-  img_url: string;
+  url: string;
   link: string;
-  tags: string;
+  tags?: string;
   content: string;
   title: string;
+  tag: string;
+  date1: string;
+  date2: string;
 }
 
 export interface reportData {
