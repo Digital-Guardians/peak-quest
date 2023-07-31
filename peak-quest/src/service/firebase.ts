@@ -90,3 +90,67 @@ export function addBanner(bannerList: any) {
     }
   });
 }
+
+//report
+export function getReportStateAll() {
+  return get(ref(database, "report")).then((res) => {
+    const data = res.val();
+    return Object.values(data);
+  });
+}
+export function getReportStateTrue() {
+  return get(ref(database, "report")) //
+    .then((res) => {
+      const data = res.val();
+      return Object.values(data).filter((user) => user.state === true);
+    });
+}
+export function getReportStateFalse() {
+  return get(ref(database, "report")) //
+    .then((res) => {
+      const data = res.val();
+      return Object.values(data).filter((user) => user.state === false);
+    });
+}
+
+export function searchUser(userName: string) {
+  return get(ref(database, "report")) //
+    .then((res) => {
+      const data = res.val();
+      return Object.values(data).filter((user) => user.name.includes(userName));
+    });
+}
+
+export function reportChecked(userName: string) {
+  return get(ref(database, "report")).then((res) => {
+    const data = res.val();
+    Object.values(data).forEach((user) => {
+      if (user.name === userName) {
+        user.state = true;
+        alert("변경되었습니다.");
+      }
+    });
+    set(ref(database, "report"), data); // 변경된 데이터를 데이터베이스에 적용합니다.
+    return data;
+  });
+}
+
+export function reportDelete(id: number) {
+  return get(ref(database, "report")).then((res) => {
+    const data = res.val();
+    const newData = Object.values(data).filter((user) => user.id !== id);
+    console.log(newData);
+
+    const message = confirm("해당 신고내용을 삭제하시겠습니까?");
+    if (message) {
+      set(ref(database, "report"), newData); // 변경된 데이터를 데이터베이스에 적용합니다.
+      alert("삭제되었습니다.");
+    } else {
+      alert("취소되었습니다.");
+    }
+
+    console.log(newData);
+
+    return newData;
+  });
+}
