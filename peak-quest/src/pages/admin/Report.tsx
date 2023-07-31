@@ -12,6 +12,8 @@ import {
   getReportStateAll,
   getReportStateFalse,
   getReportStateTrue,
+  reportChecked,
+  reportDelete,
   searchUser,
 } from "../../service/firebase";
 
@@ -53,14 +55,16 @@ export default function Report() {
   const [select, setSelect] = useState(false);
   const [reportSelect, setReportSelect] = useState("ALL");
   const [userCount, setUserCount] = useState(defaultUserCount);
-  const [inputValue, setInputValue] = useState("");
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   //바꾸는중
   const [test, setTest] = useState([defaultData]);
 
+  //리랜더용
+  const [data, setData] = useState();
+
   const { reportInfo, admin } = useService();
-  const { name, type, date, content, link } = reportInfo;
+  const { name, type, date, content, link, id } = reportInfo;
 
   useEffect(() => {
     switch (reportSelect) {
@@ -89,7 +93,7 @@ export default function Report() {
           .then((res) => setTest(res));
         break;
     }
-  }, [reportSelect]);
+  }, [data]);
 
   function selectReport(e: React.MouseEvent<HTMLDivElement>) {
     const dataId = e.currentTarget.dataset.id;
@@ -101,10 +105,14 @@ export default function Report() {
   function handleInput(e) {
     e.preventDefault();
     if (inputRef.current) {
+      if (inputRef.current.value.length === 0) {
+        setReportSelect("ALL");
+      } else {
+        setReportSelect("");
+      }
       searchUser(inputRef.current.value) //
         .then((res) => setTest(res));
     }
-    setReportSelect("");
   }
   console.log(userCount);
 
@@ -250,11 +258,15 @@ export default function Report() {
               <div className="relative mt-[118px] mb-[120px]">
                 <div className="flex font-bold">
                   <button
+                    onClick={() => {
+                      reportDelete(id).then((res) => setData(res));
+                    }}
                     className={`w-1/2 h-[60px] mr-2 text-lg text-purple bg-white border border-purple rounded-[10px]`}
                   >
                     삭제하기
                   </button>
                   <button
+                    onClick={() => reportChecked(name).then((res) => setData(res))}
                     className={`w-1/2 h-[60px]text-lg text-white bg-purple border border-purple rounded-[10px]`}
                   >
                     신고확인
