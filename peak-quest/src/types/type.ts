@@ -22,7 +22,7 @@ export interface reportData {
 }
 
 export interface userData {
-  user_name: string;
+  name: string;
   role: string;
   email: string;
   state: string;

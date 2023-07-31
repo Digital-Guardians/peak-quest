@@ -110,11 +110,10 @@ export default function Report() {
       } else {
         setReportSelect("");
       }
-      searchUser(inputRef.current.value) //
+      searchReportUser(inputRef.current.value) //
         .then((res) => setTest(res));
     }
   }
-  console.log(userCount);
 
   return (
     <>
