@@ -12,13 +12,13 @@ export interface bannerData {
 
 export interface reportData {
   id: number;
-  user_name: string;
+  name: string;
   state: string;
-  report_type: string;
-  report_date: string;
+  type: string;
+  date: string;
   content: string;
-  url: string;
-  delete: string;
+  link: string;
+  delete?: string;
 }
 
 export interface userData {

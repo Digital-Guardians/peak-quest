@@ -90,3 +90,32 @@ export function addBanner(bannerList: any) {
     }
   });
 }
+
+export function getReportStateAll() {
+  return get(ref(database, "report")).then((res) => {
+    const data = res.val();
+    return Object.values(data);
+  });
+}
+export function getReportStateTrue() {
+  return get(ref(database, "report")) //
+    .then((res) => {
+      const data = res.val();
+      return Object.values(data).filter((user) => user.state === true);
+    });
+}
+export function getReportStateFalse() {
+  return get(ref(database, "report")) //
+    .then((res) => {
+      const data = res.val();
+      return Object.values(data).filter((user) => user.state === false);
+    });
+}
+
+export function searchUser(userName: string) {
+  return get(ref(database, "report")) //
+    .then((res) => {
+      const data = res.val();
+      return Object.values(data).filter((user) => user.name.includes(userName));
+    });
+}

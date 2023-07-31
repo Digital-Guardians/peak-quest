@@ -3,29 +3,31 @@ import { useService } from "../../context/ContextProvider";
 import { reportData } from "../../types/type";
 
 interface props {
+  index: number;
   select: boolean;
   setSelect: Dispatch<SetStateAction<boolean>>;
   report: reportData;
 }
 
-export default function ReportItem({ select, setSelect, report }: props) {
-  const { id, user_name, state, report_type } = report;
+export default function ReportItem({ select, setSelect, report, index }: props) {
+  const { name, state, type } = report;
+
+  console.log(report);
 
   const { setReportInfo } = useService();
 
   return (
     <div className="flex w-full h-[84px] text-lg text-darkGray font-normal mb-5 border-b border-[#F2F2F2]">
-      <div className={`flex justify-center items-center w-[12%] text-xl`}>{id}</div>
+      <div className={`flex justify-center items-center w-[12%] text-xl`}>{index + 1}</div>
       <div className={`flex justify-center items-center w-[30%] ${select ? "text-lg" : "text-xl"}`}>
-        {user_name}님
+        {name}님
       </div>
       <div className={`flex justify-center items-center w-[20%] ${select ? "text-lg" : "text-xl"}`}>
-        {report_type}
+        {type === "info_error" ? "정보오류" : "부적절한 내용"}
       </div>
       <div className={`flex justify-center items-center w-[20%] text-lg text-center`}>
-        {state === "notRead" && <NotRead />}
-        {state === "checked" && <Checked />}
-        {state === "pending" && <Pending />}
+        {!state && <NotRead />}
+        {state && <Checked />}
       </div>
       <div className="flex justify-center items-center w-[18%] text-lg">
         {
@@ -61,13 +63,6 @@ function Checked() {
   return (
     <div className="flex justify-center items-center w-[72px] h-[32px] rounded-[10px] bg-lightPurple text-purple">
       확인
-    </div>
-  );
-}
-function Pending() {
-  return (
-    <div className="flex justify-center items-center w-[72px] h-[32px] rounded-[10px] bg-gray">
-      보류
     </div>
   );
 }
