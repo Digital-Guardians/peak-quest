@@ -13,12 +13,13 @@ export interface bannerData {
 export interface reportData {
   id: number;
   name: string;
-  state: string;
+  state: boolean;
   type: string;
   date: string;
   content: string;
   link: string;
   delete?: string;
+  uid?: string;
 }
 
 export interface userData {
