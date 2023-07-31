@@ -164,6 +164,7 @@ export function getUserListAll() {
     return Object.values(data);
   });
 }
+
 //일반 유저 리스트 (탈퇴x)
 export function getUserList() {
   return get(ref(database, "users")) //
@@ -174,6 +175,7 @@ export function getUserList() {
       );
     });
 }
+
 //정지 유저 (ban)
 export function getSuspendedUser() {
   return get(ref(database, "users")) //

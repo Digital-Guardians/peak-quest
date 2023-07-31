@@ -14,6 +14,7 @@ import {
   getReportStateTrue,
   reportChecked,
   reportDelete,
+  searchReportUser,
   searchUser,
 } from "../../service/firebase";
 
@@ -58,7 +59,7 @@ export default function Report() {
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   //바꾸는중
-  const [test, setTest] = useState([defaultData]);
+  const [reportList, setReportList] = useState([defaultData]);
 
   //리랜더용
   const [data, setData] = useState();
@@ -80,20 +81,20 @@ export default function Report() {
               checked,
               notRead,
             };
-            setTest(res);
+            setReportList(res);
             setUserCount(userCount);
           });
         break;
       case "notRead":
         getReportStateFalse() //
-          .then((res) => setTest(res));
+          .then((res) => setReportList(res));
         break;
       case "checked":
         getReportStateTrue() //
-          .then((res) => setTest(res));
+          .then((res) => setReportList(res));
         break;
     }
-  }, [data]);
+  }, [reportSelect, data]);
 
   function selectReport(e: React.MouseEvent<HTMLDivElement>) {
     const dataId = e.currentTarget.dataset.id;
@@ -111,7 +112,7 @@ export default function Report() {
         setReportSelect("");
       }
       searchReportUser(inputRef.current.value) //
-        .then((res) => setTest(res));
+        .then((res) => setReportList(res));
     }
   }
 
@@ -177,8 +178,8 @@ export default function Report() {
                   <div className="w-[18%] text-xl text-center">관리</div>
                 </div>
                 {/* reportItem */}
-                {test.length > 0 &&
-                  test.map((report, i) => {
+                {reportList.length > 0 &&
+                  reportList.map((report, i) => {
                     return (
                       <ReportItem
                         key={i}

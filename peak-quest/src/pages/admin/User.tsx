@@ -81,7 +81,7 @@ export default function User() {
           .then((res) => setUserList(res));
         break;
     }
-  }, [selectList]);
+  }, [selectList, userList]);
 
   function selectReport(e: React.MouseEvent<HTMLDivElement>) {
     const dataId = e.currentTarget.dataset.id;
