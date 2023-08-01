@@ -54,7 +54,7 @@ async function adminUser(user: any) {
 
 //이미지 등록
 export async function addBannerImage(bannerData: any, imgUrl: any) {
-  get(ref(database, "bannerItem")).then((res) => {
+  return get(ref(database, "bannerItem")).then((res) => {
     const data = res.val();
     console.log(data);
     if (!data) {
@@ -65,11 +65,14 @@ export async function addBannerImage(bannerData: any, imgUrl: any) {
 
     console.log(id);
 
-    set(ref(database, `bannerItem/${bannerData.title}`), {
+    const newData = {
       ...bannerData,
       id: `banner-${id}`,
       url: imgUrl,
-    });
+    };
+
+    set(ref(database, `bannerItem/${bannerData.title}`), newData);
+    return newData;
   });
 }
 
@@ -89,6 +92,25 @@ export function addBanner(bannerList: any) {
     } else {
       set(ref(database, "banner"), { ...bannerList });
     }
+  });
+}
+
+export function deleteBanner(id: string) {
+  return get(ref(database, "bannerItem")).then((res) => {
+    const data = Object.values(res.val());
+    const newData = data.filter((user) => user.id !== id);
+    set(ref(database, "bannerItem"), newData);
+    return newData;
+  });
+}
+
+export function itemDelete(url: string) {
+  return get(ref(database, "banner")).then((res) => {
+    console.log(url);
+    const data = Object.values(res.val());
+    const newData = data.filter((item) => item.url !== url);
+    set(ref(database, "banner"), newData);
+    return newData;
   });
 }
 

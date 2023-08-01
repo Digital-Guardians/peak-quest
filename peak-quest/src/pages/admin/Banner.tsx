@@ -12,9 +12,12 @@ import { uploadImage } from "../../service/imageUpLoader";
 import {
   addBanner,
   addBannerImage,
+  deleteBanner,
   getBannerItemList,
   getBannerList,
+  itemDelete,
 } from "../../service/firebase";
+import { TiDeleteOutline } from "react-icons/ti";
 
 interface banner {
   key: string;
@@ -54,32 +57,16 @@ const defaultFormData: formData = {
 
 export default function Banner() {
   const [select, setSelect] = useState(false);
-  const [banner, setBanner] = useState<bannerData[]>([]);
   const [list, setList] = useState<banner[]>([]);
-  const [test, setTest] = useState<banner[]>([]);
+  const [banner, setBanner] = useState<banner[]>([]);
   const [selectImg, setSelectImg] = useState<File | null>(null);
   const [formData, setFormData] = useState<formData>(defaultFormData);
+  const [data, setData] = useState<bannerData[]>([defaultBannerData]);
 
   const { bannerInfo, setBannerInfo, admin } = useService();
-  const { url, link, title, content, tag, date1, date2 } = bannerInfo;
+  const { id, url, link, title, content, tag, date1, date2 } = bannerInfo;
 
   const MAX_IMAGE_SIZE = 5 * 1024 * 1024; // 5MB
-
-  // useEffect(() => {
-  //   fetch("/mock/admin/banner.json")
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setBanner(data.bannerItems);
-  //     });
-  // }, []);
-
-  // useEffect(() => {
-  //   fetch("/mock/admin/bannerList.json")
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       setList(data.banner);
-  //     });
-  // }, []);
 
   useEffect(() => {
     getBannerList() //
@@ -96,9 +83,9 @@ export default function Banner() {
       .then((data) => {
         console.log(data);
         const dataArray = Object.keys(data).map((key) => data[key]);
-        setTest(dataArray);
+        setBanner(dataArray);
       });
-  }, []);
+  }, [data]);
 
   function handleInput(event: any) {
     const target = event.target.dataset.id;
@@ -125,26 +112,26 @@ export default function Banner() {
   }
 
   function handleSubmit(event: any) {
-    console.log(formData);
+    const target = event.target;
 
-    if (event.target.dataset.id === "button") {
+    if (target.dataset.id === "button") {
       event.preventDefault();
-
-      console.log("이미지");
-      uploadImage(selectImg).then((url) => addBannerImage(formData, url));
-
-      console.log("업로드 완료");
+      if (target.name === "save") {
+        console.log("이미지");
+        uploadImage(selectImg)
+          .then((url) => addBannerImage(formData, url))
+          .then((res) => setData(res));
+        console.log("업로드 완료");
+      } else if (target.name === "delete") {
+        deleteBanner(id).then((res) => setData(res));
+      }
     }
   }
 
   const handleImageChange = (event: any) => {
     const { files, name, value } = event.target;
 
-    // if (files.size > MAX_IMAGE_SIZE) {
-    //   alert("이미지 크기가 너무 큽니다. 5MB 이하의 이미지를 선택해주세요.");
-    //   setSelectImg(null);
-    //   return;
-    // }
+    console.log("change");
 
     if (name === "file") {
       setSelectImg(files && files[0]);
@@ -165,7 +152,7 @@ export default function Banner() {
     }
 
     if (source.droppableId === "bannerItems" && destination.droppableId === "banner") {
-      const selectItem = test.at(source.index); // 없으면 und
+      const selectItem = banner.at(source.index); // 없으면 und
       if (selectItem) {
         const add = list.find((item) => item.id === selectItem.id);
         if (!add) {
@@ -205,7 +192,10 @@ export default function Banner() {
     setSelect(true);
   }
 
-  console.log(list);
+  function deleteItem(url: string) {
+    const newData = list.filter((item) => item.url !== url);
+    setList(newData);
+  }
 
   //저장할때는 시퀸스 번호만 넘긴다
   return (
@@ -213,29 +203,7 @@ export default function Banner() {
       {admin && (
         <OutletContainer>
           <PageLeft select={select}>
-            <div className="flex w-full">
-              {/* inputContainer */}
-              {/* <div className="flex w-full h-1/5 pb-9">
-                <input
-                  className={`w-1/5  h-[60px] ${
-                    select ? "pl-2 text-lg" : ""
-                  } border border-[#D9D9D9] mr-[6px] pl-4 rounded-[10px] half:mx-1`}
-                  placeholder="시작일"
-                />
-                <input
-                  className={`w-1/5  h-[60px] ${
-                    select ? "pl-2 text-lg" : ""
-                  } border border-[#D9D9D9] mx-[6px] pl-4 rounded-[10px] half:mx-1`}
-                  placeholder="종료일"
-                />
-                <input
-                  className={`w-3/5  h-[60px] ${
-                    select ? "pl-2 text-lg" : ""
-                  } border border-[#D9D9D9] mx-[6px] pl-4 rounded-[10px] half:mx-1`}
-                  placeholder="검색창"
-                />
-              </div> */}
-            </div>
+            <div className="flex w-full"></div>
             {/* bannerContainer */}
             <DragDropContext onDragEnd={onDragEnd}>
               <div className="flex flex-col w-full h-4/5 transition-all duration-[1s]">
@@ -272,31 +240,22 @@ export default function Banner() {
                                   {...provided.draggableProps}
                                   ref={provided.innerRef}
                                 >
-                                  <img
-                                    className="w-[86px] h-[86px] ml-2 rounded-xl"
-                                    src={item.url}
-                                  />
+                                  <div className="relative">
+                                    <img
+                                      className="w-[86px] h-[86px] ml-2 rounded-xl"
+                                      src={item.url}
+                                    />
+                                    <TiDeleteOutline
+                                      onClick={() => {
+                                        deleteItem(item.url);
+                                      }}
+                                      className="flex justify-center items-center absolute w-4 h-4 top-[-4px] right-[-4px] bg-white rounded-[50%] cursor-pointer"
+                                    ></TiDeleteOutline>
+                                  </div>
                                 </div>
                               )}
                             </Draggable>
                           ))}
-                        {/* {list &&
-                          list.map((item, i) => (
-                            <Draggable draggableId={item.key} index={i} key={item.key}>
-                              {(provided) => (
-                                <div
-                                  {...provided.dragHandleProps}
-                                  {...provided.draggableProps}
-                                  ref={provided.innerRef}
-                                >
-                                  <img
-                                    className="w-[86px] h-[86px] ml-2 rounded-xl"
-                                    src={item.img_url}
-                                  />
-                                </div>
-                              )}
-                            </Draggable>
-                          ))} */}
                         {provided.placeholder}
                       </div>
                     )}
@@ -319,19 +278,7 @@ export default function Banner() {
                       {...provided.droppableProps}
                       ref={provided.innerRef}
                     >
-                      {test &&
-                        test.map((info, i) => {
-                          return (
-                            <BannerItem
-                              key={Math.random()}
-                              index={i}
-                              info={info}
-                              select={select}
-                              setSelect={setSelect}
-                            />
-                          );
-                        })}
-                      {/* {banner &&
+                      {banner &&
                         banner.map((info, i) => {
                           return (
                             <BannerItem
@@ -342,7 +289,7 @@ export default function Banner() {
                               setSelect={setSelect}
                             />
                           );
-                        })} */}
+                        })}
                       {provided.placeholder}
                       <div
                         className="flex justify-center items-center my-6 cursor-pointer"
@@ -400,15 +347,6 @@ export default function Banner() {
               </div>
               <div className="relative mt-[28px]">
                 <div className="mb-1 text-xl text-darkGray">베너 이미지</div>
-                {/* {img_url && (
-                  <div
-                    className={`flex justify-center overflow-hidden pl-4 pt-2 pb-2 text-lg border border-[#D9D9D9] mr-[6px] rounded-[10px]`}
-                  >
-                    {img_url && (
-                      <img className="max-h-[200px]" src={img_url ? img_url : ""} alt="" />
-                    )}
-                  </div>
-                )} */}
                 <input
                   type="file"
                   name="file"
@@ -466,6 +404,8 @@ export default function Banner() {
               <div className="relative mt-[48px] mb-[120px]">
                 <div className="flex font-bold">
                   <button
+                    data-id="button"
+                    name="delete"
                     className={`${
                       bannerInfo.id === "" ? "hidden" : ""
                     } w-1/2 h-[60px] mr-2 text-lg text-purple bg-white border border-purple rounded-[10px]`}
@@ -474,6 +414,7 @@ export default function Banner() {
                   </button>
                   <button
                     data-id="button"
+                    name="save"
                     className={`${
                       bannerInfo.id === "" ? "w-full" : "w-1/2"
                     } h-[60px] text-lg text-white bg-purple border border-purple rounded-[10px]`}
