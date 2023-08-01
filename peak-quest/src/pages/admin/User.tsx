@@ -15,6 +15,7 @@ import {
   getUserListAll,
   searchUser,
 } from "../../service/firebase";
+import { userData } from "../../types/type";
 
 const defaultUserCount = {
   all: 0,
@@ -22,13 +23,35 @@ const defaultUserCount = {
   deleteUser: 0,
   ban: 0,
 };
+
+const userDefaultData: userData = {
+  name: "",
+  role: "",
+  email: "",
+  state: "",
+  ban: {
+    ban_type: "",
+    ban_content: "",
+    ban_start_date: "",
+    ban_end_date: "",
+  },
+  delete: {
+    delete_state: "",
+    delete_content: "",
+    deleted_at: "",
+  },
+};
+
 export default function User() {
   const [select, setSelect] = useState(false);
-  const [selectList, setSelectList] = useState("ALL");
+  const [selectList, setSelectList] = useState("all");
   const [userList, setUserList] = useState([]);
   const [userCount, setUserCount] = useState(defaultUserCount);
   const [selectBanType, setSelectBanType] = useState("");
   const [selectType, setSelectType] = useState({});
+
+  //리랜더용
+  const [data, setData] = useState<userData[]>([userDefaultData]);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -40,7 +63,7 @@ export default function User() {
 
   useEffect(() => {
     switch (selectList) {
-      case "ALL":
+      case "all":
         console.log("all");
 
         getUserListAll() //
@@ -81,7 +104,7 @@ export default function User() {
           .then((res) => setUserList(res));
         break;
     }
-  }, [selectList, userList]);
+  }, [selectList, data]);
 
   function selectReport(e: React.MouseEvent<HTMLDivElement>) {
     const dataId = e.currentTarget.dataset.id;
@@ -89,11 +112,6 @@ export default function User() {
       setSelectList(dataId);
     }
   }
-
-  const handleBanTypeChange = (e: any) => {
-    const selectedType = e.target.value;
-    handleSelectBan(selectedType);
-  };
 
   function handleSelectBan(banType: string) {
     setSelectBanType(banType);
@@ -104,7 +122,7 @@ export default function User() {
     e.preventDefault();
     if (inputRef.current) {
       if (inputRef.current.value.length === 0) {
-        setSelectList("ALL");
+        setSelectList("all");
       } else {
         setSelectList("");
       }
@@ -134,10 +152,10 @@ export default function User() {
             <div className="flex justify-center items-center w-full h-[132px] pb-3 text-[32px] font-bold border-b border-gray">
               <div
                 className="flex flex-col w-1/6 h-[72px] justify-center items-center px-5 py-8 cursor-pointer"
-                data-id="ALL"
+                data-id="all"
                 onClick={selectReport}
               >
-                <div className={`${selectList === "ALL" ? "text-red" : ""}`}>
+                <div className={`${selectList === "all" ? "text-red" : ""}`}>
                   {userCount && userCount.all}
                 </div>
                 <div className="text-lg font-normal">전체</div>
@@ -210,7 +228,7 @@ export default function User() {
             <div className="">회원 관리</div>
           </div>
           {delete_state === "Y" ? (
-            <Delete select={select} />
+            <Delete select={select} setData={setData} />
           ) : (
             <>
               <Ban
@@ -219,6 +237,7 @@ export default function User() {
                 selectBanType={selectBanType}
                 selectType={selectType}
                 handleSelectBan={handleSelectBan}
+                setData={setData}
               />
             </>
           )}

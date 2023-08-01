@@ -8,6 +8,7 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
+import { userData } from "../types/type";
 
 // import { getAnalytics } from "firebase/analytics";
 
@@ -86,7 +87,7 @@ export function addBanner(bannerList: any) {
     if (!data) {
       set(ref(database, "bannerItem"), "");
     } else {
-      return set(ref(database, "banner"), { ...bannerList });
+      set(ref(database, "banner"), { ...bannerList });
     }
   });
 }
@@ -98,6 +99,7 @@ export function getReportStateAll() {
     return Object.values(data);
   });
 }
+
 export function getReportStateTrue() {
   return get(ref(database, "report")) //
     .then((res) => {
@@ -114,7 +116,7 @@ export function getReportStateFalse() {
 }
 
 export function searchReportUser(userName: string) {
-  return get(ref(database, "report")) //
+  get(ref(database, "report")) //
     .then((res) => {
       const data = res.val();
       return Object.values(data).filter((user) => user.name.includes(userName));
@@ -122,7 +124,7 @@ export function searchReportUser(userName: string) {
 }
 
 export function reportChecked(userName: string) {
-  return get(ref(database, "report")).then((res) => {
+  get(ref(database, "report")).then((res) => {
     const data = res.val();
     Object.values(data).forEach((user) => {
       if (user.name === userName) {
@@ -198,5 +200,74 @@ export function searchUser(userName: string) {
     .then((res) => {
       const data = res.val();
       return Object.values(data).filter((user) => user.name.includes(userName));
+    });
+}
+
+//회원 정지
+export function userSuspend(
+  userName: string,
+  banType: string,
+  content: string,
+  startDate?: string,
+  endDate?: string
+) {
+  console.log(banType);
+
+  return get(ref(database, "users")) //
+    .then((res) => {
+      const data = res.val();
+      const newData = Object.values(data) as userData[];
+      newData.forEach((user) => {
+        if (user.name === userName) {
+          user.state = "ban";
+          user.ban.ban_type = banType;
+          user.ban.ban_content = content;
+          if (banType === "temporary" && startDate !== undefined && endDate !== undefined) {
+            user.ban.ban_start_date = startDate;
+            user.ban.ban_end_date = endDate;
+          } else if (banType === "permanent") {
+            const currentDate = new Date();
+
+            const year = currentDate.getFullYear();
+            const month = String(currentDate.getMonth() + 1).padStart(2, "0");
+            const day = String(currentDate.getDate()).padStart(2, "0");
+
+            const formattedDate = `${year}-${month}-${day}`;
+            console.log(formattedDate);
+            user.ban.ban_start_date = formattedDate;
+            user.ban.ban_end_date = "";
+          }
+          alert("변경되었습니다.");
+        }
+      });
+      console.log(newData);
+      set(ref(database, "users"), newData);
+      return newData;
+    });
+}
+//회원 정지 취소
+export function userUnsuspend(userName: string) {
+  return get(ref(database, "users")) //
+    .then((res) => {
+      const data = res.val();
+      const newData = Object.values(data) as userData[];
+      newData.forEach((user) => {
+        if (user.name === userName) {
+          if (user.state !== "ban") {
+            alert("정지 상태의 유저가 아닙니다.");
+            return;
+          } else {
+            user.state = "user";
+            user.ban.ban_content = "";
+            user.ban.ban_start_date = "";
+            user.ban.ban_end_date = "";
+            user.ban.ban_type = "";
+            alert("변경되었습니다.");
+          }
+        }
+      });
+      console.log(newData);
+      set(ref(database, "users"), newData);
+      return newData;
     });
 }

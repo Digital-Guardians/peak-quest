@@ -14,10 +14,7 @@ export default function ProtectedRoute({
 
   const nav = useNavigate();
 
-  console.log(admin);
-
   useEffect(() => {
-    console.log(admin);
     onAdminStateChanged(setAdmin);
   }, []);
 

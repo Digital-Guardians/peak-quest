@@ -1,12 +1,14 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import { useService } from "../../context/ContextProvider";
+import { userData } from "../../types/type";
 
 interface props {
   select: boolean;
+  setData: Dispatch<SetStateAction<userData[]>>;
 }
 
-export default function Delete({ select }: props) {
+export default function Delete({ select, setData }: props) {
   const { userInfo } = useService();
   const { delete_state, delete_content } = userInfo.delete;
 

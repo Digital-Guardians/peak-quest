@@ -28,14 +28,14 @@ export interface userData {
   email: string;
   state: string;
   ban: {
-    ban_type: string | null;
-    ban_content: string | null;
-    ban_start_date: string | null;
-    ban_end_date: string | null;
+    ban_type: string;
+    ban_content: string;
+    ban_start_date: string;
+    ban_end_date: string;
   };
   delete: {
     delete_state: string;
     delete_content: string;
-    deleted_at: string | null;
+    deleted_at: string;
   };
 }
