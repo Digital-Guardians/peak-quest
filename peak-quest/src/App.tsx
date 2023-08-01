@@ -4,11 +4,10 @@ import FloatingBtn from "./components/FloatingBtn";
 import UserProvider from "./context/userProvider";
 import Header from "./components/Header";
 
-
 function App() {
   return (
     <UserProvider>
-      <div className="flex justify-center items-center">
+      <div className="flex items-center justify-center">
         <div className="w-full max-w-[430px]">
           <FloatingBtn />
           <Outlet />

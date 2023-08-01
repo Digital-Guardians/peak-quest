@@ -1,7 +1,7 @@
 import { Dispatch, SetStateAction, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { Amenities, ListItem } from "../../../pages/user/CourseEdit";
-import KakaoMap from "./KakaoMap";
+import KakaoMapSearch from "./KakaoMapSearch";
 import { MapBtn } from "../../../assets/icon";
 
 // Tailwind CSS classes
@@ -355,7 +355,7 @@ export default function MyCourseLists({
           />
           <div className="relative flex w-full items-center justify-center rounded-lg bg-white p-5 text-center text-black shadow-3xl sm:p-2">
             <div className="w-full p-4">
-              <KakaoMap
+              <KakaoMapSearch
                 place={place}
                 lists={lists}
                 setLists={setLists}

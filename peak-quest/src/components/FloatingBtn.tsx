@@ -46,7 +46,7 @@ function FloatingBtn() {
       >
         <KakaoTalkBtn />
       </button>
-      <Link to={"/area/create"}>
+      <Link to={"/area"}>
         <button
           className={`flex h-12 w-12 items-center justify-center rounded-full bg-blue-500 shadow-lg ${
             showFloatingBtn ? "translate-y-0" : "translate-y-[999px]"

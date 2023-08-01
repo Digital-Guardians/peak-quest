@@ -28,12 +28,14 @@ import CourseTags from "../../components/user/course/CourseTags";
 // 12. 코스 상세 설명
 import CourseEditor from "../../components/user/course/CourseEditor";
 import { useNavigate } from "react-router-dom";
-import KakaoMap from "../../components/user/course/KakaoMap";
+import KakaoMap from "../../components/user/course/KakaoMapSearch";
 import KakaoMapLine from "../../components/user/course/KakaoMapLine";
 import { openDataAPI } from "../../service/openData";
 import {
   CourseNmProps,
+  getBkmtnWalrgCrseInfoListProps,
   GetFvsnStsfnFrtrlInfoListProps,
+  TransformedResult,
 } from "../../types/forestTypes";
 import OriginCourseLists from "../../components/user/course/OriginCourseLists";
 
@@ -58,6 +60,12 @@ export interface Amenities {
   hasRestroom: "Y" | "N" | "";
   hasFood: "Y" | "N" | "";
   hasWater: "Y" | "N" | "";
+}
+
+export interface OriginCourseNms {
+  originCourse: string;
+  lat: number;
+  lng: number;
 }
 
 export default function CourseEdit() {
@@ -250,6 +258,16 @@ export default function CourseEdit() {
 
   // 10. 기존 코스 정보
 
+  const [originCourse, setOriginCourse] = useState<OriginCourseNms>({
+    originCourse: "",
+    lat: 0,
+    lng: 0,
+  });
+
+  const handleOriginCourse = (originCourseNm: OriginCourseNms) => {
+    setOriginCourse(originCourseNm);
+  };
+
   // 11. 해시 태그
   // tags :string[]
   const [tags, setTags] = useState<string[]>([]);
@@ -274,7 +292,7 @@ export default function CourseEdit() {
     tags,
     courseEditorText,
   };
-  console.log("total data", data);
+  // console.log("total data", data);
 
   // console.log("myCourseTitle", myCourseTitle);
   // console.log("previewImgUrl", previewImgUrl);
@@ -288,23 +306,36 @@ export default function CourseEdit() {
   // console.log("courseEditorText", courseEditorText);
 
   // 공공데이터
-  const [fvsnStsfnFrtrlInfoList, setFvsnStsfnFrtrlInfoList] =
-    useState<CourseNmProps[]>();
+  const [originCourseLists, setOriginCourseLists] =
+    useState<TransformedResult[]>();
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const fvsnStsfnFrtrlInfo =
-  //         await openDataAPI.getFvsnStsfnFrtrlInfoList();
-  //       console.log(fvsnStsfnFrtrlInfo);
+  const [selectOriginCourse, setSelectOriginCourse] =
+    useState<TransformedResult>();
 
-  //       // setFvsnStsfnFrtrlInfoList(fvsnStsfnFrtrlInfo);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, []);
+  const selectedOriginCourse = (selectOrigin: TransformedResult) => {
+    setSelectOriginCourse(selectOrigin);
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // const fvsnStsfnFrtrlInfo =
+        //   await openDataAPI.getFvsnStsfnFrtrlInfoList();
+        // console.log(fvsnStsfnFrtrlInfo);
+
+        const response = await fetch("/mock/user/origin_course.json");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+        setOriginCourseLists(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     // 페이지 진입 시 맨 위로 스크롤 이동
@@ -394,7 +425,12 @@ export default function CourseEdit() {
       </div>
       {/* 10. 기존 코스 정보 */}
       <div className="mb-8 px-3">
-        {/* <OriginCourseLists fvsnStsfnFrtrlInfoList={fvsnStsfnFrtrlInfoList} /> */}
+        <OriginCourseLists
+          originCourseLists={originCourseLists}
+          selectOriginCourse={selectOriginCourse}
+          handleOriginCourse={handleOriginCourse}
+          selectedOriginCourse={selectedOriginCourse}
+        />
       </div>
       {/* 11. 해시 태그 */}
       <div className="mb-8 px-3">

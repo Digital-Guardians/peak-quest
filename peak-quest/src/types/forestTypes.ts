@@ -46,3 +46,19 @@ export interface getBkmtnWalrgCrseInfoListProps {
   frtrlNm: string;
   lat: number;
 }
+
+export interface Position {
+  lat: number;
+  lng: number;
+}
+
+export interface Result {
+  frtrlNm: string;
+  lat: number;
+  lot: number;
+}
+
+export interface TransformedResult {
+  frtrlNm: string;
+  position: Position[];
+}

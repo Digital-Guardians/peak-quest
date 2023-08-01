@@ -33,7 +33,7 @@ interface KakaoMapProps {
   amenities: Amenities;
 }
 
-export default function KakaoMap({
+export default function KakaoMapSearch({
   place,
   setLists,
   onPlaceChange,

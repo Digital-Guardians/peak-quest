@@ -20,7 +20,6 @@ import Report from "./pages/admin/Report";
 import BadgeList from "./pages/user/BadgeList";
 import DashBoard from "./pages/admin/DashBoard";
 
-
 const router = createBrowserRouter([
   {
     path: "/",

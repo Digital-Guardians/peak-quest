@@ -1,7 +1,8 @@
 import axios, { AxiosInstance } from "axios";
 import {
+  CourseNmProps,
   GetFvsnStsfnFrtrlInfoListProps,
-  getBkmtnWalrgCrseInfoListProps,
+  TransformedResult,
 } from "../types/forestTypes";
 
 const API_KEY = import.meta.env.VITE_OPEN_DATA_API_KEY_D;
@@ -26,34 +27,60 @@ class openDataApi {
           },
         }
       );
-      // const data = response.data.response.body.items.item;
 
-      // const result = data.map((item: GetFvsnStsfnFrtrlInfoListProps) => ({
-      //   frtrlNm: item.frtrlNm,
-      //   lat: item.lat,
-      //   lot: item.lot,
-      // }));
-
-      // return result;
-      const data = response.data.response.body.items.item;
-      const set = new Set();
+      const data: GetFvsnStsfnFrtrlInfoListProps[] =
+        response.data.response.body.items.item;
+      const set = new Set<CourseNmProps>();
 
       data.forEach((item: GetFvsnStsfnFrtrlInfoListProps) => {
         if (item.orgnPlaceTpeNm === "등산로입구") {
-          const asd = {
+          const place = {
             frtrlNm: item.frtrlNm,
             lat: item.lat,
             lot: item.lot,
-            orgnPlaceTpeNm: item.orgnPlaceTpeNm,
           };
-          set.add(asd);
+          set.add(place);
         }
       });
 
-      const result = Array.from(set);
-      console.log("result", result);
+      const result = Array.from<CourseNmProps>(set);
+      result.sort((a, b) => a.lat - b.lat);
+      const transformedResult = result.reduce<TransformedResult[]>(
+        (accumulator, currentValue) => {
+          // 이미 리스트에 있는지 확인합니다.
+          const existingIndex = accumulator.findIndex(
+            (item) => item.frtrlNm === currentValue.frtrlNm
+          );
 
-      return result;
+          // 만약 리스트에 이미 있다면, 새로운 위치를 추가합니다.
+          if (existingIndex > -1) {
+            let foundElem = accumulator[existingIndex];
+            return [
+              ...accumulator.slice(0, existingIndex),
+              {
+                ...foundElem,
+                position: [
+                  ...foundElem.position,
+                  { lat: currentValue.lat, lng: currentValue.lot },
+                ],
+              },
+              ...accumulator.slice(existingIndex + 1),
+            ];
+          } else {
+            // 아니면 새로운 항목을 추가합니다.
+            return [
+              ...accumulator,
+              {
+                frtrlNm: currentValue.frtrlNm,
+                position: [{ lat: currentValue.lat, lng: currentValue.lot }],
+              },
+            ];
+          }
+        },
+        []
+      );
+      transformedResult.sort((a, b) => a.frtrlNm.localeCompare(b.frtrlNm));
+      return transformedResult;
     } catch (error) {
       console.log(error);
     }

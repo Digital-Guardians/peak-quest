@@ -18,5 +18,5 @@
   },
   "include": ["src"],
   "references": [{ "path": "./tsconfig.node.json" }],
-  "types": ["kakao.maps.d.ts"]
+  "types": ["kakao.maps.d.ts", "firebase"]
 }
