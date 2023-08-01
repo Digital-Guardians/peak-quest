@@ -14,39 +14,29 @@ import {
   getReportStateTrue,
   reportChecked,
   reportDelete,
+  searchReportUser,
   searchUser,
 } from "../../service/firebase";
 
-interface ReportType {
-  content: string;
-  date: string;
-  id: number;
-  link: string;
-  name: string;
-  state: boolean;
-  type: string;
-  uid: string;
-}
-
 interface ReportState {
-  all: ReportType[];
-  notRead: ReportType[];
-  checked: ReportType[];
+  all: number;
+  notRead: number;
+  checked: number;
 }
 
-const defaultUserCount = {
+const defaultUserCount: ReportState = {
   all: 0,
   checked: 0,
   notRead: 0,
 };
 
-const defaultData = {
+const defaultData: reportData = {
   content: "",
   date: "",
-  id: "",
+  id: 0,
   link: "",
   name: "",
-  state: "",
+  state: true,
   type: "",
   uid: "",
 };
@@ -55,13 +45,12 @@ export default function Report() {
   const [select, setSelect] = useState(false);
   const [reportSelect, setReportSelect] = useState("ALL");
   const [userCount, setUserCount] = useState(defaultUserCount);
-
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  //바꾸는중
-  const [test, setTest] = useState([defaultData]);
+  const [reportList, setReportList] = useState<reportData[]>([defaultData]);
 
   //리랜더용
-  const [data, setData] = useState();
+  const [data, setData] = useState<reportData[]>();
+
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const { reportInfo, admin } = useService();
   const { name, type, date, content, link, id } = reportInfo;
@@ -71,7 +60,7 @@ export default function Report() {
       case "ALL":
         getReportStateAll() //
           .then((res) => {
-            const all = res;
+            const all = res as reportData[];
             const checked = res.filter((user: any) => user.state === true).length;
             const notRead = all.length - checked;
 
@@ -80,20 +69,20 @@ export default function Report() {
               checked,
               notRead,
             };
-            setTest(res);
+            setReportList(all);
             setUserCount(userCount);
           });
         break;
       case "notRead":
         getReportStateFalse() //
-          .then((res) => setTest(res));
+          .then((res) => setReportList(res as reportData[]));
         break;
       case "checked":
         getReportStateTrue() //
-          .then((res) => setTest(res));
+          .then((res) => setReportList(res as reportData[]));
         break;
     }
-  }, [data]);
+  }, [reportSelect, data]);
 
   function selectReport(e: React.MouseEvent<HTMLDivElement>) {
     const dataId = e.currentTarget.dataset.id;
@@ -102,7 +91,7 @@ export default function Report() {
     }
   }
 
-  function handleInput(e) {
+  function handleInput(e: any) {
     e.preventDefault();
     if (inputRef.current) {
       if (inputRef.current.value.length === 0) {
@@ -110,11 +99,10 @@ export default function Report() {
       } else {
         setReportSelect("");
       }
-      searchUser(inputRef.current.value) //
-        .then((res) => setTest(res));
+      searchReportUser(inputRef.current.value) //
+        .then((res) => setReportList(res as reportData[]));
     }
   }
-  console.log(userCount);
 
   return (
     <>
@@ -178,8 +166,8 @@ export default function Report() {
                   <div className="w-[18%] text-xl text-center">관리</div>
                 </div>
                 {/* reportItem */}
-                {test.length > 0 &&
-                  test.map((report, i) => {
+                {reportList.length > 0 &&
+                  reportList.map((report, i) => {
                     return (
                       <ReportItem
                         key={i}
@@ -259,7 +247,7 @@ export default function Report() {
                 <div className="flex font-bold">
                   <button
                     onClick={() => {
-                      reportDelete(id).then((res) => setData(res));
+                      reportDelete(id).then((res) => setData(res as reportData[]));
                     }}
                     className={`w-1/2 h-[60px] mr-2 text-lg text-purple bg-white border border-purple rounded-[10px]`}
                   >

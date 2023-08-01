@@ -11,7 +11,7 @@ interface props {
 }
 
 export default function UserListItem({ select, setSelect, user, index, handleSelectBan }: props) {
-  const { user_name, state, role, ban } = user;
+  const { name, state, role, ban } = user;
   const { delete_state } = user.delete;
   const { ban_type } = user.ban;
 
@@ -21,7 +21,7 @@ export default function UserListItem({ select, setSelect, user, index, handleSel
     <div className="flex w-full h-[84px] text-lg text-darkGray font-normal mb-5 border-b border-[#F2F2F2]">
       <div className={`flex justify-center items-center w-[12%] text-xl`}>{index + 1}</div>
       <div className={`flex justify-center items-center w-[30%] ${select ? "text-lg" : "text-xl"}`}>
-        {user_name}
+        {name}
       </div>
       <div className={`flex justify-center items-center w-[15%] ${select ? "text-lg" : "text-xl"}`}>
         {delete_state}

@@ -2,20 +2,59 @@ import "./page.css";
 import OutletContainer from "../../components/admin/OutletContainer";
 import PageLeft from "../../components/admin/PageLeft";
 import PageRight from "../../components/admin/PageRight";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IoIosArrowBack } from "react-icons/io";
 import UserListItem from "./UserListItem";
 import { useService } from "../../context/ContextProvider";
 import Ban from "../../components/admin/Ban";
 import Delete from "../../components/admin/Delete";
+import {
+  getDeleteUser,
+  getSuspendedUser,
+  getUserList,
+  getUserListAll,
+  searchUser,
+} from "../../service/firebase";
+import { userData } from "../../types/type";
+
+const defaultUserCount = {
+  all: 0,
+  user: 0,
+  deleteUser: 0,
+  ban: 0,
+};
+
+const userDefaultData: userData = {
+  name: "",
+  role: "",
+  email: "",
+  state: "",
+  ban: {
+    ban_type: "",
+    ban_content: "",
+    ban_start_date: "",
+    ban_end_date: "",
+  },
+  delete: {
+    delete_state: "",
+    delete_content: "",
+    deleted_at: "",
+  },
+};
 
 export default function User() {
   const [select, setSelect] = useState(false);
   const [selectList, setSelectList] = useState("all");
   const [userList, setUserList] = useState([]);
+  const [userCount, setUserCount] = useState(defaultUserCount);
   const [selectBanType, setSelectBanType] = useState("");
-
   const [selectType, setSelectType] = useState({});
+
+  //리랜더용
+  const [data, setData] = useState<userData[]>([userDefaultData]);
+
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
   // const [showInput, setShowInput] = useState(false);
 
   const { userInfo } = useService();
@@ -23,12 +62,49 @@ export default function User() {
   const { ban_type, ban_content } = userInfo.ban;
 
   useEffect(() => {
-    fetch("/mock/admin/userList.json")
-      .then((res) => res.json())
-      .then((data) => {
-        return setUserList(data.users);
-      });
-  }, []);
+    switch (selectList) {
+      case "all":
+        console.log("all");
+
+        getUserListAll() //
+          .then((res) => {
+            const all = res;
+            console.log(all);
+
+            const user = res.filter(
+              (user) => user.state !== "ban" && user.delete.delete_state !== "Y"
+            ).length;
+            const deleteUser = res.filter((user: any) => user.delete.delete_state === "Y").length;
+            const ban = res.filter((user: any) => user.state === "ban").length;
+
+            const userCount = {
+              all: all.length,
+              user,
+              deleteUser,
+              ban,
+            };
+            setUserList(res);
+            setUserCount(userCount);
+          });
+        break;
+      case "user":
+        console.log("user");
+
+        getUserList() //
+          .then((res) => setUserList(res));
+        break;
+      case "delete":
+        console.log("delete");
+        getDeleteUser() //
+          .then((res) => setUserList(res));
+        break;
+      case "ban":
+        console.log("ban");
+        getSuspendedUser() //
+          .then((res) => setUserList(res));
+        break;
+    }
+  }, [selectList, data]);
 
   function selectReport(e: React.MouseEvent<HTMLDivElement>) {
     const dataId = e.currentTarget.dataset.id;
@@ -37,17 +113,23 @@ export default function User() {
     }
   }
 
-  const handleBanTypeChange = (e: any) => {
-    const selectedType = e.target.value;
-    handleSelectBan(selectedType);
-  };
-
   function handleSelectBan(banType: string) {
     setSelectBanType(banType);
     setSelectType(banType);
   }
 
-  console.log(ban_type);
+  function handleInput(e) {
+    e.preventDefault();
+    if (inputRef.current) {
+      if (inputRef.current.value.length === 0) {
+        setSelectList("all");
+      } else {
+        setSelectList("");
+      }
+      searchUser(inputRef.current.value) //
+        .then((res) => setUserList(res));
+    }
+  }
 
   return (
     <>
@@ -56,12 +138,15 @@ export default function User() {
           <div className="flex flex-col w-full">
             {/* inputContainer */}
             <div className="flex w-full h-1/5 pb-2">
-              <input
-                className={`w-full  h-[56px] ${
-                  select ? "pl-2 text-lg" : ""
-                } border border-[#D9D9D9] mt-2 pl-4 rounded-[10px] half:mx-1`}
-                placeholder="닉네임 검색"
-              />
+              <form className="w-full" action="submit" onSubmit={handleInput}>
+                <input
+                  ref={inputRef}
+                  className={`w-full  h-[56px] ${
+                    select ? "pl-2 text-lg" : ""
+                  } border border-[#D9D9D9] mt-2 pl-4 rounded-[10px] half:mx-1`}
+                  placeholder="닉네임 검색"
+                />
+              </form>
             </div>
             {/* userState */}
             <div className="flex justify-center items-center w-full h-[132px] pb-3 text-[32px] font-bold border-b border-gray">
@@ -70,7 +155,9 @@ export default function User() {
                 data-id="all"
                 onClick={selectReport}
               >
-                <div className={`${selectList === "all" ? "text-red" : ""}`}>{12}</div>
+                <div className={`${selectList === "all" ? "text-red" : ""}`}>
+                  {userCount && userCount.all}
+                </div>
                 <div className="text-lg font-normal">전체</div>
               </div>
               <div
@@ -78,7 +165,9 @@ export default function User() {
                 data-id="user"
                 onClick={selectReport}
               >
-                <div className={`${selectList === "user" ? "text-red" : ""}`}>{3}</div>
+                <div className={`${selectList === "user" ? "text-red" : ""}`}>
+                  {userCount && userCount.user}
+                </div>
                 <div className="text-lg font-normal">일반 유저</div>
               </div>
               <div
@@ -86,7 +175,9 @@ export default function User() {
                 data-id="delete"
                 onClick={selectReport}
               >
-                <div className={`${selectList === "delete" ? "text-red" : ""}`}>{3}</div>
+                <div className={`${selectList === "delete" ? "text-red" : ""}`}>
+                  {userCount && userCount.deleteUser}
+                </div>
                 <div className="text-lg font-normal">탈퇴 유저</div>
               </div>
               <div
@@ -94,7 +185,9 @@ export default function User() {
                 data-id="ban"
                 onClick={selectReport}
               >
-                <div className={`${selectList === "ban" ? "text-red" : ""}`}>{9}</div>
+                <div className={`${selectList === "ban" ? "text-red" : ""}`}>
+                  {userCount && userCount.ban}
+                </div>
                 <div className="text-lg font-normal">정지 회원</div>
               </div>
             </div>
@@ -135,7 +228,7 @@ export default function User() {
             <div className="">회원 관리</div>
           </div>
           {delete_state === "Y" ? (
-            <Delete select={select} />
+            <Delete select={select} setData={setData} />
           ) : (
             <>
               <Ban
@@ -144,6 +237,7 @@ export default function User() {
                 selectBanType={selectBanType}
                 selectType={selectType}
                 handleSelectBan={handleSelectBan}
+                setData={setData}
               />
             </>
           )}
