@@ -1,0 +1,172 @@
+{
+  "댕당가족4967": {
+    "ban": {
+      "ban_content": "",
+      "ban_end_date": "",
+      "ban_start_date": "",
+      "ban_type": ""
+    },
+    "delete": {
+      "delete_content": "",
+      "delete_state": "N",
+      "deleted_at": ""
+    },
+    "email": "mark619@gmail.com",
+    "name": "댕당가족4967",
+    "role": "user",
+    "state": "user"
+  },
+  "모든게싫어요": {
+    "ban": {
+      "ban_content": "염세주의자임",
+      "ban_end_date": "2023-03-20T17:30:00Z",
+      "ban_start_date": "2023-03-06T09:30:00Z",
+      "ban_type": "temporary"
+    },
+    "delete": {
+      "delete_content": "",
+      "delete_state": "N",
+      "deleted_at": ""
+    },
+    "email": "409ac@gmail.com",
+    "name": "모든게싫어요",
+    "role": "user",
+    "state": "ban"
+  },
+  "사실은트레킹이싫어요": {
+    "ban": {
+      "ban_content": "트레킹이 싫으면서 왜 가입하셨어요?",
+      "ban_end_date": "",
+      "ban_start_date": "2023-03-29T:11:00:30Z",
+      "ban_type": "permanent"
+    },
+    "delete": {
+      "delete_content": "",
+      "delete_state": "N",
+      "deleted_at": ""
+    },
+    "email": "lee35@gmail.com",
+    "name": "사실은트레킹이싫어요",
+    "role": "user",
+    "state": "ban"
+  },
+  "열일중인 숲속의서연": {
+    "ban": {
+      "ban_content": "",
+      "ban_end_date": "",
+      "ban_start_date": "",
+      "ban_type": ""
+    },
+    "delete": {
+      "delete_content": "",
+      "delete_state": "N",
+      "deleted_at": ""
+    },
+    "email": "chris1683@gmail.com",
+    "name": "열일중인 숲속의서연",
+    "role": "user",
+    "state": "user"
+  },
+  "잔디밭의 꿈꾸는예나": {
+    "ban": {
+      "ban_content": "잔디밭에 마음대로 들어감",
+      "ban_end_date": "",
+      "ban_start_date": "2023-03-29T:11:00:30Z",
+      "ban_type": "permanent"
+    },
+    "delete": {
+      "delete_content": "",
+      "delete_state": "N",
+      "deleted_at": ""
+    },
+    "email": "dev.glen.a@gmail.com",
+    "name": "잔디밭의 꿈꾸는예나",
+    "role": "user",
+    "state": "ban"
+  },
+  "집나가면고생끝행복시작": {
+    "ban": {
+      "ban_content": "집을 안나감",
+      "ban_end_date": "2023-03-17T17:30:00Z",
+      "ban_start_date": "2023-03-17T13:00:00Z",
+      "ban_type": "temporary"
+    },
+    "delete": {
+      "delete_content": "",
+      "delete_state": "N",
+      "deleted_at": ""
+    },
+    "email": "david1409@gmail.com",
+    "name": "집나가면고생끝행복시작",
+    "role": "user",
+    "state": "ban"
+  },
+  "집떠난수행자6357": {
+    "ban": {
+      "ban_content": "",
+      "ban_end_date": "",
+      "ban_start_date": "",
+      "ban_type": ""
+    },
+    "delete": {
+      "delete_content": "",
+      "delete_state": "N",
+      "deleted_at": ""
+    },
+    "email": "liquid1935@gmail.com",
+    "name": "집떠난수행자6357",
+    "role": "user",
+    "state": "user"
+  },
+  "천둥치는 날의 정현": {
+    "ban": {
+      "ban_content": "",
+      "ban_end_date": "",
+      "ban_start_date": "",
+      "ban_type": ""
+    },
+    "delete": {
+      "delete_content": "천둥치는게 무서워서 탈퇴할깨요",
+      "delete_state": "Y",
+      "deleted_at": "2023-03-29T:11:00:30Z"
+    },
+    "email": "nico321@gmail.com",
+    "name": "천둥치는 날의 정현",
+    "role": "user",
+    "state": "user"
+  },
+  "트레킹홍보대사": {
+    "ban": {
+      "ban_content": "",
+      "ban_end_date": "",
+      "ban_start_date": "",
+      "ban_type": ""
+    },
+    "delete": {
+      "delete_content": "",
+      "delete_state": "N",
+      "deleted_at": ""
+    },
+    "email": "brian756@gmail.com",
+    "name": "트레킹홍보대사",
+    "role": "user",
+    "state": "user"
+  },
+  "햇살에노래하는트레커": {
+    "ban": {
+      "ban_content": "햇살에다가 노래함",
+      "ban_end_date": "2023-03-07T17:30:00Z",
+      "ban_start_date": "2023-03-06T09:30:00Z",
+      "ban_type": "temporary"
+    },
+    "delete": {
+      "delete_content": "",
+      "delete_state": "N",
+      "deleted_at": ""
+    },
+    "email": "Rynn91@gmail.com",
+    "name": "햇살에노래하는트레커",
+    "role": "user",
+    "state": "ban"
+  }
+}

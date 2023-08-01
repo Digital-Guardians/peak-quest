@@ -29,14 +29,12 @@ interface KakaoMapProps {
   lists: ListItem[];
   setLists: Dispatch<SetStateAction<ListItem[]>>;
   onPlaceChange: (place: string) => void;
-  onAddNewInput: () => void;
   handleCloseMapPopup: () => void;
   amenities: Amenities;
 }
 
 export default function KakaoMap({
   place,
-  onAddNewInput,
   setLists,
   onPlaceChange,
   handleCloseMapPopup,
@@ -105,7 +103,6 @@ export default function KakaoMap({
           const bounds = new kakao.maps.LatLngBounds();
           let markers = [];
           let datas = data.slice(0, 5);
-          console.log("datas", datas);
 
           for (var i = 0; i < datas.length; i++) {
             markers.push({

@@ -1,5 +1,5 @@
 // 관련 컴포넌트
-import React, { ChangeEvent, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 // 0. 메뉴탭
 import { IoIosArrowBack } from "react-icons/io";
 // 1. 배너
@@ -30,6 +30,12 @@ import CourseEditor from "../../components/user/course/CourseEditor";
 import { useNavigate } from "react-router-dom";
 import KakaoMap from "../../components/user/course/KakaoMap";
 import KakaoMapLine from "../../components/user/course/KakaoMapLine";
+import { openDataAPI } from "../../service/openData";
+import {
+  CourseNmProps,
+  GetFvsnStsfnFrtrlInfoListProps,
+} from "../../types/forestTypes";
+import OriginCourseLists from "../../components/user/course/OriginCourseLists";
 
 // **타입 정의**
 // 7. 소요 시간
@@ -62,7 +68,8 @@ export default function CourseEdit() {
   // myCourseTitle :string
   const [myCourseTitle, setMyCourseTitle] = useState<string>("");
   const handleMyCourseTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setMyCourseTitle(event.target.value);
+    const value = event.target.value.slice(0, 20);
+    setMyCourseTitle(value);
   };
 
   // 3. 썸네일
@@ -190,8 +197,6 @@ export default function CourseEdit() {
     hasWater: "",
   });
 
-  console.log("lists", lists);
-
   // 새로운 입력창을 추가하는 함수
   const handleAddNewInput = () => {
     const newItem: ListItem = {
@@ -269,7 +274,7 @@ export default function CourseEdit() {
     tags,
     courseEditorText,
   };
-  // console.log("total data", data);
+  console.log("total data", data);
 
   // console.log("myCourseTitle", myCourseTitle);
   // console.log("previewImgUrl", previewImgUrl);
@@ -282,6 +287,29 @@ export default function CourseEdit() {
   // console.log("tags", tags);
   // console.log("courseEditorText", courseEditorText);
 
+  // 공공데이터
+  const [fvsnStsfnFrtrlInfoList, setFvsnStsfnFrtrlInfoList] =
+    useState<CourseNmProps[]>();
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const fvsnStsfnFrtrlInfo =
+  //         await openDataAPI.getFvsnStsfnFrtrlInfoList();
+  //       console.log(fvsnStsfnFrtrlInfo);
+
+  //       // setFvsnStsfnFrtrlInfoList(fvsnStsfnFrtrlInfo);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, []);
+
+  useEffect(() => {
+    // 페이지 진입 시 맨 위로 스크롤 이동
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div>
       {/* 0. 메뉴탭 */}
@@ -289,7 +317,13 @@ export default function CourseEdit() {
         {/* 뒤로 가기 버튼 */}
         <div
           className="absolute left-3 top-3 cursor-pointer text-2xl"
-          onClick={() => navigate(-1)}
+          onClick={() => {
+            if (location.pathname === "/area/create") {
+              navigate("/");
+            } else {
+              navigate(-1);
+            }
+          }}
         >
           <IoIosArrowBack />
         </div>
@@ -359,8 +393,9 @@ export default function CourseEdit() {
         />
       </div>
       {/* 10. 기존 코스 정보 */}
-      <div className="mb-8 px-3">기존 코스 정보</div>
-      <KakaoMapLine />
+      <div className="mb-8 px-3">
+        {/* <OriginCourseLists fvsnStsfnFrtrlInfoList={fvsnStsfnFrtrlInfoList} /> */}
+      </div>
       {/* 11. 해시 태그 */}
       <div className="mb-8 px-3">
         <CourseTags tags={tags} handleTagsChange={handleTagsChange} />
@@ -370,8 +405,8 @@ export default function CourseEdit() {
         <CourseEditor setCourseEditorText={setCourseEditorText} />
       </div>
       {/* 13. 추가 버튼 */}
-      <div className="mb-8 px-2">
-        <button className="mt-12 w-full rounded-md bg-green py-2 text-white">
+      <div className="mb-5 px-2">
+        <button className="mt-5 w-full rounded-md bg-green py-2 text-white">
           코스 등록하기
         </button>
       </div>

@@ -21,8 +21,6 @@ export default function KakaoMapLine() {
   const startPosition = lists[0]?.position;
   const endPosition = lists[lists.length - 1].position;
 
-  console.log(startPosition);
-
   return (
     <Map // 지도를 표시할 Container
       center={center}

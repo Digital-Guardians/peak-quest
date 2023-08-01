@@ -3,7 +3,6 @@ import { IoClose } from "react-icons/io5";
 import { Amenities, ListItem } from "../../../pages/user/CourseEdit";
 import KakaoMap from "./KakaoMap";
 import { MapBtn } from "../../../assets/icon";
-import React from "react";
 
 // Tailwind CSS classes
 const buttonClasses = "w-1/3 h-10 transition-colors duration-300";
@@ -72,7 +71,6 @@ export default function MyCourseLists({
 
   // 장소 입력
   const handlePlaceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value.trim() === "") return;
     onPlaceChange(e.target.value);
   };
 
@@ -362,7 +360,6 @@ export default function MyCourseLists({
                 lists={lists}
                 setLists={setLists}
                 onPlaceChange={onPlaceChange}
-                onAddNewInput={onAddNewInput}
                 handleCloseMapPopup={handleCloseMapPopup}
                 amenities={amenities}
               />

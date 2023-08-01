@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>오감만족숲길정보</title>
+  </head>
+
+  <body>
+    <div class="test">123</div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+      const $test = document.querySelector(".test");
+      let datalist = [];
+
+      function fetchData() {
+        axios
+          .get(
+            "http://apis.data.go.kr/B553662/fvsnStsfnFrtrlInfoService/getFvsnStsfnFrtrlInfoList",
+            {
+              params: {
+                serviceKey:
+                  "VGklHqhncCoUnMl0+xRfoBt0nnZJmOCphPhttN9t/LKEysv1NYN6+grTX2IV2nTg5zWZ7Y2wyjvXs2RfEoQB4g==",
+                type: "json",
+                pageNo: 1,
+                numOfRows: 10000,
+              },
+            }
+          )
+          .then((response) => {
+            const data = response.data.response.body.items.item;
+            console.log(data);
+            const set = new Set();
+            data.map((item) => {
+              if (item.orgnPlaceTpeNm === "등산로입구") {
+                const asd = [
+                  item.frtrlNm,
+                  item.lat,
+                  item.lot,
+                  item.orgnPlaceTpeNm,
+                ];
+                // console.log(asd);
+                set.add(asd);
+              }
+            });
+
+            console.log(set);
+          })
+          .catch((error) => console.log(error));
+      }
+      function afterDataFetch() {
+        console.log(datalist);
+      }
+
+      fetchData();
+    </script>
+  </body>
+</html>

@@ -22,6 +22,7 @@ export default function MyCourseTitle({
         type="text"
         onChange={handleMyCourseTitle}
         placeholder="코스를 잘 표현할 수 있는 제목을 적어주세요."
+        maxLength={20}
       />
     </div>
   );

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  <title>백두대간종주코스정보 서비스</title>
+</head>
+
+<body>
+  <div class="test"></div>
+  <script>
+
+
+    const $test = document.querySelector('.test');
+
+    function search(pagenum) {
+      https: axios
+        .get(
+          // api 사용을 원하는 기본 url 작성
+          "http://apis.data.go.kr/B553662/bkmtnWalrgCrseInfoService/getBkmtnWalrgCrseInfoList",
+          {
+            params: {
+              // 필요로 하는 요청값 작성
+              // page: 1,
+              numOfRows: 10000,
+              // perPage: 10,
+              pageNo: pagenum,
+              serviceKey:
+                "VGklHqhncCoUnMl0+xRfoBt0nnZJmOCphPhttN9t/LKEysv1NYN6+grTX2IV2nTg5zWZ7Y2wyjvXs2RfEoQB4g==",
+              type: "json",
+            },
+          }
+        )
+        // 성공 응답 값 출력
+        .then((res) => {
+          const set = new Set();
+
+          res.data.response.body.items.item.map(item =>
+            set.add(item.frtrlNm)
+          )
+
+          dataArr = Array.from(set);
+
+          const result = {};
+
+          for (let i = 0; i < dataArr.length; i++) {
+            const item = dataArr[i];
+            const matches = item.match(/^(.+?)\s(\d+코스)(?:\s)?\((.+?)\)$/);
+
+            if (matches && matches.length === 4) {
+              const region = matches[1];
+              const course = matches[2];
+              const name = matches[3];
+
+              if (!result[region]) {
+                result[region] = {};
+              }
+
+              result[region][course] = { name: name !== "_" ? name : null };
+            }
+          }
+
+          console.log(result);
+
+
+        })
+        // 에러 출력
+        .catch((error) => console.log(error));
+    }
+    search(1)
+    search(2)
+    search(3)
+    search(4)
+    search(5)
+    search(6)
+  </script>
+</body>
+
+</html>

@@ -12,7 +12,8 @@ export default function CourseTags({
   const [tagInputValue, setTagInputValue] = useState<string>("");
 
   const handleTagInputValue = (e: ChangeEvent<HTMLInputElement>) => {
-    setTagInputValue(e.target.value);
+    const value = e.target.value.slice(0, 10);
+    setTagInputValue(value);
   };
 
   const handleAddTags = () => {
@@ -43,9 +44,14 @@ export default function CourseTags({
         <h1 className="mb-2 text-xl font-medium text-black">
           나만의 코스 태그 설정
         </h1>
-        <p className="bg-lightGreen p-1 text-md leading-3 text-green sm:hidden">
-          최대 5개까지
-        </p>
+        <div className="flex space-x-1">
+          <p className="bg-lightGreen p-1 text-md leading-3 text-green sm:hidden">
+            최대 5개까지
+          </p>
+          <p className="bg-lightGreen p-1 text-md leading-3 text-green sm:hidden">
+            10글자 입력 가능
+          </p>
+        </div>
       </div>
 
       <div className="flex flex-wrap">

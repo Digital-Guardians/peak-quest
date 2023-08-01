@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 // 에디터 라이브러리
 import { Editor } from "@toast-ui/react-editor";
 // 글자 색 관련 플러그인
@@ -36,6 +36,14 @@ export default function CourseEditor({
     }
   }, [setCourseEditorText]);
 
+  useEffect(() => {
+    // 에디터 컴포넌트가 마운트되면 자동으로 포커스를 설정하는 기능을 막기 위해 blur() 함수 호출
+    const editorInstance = editorRef.current?.getInstance();
+    if (editorInstance) {
+      editorInstance.blur();
+    }
+  }, []);
+
   return (
     <div>
       <h1 className="mb-2 text-xl font-medium text-black">코스 상세 설명</h1>
@@ -46,7 +54,7 @@ export default function CourseEditor({
         hideModeSwitch={true} // 탭 표시줄 숨기기
         toolbarItems={toolbarItems} // 툴바
         plugins={[colorSyntax]} // 글자 색
-        useCommandShortcut={true} // 키보드 단축키 허용
+        useCommandShortcut={false} // 키보드 단축키 허용
         onChange={onChange} // 사용자가 에디터에 쓴 컨텐츠 담기
       />
     </div>
