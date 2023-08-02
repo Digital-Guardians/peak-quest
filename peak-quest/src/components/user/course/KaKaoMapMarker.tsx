@@ -6,17 +6,24 @@ import { useState } from "react";
 interface KakaoMapMarkerProps {
   selectOriginCourse?: TransformedResult;
   handleClosePopup: () => void;
-  submittedOriginCouse: () => void;
+  submittedOriginCourse: () => void;
+  cancelOriginCourse: () => void;
 }
 
 export default function KaKaoMapMarker({
   selectOriginCourse,
   handleClosePopup,
-  submittedOriginCouse,
+  submittedOriginCourse,
+  cancelOriginCourse,
 }: KakaoMapMarkerProps) {
   const saveOriginCourse = () => {
     handleClosePopup();
-    submittedOriginCouse();
+    submittedOriginCourse();
+  };
+
+  const notSaveOriginCourse = () => {
+    handleClosePopup();
+    cancelOriginCourse();
   };
   return (
     <div className="w-full">
@@ -51,7 +58,7 @@ export default function KaKaoMapMarker({
       </Map>
       <div className="mt-2 flex justify-between space-x-3">
         <button
-          onClick={handleClosePopup}
+          onClick={notSaveOriginCourse}
           className="w-1/2 rounded-lg border-2 border-gray px-4 py-2 text-darkGray"
         >
           취소

@@ -3,7 +3,6 @@ import { IoClose } from "react-icons/io5";
 import { TransformedResult } from "../../../types/forestTypes";
 import { MapBtn } from "../../../assets/icon";
 import KaKaoMapMarker from "./KaKaoMapMarker";
-import { OriginCourseNms } from "../../../pages/user/CourseEdit";
 
 interface OriginCourseListsProps {
   originCourseLists?: TransformedResult[];
@@ -27,8 +26,12 @@ export default function OriginCourseLists({
   };
 
   const [isSelectedOriginCourse, setIsSelectedOriginCourse] = useState(false);
-  const submittedOriginCouse = () => {
+  const submittedOriginCourse = () => {
     setIsSelectedOriginCourse(true);
+  };
+
+  const cancelOriginCourse = () => {
+    setIsSelectedOriginCourse(false);
   };
 
   const saveOriginCourse = (e: React.MouseEvent<HTMLLIElement>) => {
@@ -52,8 +55,8 @@ export default function OriginCourseLists({
       </h6>
 
       <div className="mb-2 w-full rounded-lg border-2 border-gray p-2 text-center">
-        {selectOriginCourse ? (
-          selectOriginCourse.frtrlNm
+        {isSelectedOriginCourse ? (
+          selectOriginCourse?.frtrlNm
         ) : (
           <span className="text-darkGray">목록에서 코스를 선택해주세요</span>
         )}
@@ -92,7 +95,8 @@ export default function OriginCourseLists({
             <KaKaoMapMarker
               selectOriginCourse={selectOriginCourse}
               handleClosePopup={handleClosePopup}
-              submittedOriginCouse={submittedOriginCouse}
+              submittedOriginCourse={submittedOriginCourse}
+              cancelOriginCourse={cancelOriginCourse}
             />
             <button
               className="absolute right-2 top-2 text-darkGray"
