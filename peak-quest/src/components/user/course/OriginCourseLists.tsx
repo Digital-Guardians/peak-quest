@@ -2,21 +2,18 @@ import React, { useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { TransformedResult } from "../../../types/forestTypes";
 import { MapBtn } from "../../../assets/icon";
-import KaKaoMapMarker from "./KaKaoMapPolyline";
+import KaKaoMapMarker from "./KaKaoMapMarker";
 import { OriginCourseNms } from "../../../pages/user/CourseEdit";
-import KaKaoMapPolyline from "./KaKaoMapPolyline";
 
 interface OriginCourseListsProps {
   originCourseLists?: TransformedResult[];
   selectOriginCourse?: TransformedResult;
-  handleOriginCourse: (originCourse: OriginCourseNms) => void;
   selectedOriginCourse: (selectOrigin: TransformedResult) => void;
 }
 
 export default function OriginCourseLists({
   originCourseLists,
   selectOriginCourse,
-  handleOriginCourse,
   selectedOriginCourse,
 }: OriginCourseListsProps) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -29,9 +26,13 @@ export default function OriginCourseLists({
     setIsPopupOpen(false);
   };
 
+  const [isSelectedOriginCourse, setIsSelectedOriginCourse] = useState(false);
+  const submittedOriginCouse = () => {
+    setIsSelectedOriginCourse(true);
+  };
+
   const saveOriginCourse = (e: React.MouseEvent<HTMLLIElement>) => {
     const selectedItemId = e.currentTarget.id;
-    console.log(selectedItemId);
 
     const selectedItem = originCourseLists?.find(
       (item) => item.frtrlNm === selectedItemId
@@ -50,6 +51,14 @@ export default function OriginCourseLists({
         선택하신 지역 위치 기반 기존 산림청 코스 목록 결과 입니다.
       </h6>
 
+      <div className="mb-2 w-full rounded-lg border-2 border-gray p-2 text-center">
+        {selectOriginCourse ? (
+          selectOriginCourse.frtrlNm
+        ) : (
+          <span className="text-darkGray">목록에서 코스를 선택해주세요</span>
+        )}
+      </div>
+
       <ul className="h-[300px] w-full overflow-auto rounded-lg border border-gray py-3 text-darkGray">
         {originCourseLists?.length === 0 && <div>검색 결과가 없습니다.</div>}
         {originCourseLists?.map((item, index) => (
@@ -63,6 +72,7 @@ export default function OriginCourseLists({
               <h3 className="mt-[2px] flex h-5 w-5 items-center justify-center rounded-full border border-darkGray text-sm">
                 {index + 1}
               </h3>
+
               <h2>{item.frtrlNm}</h2>
             </div>
             <div className="text-md opacity-70 transition-all duration-200 hover:opacity-100">
@@ -79,10 +89,10 @@ export default function OriginCourseLists({
             onClick={handleClosePopup}
           />
           <div className="relative flex w-full items-center justify-center rounded-lg bg-white p-8 text-black shadow-3xl sm:p-6">
-            <KaKaoMapPolyline
+            <KaKaoMapMarker
               selectOriginCourse={selectOriginCourse}
               handleClosePopup={handleClosePopup}
-              handleOriginCourse={handleOriginCourse}
+              submittedOriginCouse={submittedOriginCouse}
             />
             <button
               className="absolute right-2 top-2 text-darkGray"

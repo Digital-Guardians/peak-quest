@@ -258,16 +258,6 @@ export default function CourseEdit() {
 
   // 10. 기존 코스 정보
 
-  const [originCourse, setOriginCourse] = useState<OriginCourseNms>({
-    originCourse: "",
-    lat: 0,
-    lng: 0,
-  });
-
-  const handleOriginCourse = (originCourseNm: OriginCourseNms) => {
-    setOriginCourse(originCourseNm);
-  };
-
   // 11. 해시 태그
   // tags :string[]
   const [tags, setTags] = useState<string[]>([]);
@@ -428,7 +418,6 @@ export default function CourseEdit() {
         <OriginCourseLists
           originCourseLists={originCourseLists}
           selectOriginCourse={selectOriginCourse}
-          handleOriginCourse={handleOriginCourse}
           selectedOriginCourse={selectedOriginCourse}
         />
       </div>
