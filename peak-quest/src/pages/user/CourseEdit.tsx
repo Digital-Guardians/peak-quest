@@ -360,7 +360,7 @@ export default function CourseEdit() {
       </div>
       {/* 10. 기존 코스 정보 */}
       <div className="mb-8 px-3">기존 코스 정보</div>
-      <KakaoMapLine />
+      {/* <KakaoMapLine /> */}
       {/* 11. 해시 태그 */}
       <div className="mb-8 px-3">
         <CourseTags tags={tags} handleTagsChange={handleTagsChange} />
