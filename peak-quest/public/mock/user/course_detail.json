@@ -24,15 +24,23 @@
           "water": "Y",
           "restaurant": "N",
           "restroom": "N"
+        },
+        "position": {
+          "lat": 38.1195504,
+          "lng": 128.4655581
         }
       },
       {
         "id": 2,
-        "place": "설악산 휴게소",
+        "place": "설악 휴게소",
         "amenities": {
           "water": "N",
           "restaurant": "Y",
           "restroom": "Y"
+        },
+        "position": {
+          "lat": 38.1724445,
+          "lng": 128.4943473
         }
       },
       {
@@ -42,6 +50,10 @@
           "water": "Y",
           "restaurant": "N",
           "restroom": "N"
+        },
+        "position": {
+          "lat": 37.688488,
+          "lng": 128.7527571
         }
       }
     ],

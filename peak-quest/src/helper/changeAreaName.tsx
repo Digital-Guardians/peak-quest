@@ -1,4 +1,4 @@
-import React from "react";
+// 코스 이름 변경
 
 export const changeKorean = (areaName: string | undefined) => {
   areaName = areaName?.toLocaleLowerCase();
@@ -42,4 +42,3 @@ export const changeEnglish = (areaName: string | undefined) => {
       return "area/notfound";
   }
 };
-

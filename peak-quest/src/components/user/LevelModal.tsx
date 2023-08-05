@@ -1,11 +1,11 @@
 import React, { SetStateAction } from "react";
 import { IoClose } from "react-icons/io5";
 
-interface LwvelModalProps {
+interface LevelModalProps {
   setPopUp: React.Dispatch<SetStateAction<boolean>>;
 }
 
-export default function LevelModal({ setPopUp }: LwvelModalProps) {
+export default function LevelModal({ setPopUp }: LevelModalProps) {
   return (
     <div className="fixed inset-0 z-10 flex items-center justify-center">
       <div
