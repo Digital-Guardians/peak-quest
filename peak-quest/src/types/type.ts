@@ -39,3 +39,11 @@ export interface userData {
     deleted_at: string;
   };
 }
+
+export interface banner {
+  id: string;
+  url: string;
+  link: string;
+  tags: string;
+  title: string;
+}

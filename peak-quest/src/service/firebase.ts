@@ -8,7 +8,7 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { userData } from "../types/type";
+import { banner, userData } from "../types/type";
 
 // import { getAnalytics } from "firebase/analytics";
 
@@ -75,14 +75,23 @@ export async function addBannerImage(bannerData: any, imgUrl: any) {
     return newData;
   });
 }
-
-export function getBannerList() {
-  return get(ref(database, "banner")).then((res) => res.val());
+export async function getBannerList() {
+  const res = await get(ref(database, "banner"));
+  return res.val();
 }
 
-export function getBannerItemList() {
-  return get(ref(database, "bannerItem")).then((res) => res.val());
+export async function getBannerItemList() {
+  const res = await get(ref(database, "bannerItem"));
+  return res.val();
 }
+
+// export function getBannerList() {
+//   return get(ref(database, "banner")).then((res) => res.val());
+// }
+
+// export function getBannerItemList() {
+//   return get(ref(database, "bannerItem")).then((res) => res.val());
+// }
 
 export function addBanner(bannerList: any) {
   get(ref(database, "bannerItem")).then((res) => {
@@ -292,4 +301,37 @@ export function userUnsuspend(userName: string) {
       set(ref(database, "users"), newData);
       return newData;
     });
+}
+
+//=================
+
+//banner
+
+export async function getMainBanner() {
+  const bannerList = Object.values(await getBannerList());
+  const bannerItemList = Object.values(await getBannerItemList());
+
+  const bannerArr = {};
+  const bannerItemArr = {};
+
+  for (const item of bannerList) {
+    bannerArr[item.id] = item;
+  }
+  for (const item of bannerItemList) {
+    bannerItemArr[item.id] = item;
+  }
+
+  const newData = [];
+  for (const id in bannerArr) {
+    if (bannerItemArr[id]) {
+      const combined = {
+        ...bannerItemArr[id],
+      };
+      newData.push(combined);
+    }
+  }
+
+  // console.log(newData);
+
+  return newData;
 }
