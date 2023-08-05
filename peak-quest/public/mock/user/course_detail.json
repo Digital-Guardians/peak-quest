@@ -2,7 +2,7 @@
   "course": {
     "id": 1,
     "writer": "하늘을 나는 트래커",
-    "title": "강원도 주민이 추천하는 코스코스코스코스코스",
+    "title": "강원도 주민이 추천하는 경치좋은 코스",
     "area": "강원권",
     "detail_area": "강원도 인제군",
     "thumbnail": "/images/course/course1.png",
@@ -20,6 +20,7 @@
       {
         "id": 1,
         "place": "설악산",
+        "image": "/images/course/detail/detail_mountain.png",
         "amenities": {
           "water": "Y",
           "restaurant": "N",
@@ -28,11 +29,13 @@
         "position": {
           "lat": 38.1195504,
           "lng": 128.4655581
-        }
+        },
+        "content": "안녕하세요 설악산입니다."
       },
       {
         "id": 2,
         "place": "설악 휴게소",
+        "image": "/images/course/detail/detail_rest.png",
         "amenities": {
           "water": "N",
           "restaurant": "Y",
@@ -41,11 +44,13 @@
         "position": {
           "lat": 38.1724445,
           "lng": 128.4943473
-        }
+        },
+        "content": "안녕하세요 설악 휴게소입니다."
       },
       {
         "id": 3,
         "place": "대관령 양떼목장",
+        "image": "/images/course/detail/detail_sheep.png",
         "amenities": {
           "water": "Y",
           "restaurant": "N",
@@ -54,10 +59,20 @@
         "position": {
           "lat": 37.688488,
           "lng": 128.7527571
-        }
+        },
+        "content": "안녕하세요 대관령 양떼목장입니다."
       }
     ],
-    "content": "balhblah ... editor 내용",
+    "alreadyCourse": [
+      {
+        "id": 1,
+        "name": "강원 트래킹 A코스"
+      },
+      {
+        "id": 2,
+        "name": "설악 트래킹 2코스"
+      }
+    ],
     "tag": ["강원도 즐기기", "설악산 트래킹", "한국 트래킹"]
   }
 }

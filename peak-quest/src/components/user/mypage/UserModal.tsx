@@ -59,9 +59,9 @@ export default function UserModal({
     document.body.style.overflow = "auto";
   };
   return (
-    <div className="w-full max-w-[430px] h-screen flex justify-center items-center bg-black/60 fixed top-[50px] z-10 mx-auto">
-      <div className="w-[85%] max-w-[430px] sm:w-[93%] h-[155px] sm:h-[145px] flex flex-col justify-center items-center bg-white py-3 px-2 shadow-3xl rounded-lg">
-        <p className="text-lg font-bold text-black mb-1">
+    <div className="fixed top-[50px] z-10 mx-auto flex h-screen w-full max-w-[430px] items-center justify-center bg-black/60">
+      <div className="flex h-[155px] w-[85%] max-w-[430px] flex-col items-center justify-center rounded-lg bg-white px-2 py-3 shadow-3xl sm:h-[145px] sm:w-[93%]">
+        <p className="mb-1 text-lg font-bold text-black">
           {newContent ? (
             <>
               <span>{newContent[0]}</span>
@@ -77,15 +77,15 @@ export default function UserModal({
             {el}
           </p>
         ))}
-        <div className="w-full h-[40px] flex justify-evenly items-center text-md mt-4">
+        <div className="mt-4 flex h-[40px] w-full items-center justify-evenly text-md">
           <button
-            className="w-[45%] h-full bg-mint text-white font-bold rounded-lg"
+            className="h-full w-[45%] rounded-lg bg-mint font-bold text-white"
             onClick={handleClick}
           >
             {firstStatus}하기
           </button>
           <button
-            className="w-[45%] h-full bg-gray text-darkGray font-bold rounded-lg"
+            className="h-full w-[45%] rounded-lg bg-gray font-bold text-darkGray"
             onClick={() => {
               setOpen(false);
               // 다시 스크롤 가능
