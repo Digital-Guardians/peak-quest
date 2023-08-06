@@ -47,6 +47,21 @@ export async function userLogin() {
 
       const formattedDate = `${year}-${month}-${day}`;
 
+      const badges = {
+        gold: { hasBadge: "N" },
+        silver: { hasBadge: "N" },
+        bronze: { hasBadge: "N" },
+        allClear: { hasBadge: "N" },
+        start: { hasBadge: "N" },
+        firstWish: { hasBadge: "N" },
+        firstRecommand: { hasBadge: "N" },
+        firstShare: { hasBadge: "N" },
+        bestInformation: { hasBadge: "N" },
+        bestShare: { hasBadge: "N" },
+        bestRecommand: { hasBadge: "N" },
+        peakQuestMaster: { hasBadge: "N" },
+      };
+
       const newUserData = {
         uid: user.uid,
         img_url: user.photoURL,
@@ -56,6 +71,7 @@ export async function userLogin() {
         registration_date: formattedDate,
         ban: { ban_content: "", ban_end_date: "", ban_state_date: "", ban_type: "" },
         delete: { delete_content: "", delete_State: "N", delete_at: "" },
+        badges,
         role: "user",
         state: "user",
       };
@@ -281,7 +297,7 @@ export function getDeleteUser() {
   return get(ref(database, "users")) //
     .then((res) => {
       const data = res.val();
-      return Object.values(data).filter((user) => user.delete.delete_state === "Y");
+      return Object.values(data).filter((user) => user.delete.delete_state === "N");
     });
 }
 
