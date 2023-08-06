@@ -99,6 +99,14 @@ export function onUserStateChanged(callback: any) {
   });
 }
 
+//mypage 뱃지 리스트
+export function getBagdes(uid: string) {
+  get(ref(database, "userTest")).then((res) => {
+    const data = res.val();
+    const newData = Object.entries(data[uid].badges).map(([key, value]) => ({ [key]: value }));
+  });
+}
+
 //어드민 관련
 export function adminLogin() {
   signInWithPopup(auth, provider) //
