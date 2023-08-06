@@ -29,14 +29,12 @@ interface KakaoMapProps {
   lists: ListItem[];
   setLists: Dispatch<SetStateAction<ListItem[]>>;
   onPlaceChange: (place: string) => void;
-  onAddNewInput: () => void;
   handleCloseMapPopup: () => void;
   amenities: Amenities;
 }
 
-export default function KakaoMap({
+export default function KakaoMapSearch({
   place,
-  onAddNewInput,
   setLists,
   onPlaceChange,
   handleCloseMapPopup,
@@ -105,7 +103,6 @@ export default function KakaoMap({
           const bounds = new kakao.maps.LatLngBounds();
           let markers = [];
           let datas = data.slice(0, 5);
-          console.log("datas", datas);
 
           for (var i = 0; i < datas.length; i++) {
             markers.push({
@@ -197,7 +194,7 @@ export default function KakaoMap({
           <li
             onClick={() => handleMarkerClick(marker)}
             key={marker.id}
-            className="my-2 cursor-pointer py-1 transition-all duration-200 hover:bg-blue-100"
+            className="my-2 cursor-pointer py-1 transition-all duration-200 hover:bg-lightGreen"
           >
             <div className="flex items-center space-x-2">
               <div className="aspect-ratio flex h-7 w-7 items-center justify-center rounded-full bg-mint p-2 leading-7 text-white">
