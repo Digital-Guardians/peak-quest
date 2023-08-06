@@ -14,14 +14,17 @@ interface CourseItemProps {
 }
 
 interface Course {
-  id: string;
+  id: number;
   title: string;
   writer: string;
   thumbnail: string;
   views: number;
   recommendations: number;
-  distance: number;
   area: string;
+  position: {
+    lat: number;
+    lng: number;
+  };
 }
 
 export default function CourseItem({ courseList, isMine }: CourseItemProps) {
@@ -40,16 +43,16 @@ export default function CourseItem({ courseList, isMine }: CourseItemProps) {
           secondStatus={"취소"}
         />
       )}
-      <div className="w-full p-3 grid grid-cols-2 gap-4 sm:grid-cols-1 sm:gap-3">
+      <div className="grid w-full grid-cols-2 gap-4 p-3 sm:grid-cols-1 sm:gap-3">
         {/* 각각의 CourseItem */}
         {courseList.map((course) => (
           <div
             key={course.id}
-            className="max-w-full h-full flex flex-col items-stretch justify-center border-[2px] border-[#f2f2f2] rounded-lg box-border relative"
+            className="relative box-border flex h-full max-w-full flex-col items-stretch justify-center rounded-lg border-[2px] border-[#f2f2f2]"
           >
             {/* 코스 이미지 */}
             <div
-              className="max-w-full h-[100px] relative sm:h-[110px]"
+              className="relative h-[100px] max-w-full cursor-pointer sm:h-[110px]"
               onClick={() => {
                 navigate(
                   `/area/${changeEnglish(
@@ -59,15 +62,15 @@ export default function CourseItem({ courseList, isMine }: CourseItemProps) {
               }}
             >
               <img
-                className="w-full h-full rounded-t-lg "
+                className="h-full w-full rounded-t-lg "
                 src={`${course.thumbnail}`}
                 alt={`${course.title}`}
               />
-              <div className="w-full h-full bg-gradient-to-b from-black/20 rounded-t-lg absolute top-0 left-0" />
+              <div className="absolute left-0 top-0 h-full w-full rounded-t-lg bg-gradient-to-b from-black/20" />
             </div>
             {/* 공유 버튼 */}
             <div
-              className={`w-[23px] h-[23px] flex items-center justify-center bg-black/20 text-white text-md border-[1px] border-white rounded-full cursor-pointer absolute top-2 ${
+              className={`absolute top-2 flex h-[23px] w-[23px] cursor-pointer items-center justify-center rounded-full border-[1px] border-white bg-black/20 text-md text-white ${
                 isMine ? "right-2" : "right-9 "
               }`}
               onClick={() => {
@@ -82,10 +85,14 @@ export default function CourseItem({ courseList, isMine }: CourseItemProps) {
               <FiShare />
             </div>
             {/* 스크랩 버튼 => 내가 만든 코스는 제외 */}
-            {isMine ? <></> : <WishBtn courseId={Number(course.id)} />}
+            {isMine ? (
+              <></>
+            ) : (
+              <WishBtn courseId={Number(course.id)} isDetail={false} />
+            )}
             {/* 코스 설명 */}
             <div
-              className="p-2 w-full h-[96px] flex flex-col items-start justify-evenly sm:h-[86px]"
+              className="flex h-[96px] w-full cursor-pointer flex-col items-start justify-evenly p-2 sm:h-[86px]"
               onClick={() => {
                 navigate(
                   `/area/${changeEnglish(
@@ -94,14 +101,14 @@ export default function CourseItem({ courseList, isMine }: CourseItemProps) {
                 );
               }}
             >
-              <p className="text-lg text-black font-bold">{course.title}</p>
-              <p className="text-md text-darkGray mb-1">{course.writer}님</p>
-              <div className="w-full flex justify-start items-center text-sm text-darkGray sm:justify-end">
-                <div className="flex justify-center items-center mr-2">
+              <p className="text-lg font-bold text-black">{course.title}</p>
+              <p className="mb-1 text-md text-darkGray">{course.writer}님</p>
+              <div className="flex w-full items-center justify-start text-sm text-darkGray sm:justify-end">
+                <div className="mr-2 flex items-center justify-center">
                   <AiFillEye />
                   <p className="ml-1">{course.views}</p>
                 </div>
-                <div className="flex justify-center items-center">
+                <div className="flex items-center justify-center">
                   <AiFillLike />
                   <p className="ml-1">{course.recommendations}</p>
                 </div>
@@ -109,15 +116,15 @@ export default function CourseItem({ courseList, isMine }: CourseItemProps) {
             </div>
             {/* 내가 만든 코스에서 수정 & 삭제 버튼 */}
             {isMine ? (
-              <div className="w-full flex justify-evenly items-center text-md mb-2">
+              <div className="mb-2 flex w-full items-center justify-evenly text-md">
                 <button
-                  className="w-[84px] h-[34px] rounded-lg bg-mint text-white"
+                  className="h-[34px] w-[84px] rounded-lg bg-mint text-white"
                   onClick={() => navigate(`/area/create/${course.id}`)}
                 >
                   수정하기
                 </button>
                 <button
-                  className="w-[84px] h-[34px] rounded-lg border-[1px] border-gray text-darkGray"
+                  className="h-[34px] w-[84px] rounded-lg border-[1px] border-gray text-darkGray"
                   onClick={() => setOpen(true)}
                 >
                   삭제하기

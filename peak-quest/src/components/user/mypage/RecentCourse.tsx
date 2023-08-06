@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { changeEnglish } from "../../../helper/changeAreaName";
+import mountain from "../../../assets/user/mountain.png";
 
 interface RecentCourse {
   id: string;
@@ -19,7 +20,7 @@ export default function RecentCourse() {
   return (
     <>
       {recentCourseList.length > 0 ? (
-        <div className="h-min-[290px] p-3 grid grid-cols-2 grid-rows-2 gap-2 sm:gap-2 ease-linear duration-300">
+        <div className="h-min-[290px] grid grid-cols-2 grid-rows-2 gap-2 p-3 duration-300 ease-linear sm:gap-2">
           {recentCourseList.map((course) => (
             <div
               key={course.id}
@@ -32,18 +33,18 @@ export default function RecentCourse() {
                 );
               }}
             >
-              <div className="h-[85px] relative">
+              <div className="relative h-[85px]">
                 {/* 썸네일 */}
                 <img
-                  className="w-full h-full rounded-lg "
+                  className="h-full w-full rounded-lg "
                   src={`${course.thumbnail}`}
                   alt={`${course.title}`}
                 />
-                <p className="py-[2px] px-[10px] bg-green/30 text-md text-white font-bold rounded-2xl absolute bottom-2 right-2">
+                <p className="absolute bottom-2 right-2 rounded-2xl bg-green/30 px-[10px] py-[2px] text-md font-bold text-white">
                   {course.area}
                 </p>
               </div>
-              <p className="pt-2 pl-1 text-black text-[14px]  whitespace-break-spaces sm:text-md">
+              <p className="whitespace-break-spaces pl-1 pt-2 text-[14px]  text-black sm:text-md">
                 {course.title.length >= 12
                   ? course.title.slice(0, 12) + "..."
                   : course.title}
@@ -52,8 +53,8 @@ export default function RecentCourse() {
           ))}
         </div>
       ) : (
-        <div className="h-[300px] flex flex-col justify-center items-center p-3 text-[14px]">
-          <img className="h-[35%] " src="../../src/assets/user/mountain.png" />
+        <div className="flex h-[300px] flex-col items-center justify-center p-3 text-[14px]">
+          <img className="h-[25%] " src={mountain} />
           <p>아직 확인해 본 코스가 없어요.</p>
           <p>
             <span className="font-bold text-green">픽퀘스트</span>의

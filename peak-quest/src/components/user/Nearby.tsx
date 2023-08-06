@@ -1,81 +1,138 @@
 import React, { useEffect, useState } from "react";
 import { MdMyLocation } from "react-icons/md";
 import CourseItem from "./CourseItem";
+import { getLocation } from "../../helper/getLocation";
+import Address from "./Address";
+import { calcDistance } from "../../helper/calcDistance";
+
+interface Location {
+  lat: number;
+  lng: number;
+}
+
+interface NearByCourse {
+  id: number;
+  title: string;
+  writer: string;
+  thumbnail: string;
+  views: number;
+  recommendations: number;
+  area: string;
+  position: {
+    lat: number;
+    lng: number;
+  };
+}
 
 export default function Nearby() {
+  // 로딩여부 => 로딩중이면 true
+  const [loading, setLoading] = useState<boolean>(true);
   // 기본 거리 10km
   const [distance, setDistance] = useState(10);
   // 가까운 코스 목록
-  const [nearCourseList, setNearCourseList] = useState();
+  const [nearCourseList, setNearCourseList] = useState<NearByCourse[]>([]);
+  // 현재 위치 => 기본값 산림비전센터
+  const [location, setLocation] = useState<Location>();
 
-  // 거리 선택 => 해당 거리 이내의 코스 불러오기
-  useEffect(() => {
-    if (distance === 10) {
-      fetch("/mock/user/nearbyCourse_10.json")
+  // 근처 코스 정보 가져오기 (distance = 유저가 선택한 거리 값)
+  const getCourse = (distance: number) => {
+    // 초기화
+    setNearCourseList([]);
+    if (location) {
+      // 코스 불러와서 거리 계산하고 해당 값만 저장
+      fetch("/mock/user/nearbyCourse.json")
         .then((res) => res.json())
         .then((data) => {
-          setNearCourseList(data.courses);
-        });
-    } else if (distance === 30) {
-      fetch("/mock/user/nearbyCourse_30.json")
-        .then((res) => res.json())
-        .then((data) => {
-          setNearCourseList(data.courses);
-        });
-    } else {
-      fetch("/mock/user/nearbyCourse_50.json")
-        .then((res) => res.json())
-        .then((data) => {
-          setNearCourseList(data.courses);
+          // console.log(distance);
+          if (data.courses.length > 0) {
+            data.courses.forEach((el: NearByCourse) => {
+              // 계산 된 거리 값
+              let distanceFromLocation = calcDistance(
+                el.position.lat,
+                el.position.lng,
+                location.lat,
+                location.lng
+              );
+              // 0 ~ 10, 10.1 ~30, 30.1 ~50
+              // 20씩 차이나서 .. -20
+              if (
+                distanceFromLocation > 0 &&
+                distanceFromLocation > distance - 20 &&
+                distanceFromLocation <= distance
+              ) {
+                // 코스 el 저장
+                setNearCourseList((prevCourseList) => [...prevCourseList, el]);
+              }
+            });
+          }
         });
     }
-  }, [distance]);
+  };
+
+  useEffect(() => {
+    // 위치 불러오기
+    getLocation(setLocation);
+  }, []);
+
+  useEffect(() => {
+    if (location) {
+      setLoading(false);
+      // 처음 렌더링시 => 10km
+      getCourse(distance);
+    }
+  }, [location, distance]);
 
   return (
-    <div className="p-3 ease-linear duration-300">
+    <div className="mt-10 p-3 duration-300 ease-linear">
       {/* 제목 & 위치 */}
-      <div className="flex justify-between items-center pl-1 sm:flex-col sm:items-start ">
-        <p className="text-xl text-black font-bold sm:mb-1">내 근처에 있어요</p>
-        <div className="flex justify-center items-center text-darkGray text-md sm:pl-1">
+      <div className="flex items-center justify-between pl-1 sm:flex-col sm:items-start ">
+        <p className="text-xl font-bold text-black sm:mb-1">내 근처에 있어요</p>
+        <div className="flex items-center justify-center text-md text-darkGray sm:pl-1">
           <MdMyLocation />
-          <p className="ml-1">서울특별시 서대문구</p>
+          {location && <Address location={location} />}
         </div>
       </div>
       {/* km 버튼 */}
-      <div className="mt-3 mb-4">
+      <div className="mb-4 mt-3">
         <button
           className={
             distance === 10
-              ? "w-[64px] h-[30px] bg-mint  text-md text-white border-0 font-bold rounded-3xl mr-2"
-              : "w-[64px] h-[30px] text-md text-darkGray border-[1px] border-gray rounded-3xl mr-2"
+              ? "mr-2 h-[30px] w-[70px]  rounded-3xl border-0 bg-mint text-md font-bold text-white"
+              : "mr-2 h-[30px] w-[70px] rounded-3xl border-[1px] border-gray text-md text-darkGray"
           }
           onClick={() => setDistance(10)}
         >
-          10km
+          0 ~ 10km
         </button>
         <button
           className={
             distance === 30
-              ? "w-[64px] h-[30px] bg-mint  text-md text-white border-0 font-bold rounded-3xl mr-2"
-              : "w-[64px] h-[30px] text-md text-darkGray border-[1px] border-gray rounded-3xl mr-2"
+              ? "mr-2 h-[30px] w-[70px]  rounded-3xl border-0 bg-mint text-md font-bold text-white"
+              : "mr-2 h-[30px] w-[70px] rounded-3xl border-[1px] border-gray text-md text-darkGray"
           }
           onClick={() => setDistance(30)}
         >
-          30km
+          10 ~ 30km
         </button>
         <button
           className={
             distance === 50
-              ? "w-[64px] h-[30px] bg-mint  text-md text-white border-0 font-bold rounded-3xl mr-2"
-              : "w-[64px] h-[30px] text-md text-darkGray border-[1px] border-gray rounded-3xl mr-2"
+              ? "mr-2 h-[30px] w-[70px]  rounded-3xl border-0 bg-mint text-md font-bold text-white"
+              : "mr-2 h-[30px] w-[70px] rounded-3xl border-[1px] border-gray text-md text-darkGray"
           }
           onClick={() => setDistance(50)}
         >
-          50km
+          30 ~ 50km
         </button>
       </div>
       {/* course 목록 */}
-      {nearCourseList && <CourseItem courseList={nearCourseList} />}
+      {loading ? (
+        <div>Loading...</div>
+      ) : (
+        nearCourseList && (
+          <CourseItem courseList={nearCourseList} isMine={false} />
+        )
+      )}
     </div>
   );
 }

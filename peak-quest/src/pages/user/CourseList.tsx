@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import CourseItem from "../../components/user/CourseItem";
 import Filter from "../../components/user/Filter";
 import Header from "../../components/Header";
+import "../../components/user/scroll.css";
 
 // 코스 타입 정의
 interface Course {
@@ -94,7 +95,7 @@ export default function CourseList() {
       {/* 해당 코스 목록 */}
       <div
         id="courseList"
-        className={`w-full mx-auto h-full bg-white ease-linear duration-500 overflow-auto ${
+        className={`w-full mx-auto h-full bg-white ease-linear duration-700 overflow-auto scrollbar-custom ${
           isScroll
             ? "rounded-none absolute top-[50px]"
             : "rounded-t-2xl absolute top-[285px]"

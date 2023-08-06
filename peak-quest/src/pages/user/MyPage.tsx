@@ -6,6 +6,8 @@ import { MdOutlineRoute, MdOutlineBookmarkBorder } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import Profile from "../../components/user/mypage/Profile";
 import RecentCourse from "../../components/user/mypage/RecentCourse";
+import { useUserContext } from "../../context/userContext";
+import { onUserStateChanged } from "../../service/firebase";
 
 // 코스 타입 정의
 interface Course {
@@ -34,59 +36,65 @@ export default function MyPage() {
   // 최근 본 코스
   const [recentCourseList, setRecentCourseList] = useState<Course[]>([]);
 
+  const { user, setUser } = useUserContext();
+
+  // useEffect(() => {
+  //   // myCourse
+  //   // fetch(`/mock/user/myPage_myCourse_2.json`)
+  //   //   .then((res) => res.json())
+  //   //   .then((data) => {
+  //   //     setMakeCourseList(data.courses);
+  //   //   })
+  //   //   .catch((error) => {
+  //   //     console.error("Error fetching more courses:", error);
+  //   //   });
+  //   // // wishCourse
+  //   // fetch(`/mock/user/myPage_wishCourse.json`)
+  //   //   .then((res) => res.json())
+  //   //   .then((data) => {
+  //   //     setWishCourseList(data.courses);
+  //   //   })
+  //   //   .catch((error) => {
+  //   //     console.error("Error fetching more courses:", error);
+  //   //   });
+  // }, []);
+
   useEffect(() => {
-    // myCourse
-    // fetch(`/mock/user/myPage_myCourse_2.json`)
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     setMakeCourseList(data.courses);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error fetching more courses:", error);
-    //   });
-    // // wishCourse
-    // fetch(`/mock/user/myPage_wishCourse.json`)
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     setWishCourseList(data.courses);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error fetching more courses:", error);
-    //   });
-  }, []);
+    onUserStateChanged(setUser);
+  }, [user]);
 
   return (
-    <div className="w-max-[430px] bg-[#f3f3f3] flex flex-col justify-center items-center">
+    <div className="w-max-[430px] flex flex-col items-center justify-center bg-[#f3f3f3]">
       {/* header */}
-      <div className="w-full h-[50px] sm:h-[48px] pt-1 sm:pt-2 bg-white text-xl sm:text-lg font-bold text-center leading-loose ease-linear duration-300 relative">
+      <div className="relative h-[50px] w-full bg-white pt-1 text-center text-xl font-bold leading-loose duration-300 ease-linear sm:h-[48px] sm:pt-2 sm:text-lg">
         {/* 뒤로 가기 버튼 */}
         <div
-          className="text-2xl sm:text-xl ease-linear duration-300 absolute top-3 left-3"
+          className="absolute left-3 top-3 text-2xl duration-300 ease-linear sm:text-xl"
           onClick={() => navigate(-1)}
         >
           <IoIosArrowBack />
         </div>
         <p>마이페이지</p>
       </div>
-      <div className="w-full h-full relative">
-        {requireLogin && (
-          <div className="w-[180px] h-[32px] absolute top-[50%] left-[26%] z-10 flex justify-center items-center text-md text-green font-bold border-[1px] border-green bg-lightGreen rounded-full">
+      <div className="relative h-full w-full">
+        {!user && (
+          <div className="absolute left-[26%] top-[50%] z-10 flex h-[32px] w-[180px] items-center justify-center rounded-full border-[1px] border-green bg-lightGreen text-md font-bold text-green">
             로그인 후 이용 가능합니다.
           </div>
         )}
-        <div className={requireLogin ? "blur-sm" : ""}>
+        <div className={!user ? "blur-sm" : ""}>
           {/* 프로필 영역 */}
           <Profile />
           {/* 내가 만든 코스 */}
-          <div className="w-full bg-white pb-2 mt-3 border-b-[1px] border-lightGray">
-            <div className="flex justify-between items-center pt-[15px] px-[8px]">
+          <div className="mt-3 w-full border-b-[1px] border-lightGray bg-white pb-2">
+            <div className="flex items-center justify-between px-[8px] pt-[15px]">
               <div className="flex items-center font-bold">
-                <div className="text-mint mr-2 text-2xl">
+                <div className="mr-2 text-2xl text-mint">
                   <MdOutlineRoute />
                 </div>
                 <p className="text-xl sm:text-lg">내가 만든 코스</p>
               </div>
-              <button className="w-[26%] h-[32px] sm:w-[24%] sm:h-[28px] text-md text-mint border-[1px] border-mint rounded-full">
+              <button className="h-[32px] w-[26%] rounded-full border-[1px] border-mint text-md text-mint sm:h-[28px] sm:w-[24%]">
                 전체보기
               </button>
             </div>
@@ -94,16 +102,13 @@ export default function MyPage() {
               <CourseItem courseList={makeCourseList} isMine={true} />
             ) : (
               !requireLogin && (
-                <div className=" h-[115px] flex flex-col justify-center items-center p-3 text-[14px]">
+                <div className=" flex h-[115px] flex-col items-center justify-center p-3 text-[14px]">
                   <p>
-                    당신의{" "}
-                    <span className="text-green font-bold">
-                      멋진 코스를 기록
-                    </span>
+                    당신의 <span className="font-bold text-green">멋진 코스를 기록</span>
                     하러 떠나볼까요?
                   </p>
                   <a
-                    className="font-bold flex justify-center items-center text-md text-mint mt-2 border-b-[1px] border-mint"
+                    className="mt-2 flex items-center justify-center border-b-[1px] border-mint text-md font-bold text-mint"
                     href="/area/create"
                   >
                     코스 만들러 가기 <IoIosArrowForward />
@@ -113,15 +118,15 @@ export default function MyPage() {
             )}
           </div>
           {/* 스크랩 */}
-          <div className="w-full bg-white pb-2 mt-3 border-b-[1px] border-lightGray">
-            <div className="flex justify-between items-center pt-[15px] px-[8px]">
+          <div className="mt-3 w-full border-b-[1px] border-lightGray bg-white pb-2">
+            <div className="flex items-center justify-between px-[8px] pt-[15px]">
               <div className="flex items-center font-bold">
-                <div className="text-mint text-2xl mr-2">
+                <div className="mr-2 text-2xl text-mint">
                   <MdOutlineBookmarkBorder />
                 </div>
                 <p className="text-xl sm:text-lg ">스크랩한 코스</p>
               </div>
-              <button className="w-[26%] h-[32px] sm:w-[24%] sm:h-[28px] text-md text-mint border-[1px] border-mint rounded-full">
+              <button className="h-[32px] w-[26%] rounded-full border-[1px] border-mint text-md text-mint sm:h-[28px] sm:w-[24%]">
                 전체보기
               </button>
             </div>
@@ -129,10 +134,10 @@ export default function MyPage() {
               <CourseItem courseList={wishCourseList} isMine={false} />
             ) : (
               !requireLogin && (
-                <div className=" h-[115px] flex flex-col justify-center items-center p-3 text-[14px]">
+                <div className=" flex h-[115px] flex-col items-center justify-center p-3 text-[14px]">
                   <p>
                     마음에 드는
-                    <span className="text-green font-bold"> 코스를 저장</span>
+                    <span className="font-bold text-green"> 코스를 저장</span>
                     하고
                   </p>
                   <p>필요할 때마다 확인할 수 있어요.</p>
@@ -143,9 +148,9 @@ export default function MyPage() {
         </div>
       </div>
       {/* 최근 본 코스 */}
-      <div className="w-full h-full bg-white pb-2 mt-3 border-b-[1px] border-lightGray">
-        <div className="flex items-center font-bold pt-[15px] px-[8px]">
-          <div className="text-mint mr-2 text-2xl">
+      <div className="mt-3 h-full w-full border-b-[1px] border-lightGray bg-white pb-2">
+        <div className="flex items-center px-[8px] pt-[15px] font-bold">
+          <div className="mr-2 text-2xl text-mint">
             <AiOutlineEye />
           </div>
           <p className="text-xl sm:text-lg">최근 본 코스</p>
@@ -153,11 +158,11 @@ export default function MyPage() {
         <RecentCourse />
       </div>
       {/* 로그아웃 */}
-      <button className="w-[95%] h-[48px] sm:h-[40px] mt-3 mb-3 rounded-md bg-mint text-lg text-white font-bold sm:text-md ease-linear duration-300">
+      <button className="mb-3 mt-3 h-[48px] w-[95%] rounded-md bg-mint text-lg font-bold text-white duration-300 ease-linear sm:h-[40px] sm:text-md">
         로그아웃
       </button>
       {/* 회원탈퇴 */}
-      <button className="mt-1 mb-4 p-1 text-md text-[#A4A4A4] font-bold border-b-[1px] border-gray sm:text-sm ease-linear duration-300">
+      <button className="mb-4 mt-1 border-b-[1px] border-gray p-1 text-md font-bold text-[#A4A4A4] duration-300 ease-linear sm:text-sm">
         회원탈퇴
       </button>
     </div>
