@@ -94,17 +94,17 @@ export function userLogOut() {
 export function onUserStateChanged(callback: any) {
   onAuthStateChanged(auth, (user) => {
     const updatedUser = user ? user : null;
-    console.log(updatedUser);
+    // console.log(updatedUser);
     callback(updatedUser);
   });
 }
 
 //mypage 뱃지 리스트
-export function getBagdes(uid: string) {
-  get(ref(database, "userTest")).then((res) => {
-    const data = res.val();
-    const newData = Object.entries(data[uid].badges).map(([key, value]) => ({ [key]: value }));
-  });
+export async function getBagdes(uid: string) {
+  const res = await get(ref(database, "userTest"));
+  const data = res.val();
+  const newData = Object.entries(data[uid].badges).map(([key, value]) => ({ [key]: value }));
+  return newData;
 }
 
 //어드민 관련
@@ -158,6 +158,7 @@ export async function addBannerImage(bannerData: any, imgUrl: any) {
     return newData;
   });
 }
+
 export async function getBannerList() {
   const res = await get(ref(database, "banner"));
   return res.val();
@@ -166,6 +167,11 @@ export async function getBannerList() {
 export async function getBannerItemList() {
   const res = await get(ref(database, "bannerItem"));
   return res.val();
+}
+
+//게시글 작성
+export function addCourse(formData, img) {
+  set(ref(database, `bannerItem/${bannerData.title}`), newData);
 }
 
 // export function getBannerList() {

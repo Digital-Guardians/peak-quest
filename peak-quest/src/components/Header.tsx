@@ -39,7 +39,13 @@ function Header() {
             로그인
           </div>
         ) : (
-          <div className="cursor-pointer font-bold" onClick={userLogOut}>
+          <div
+            className="cursor-pointer font-bold"
+            onClick={() => {
+              userLogOut();
+              setUser("");
+            }}
+          >
             로그아웃
           </div>
         )}

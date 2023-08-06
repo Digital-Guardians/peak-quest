@@ -5,6 +5,8 @@ import { IoIosArrowBack } from "react-icons/io";
 import { IoClose } from "react-icons/io5";
 import congratulations from "../../assets/congratulations.png";
 import "./BadgeList.css";
+import { useUserContext } from "../../context/userContext";
+import { getBagdes, onUserStateChanged } from "../../service/firebase";
 
 // 뱃지 인증 여부
 type BadgeStatus = "Y" | "N";
@@ -29,18 +31,18 @@ interface BadgeInfoProps {
 // badgeStatus 초기값 임의 설정 해줌
 // 나중에는 데이터 불러와서 저장해주어야 한다
 const hasBadgeInfos: { [key: string]: HasBadgeProp }[] = [
-  { gold: { hasBadge: "Y" } },
-  { silver: { hasBadge: "Y" } },
-  { bronze: { hasBadge: "Y" } },
-  { allClear: { hasBadge: "Y" } },
-  { start: { hasBadge: "Y" } },
-  { firstWish: { hasBadge: "Y" } },
-  { firstRecommand: { hasBadge: "Y" } },
-  { firstShare: { hasBadge: "Y" } },
-  { bestInformation: { hasBadge: "Y" } },
-  { bestShare: { hasBadge: "Y" } },
-  { bestRecommand: { hasBadge: "Y" } },
-  { peakQuestMaster: { hasBadge: "Y" } },
+  { gold: { hasBadge: "N" } },
+  { silver: { hasBadge: "N" } },
+  { bronze: { hasBadge: "N" } },
+  { allClear: { hasBadge: "N" } },
+  { start: { hasBadge: "N" } },
+  { firstWish: { hasBadge: "N" } },
+  { firstRecommand: { hasBadge: "N" } },
+  { firstShare: { hasBadge: "N" } },
+  { bestInformation: { hasBadge: "N" } },
+  { bestShare: { hasBadge: "N" } },
+  { bestRecommand: { hasBadge: "N" } },
+  { peakQuestMaster: { hasBadge: "N" } },
 ];
 
 // 1. 뱃지 리스트 컴포넌트
@@ -102,28 +104,37 @@ export default function BadgeList() {
     setIsGetPopUpOpen(false);
   };
 
+  const { user, setUser } = useUserContext();
+
+  useEffect(() => {
+    onUserStateChanged(setUser);
+    const fetch = async () => {
+      const data = await getBagdes(user.uid);
+      setBadgeStatus(data);
+    };
+
+    fetch();
+  }, [user]);
+
   return (
     <div className="bg-lightGray">
       {/* 전체보기 */}
       <div className="relative h-[50px] w-full items-center bg-white text-center text-xl font-bold leading-[48px] text-black sm:text-xl">
         {/* 뒤로 가기 버튼 */}
-        <div
-          className="absolute left-3 top-3 cursor-pointer text-2xl"
-          onClick={() => navigate(-1)}
-        >
+        <div className="absolute left-3 top-3 cursor-pointer text-2xl" onClick={() => navigate(-1)}>
           <IoIosArrowBack />
         </div>
         <div>뱃지 전체보기</div>
       </div>
       <div>
         {/* 뱃지 개수 */}
-        <div className="pt-8 px-8">
+        <div className="px-8 pt-8">
           <h1 className="text-[20px] font-bold">내 뱃지</h1>
           <p className="text-md text-darkGray">{activeBadgeCount}/12개</p>
         </div>
         {/* 뱃지 리스트  */}
-        <div className="flex justify-center items-center my-3">
-          <div className="grid grid-cols-3 gap-6 md:gap-5 sm:gap-1 whitespace-normal break-all">
+        <div className="my-3 flex items-center justify-center">
+          <div className="grid grid-cols-3 gap-6 whitespace-normal break-all sm:gap-1 md:gap-5">
             {badgeColorInfos.map((badgeColorInfo) => {
               const {
                 id,
@@ -142,17 +153,9 @@ export default function BadgeList() {
                   key={id}
                   name={name}
                   shortName={shortName}
-                  image={
-                    isBadgeAuth.includes(id) ? image : "/images/badge/lock.png"
-                  }
-                  activeColor={
-                    isBadgeAuth.includes(id) ? activeColor : inActiveColor
-                  }
-                  activeTextColor={
-                    isBadgeAuth.includes(id)
-                      ? activeTextColor
-                      : inActiveTextColor
-                  }
+                  image={isBadgeAuth.includes(id) ? image : "/images/badge/lock.png"}
+                  activeColor={isBadgeAuth.includes(id) ? activeColor : inActiveColor}
+                  activeTextColor={isBadgeAuth.includes(id) ? activeTextColor : inActiveTextColor}
                   handleOpenPopUp={hanleOpenPopUp}
                   setBadgeInfo={setBadgeInfo}
                   popupText={popupText}
@@ -163,7 +166,7 @@ export default function BadgeList() {
         </div>
         {/* 버튼 */}
         <div className="px-8">
-          <button className="cursor-auto w-full bg-mint text-white py-2 rounded-lg text-md mt-3 mb-10 font-medium sm:py-2 sm:mt-4 sm:mb-7">
+          <button className="mb-10 mt-3 w-full cursor-auto rounded-lg bg-mint py-2 text-md font-medium text-white sm:mb-7 sm:mt-4 sm:py-2">
             {window.innerWidth <= 345
               ? "더 많은 뱃지를 획득해 보세요!"
               : "다양한 활동을 통해 더 많은 뱃지를 획득해 보세요!"}
@@ -291,8 +294,7 @@ const badgeColorInfos: BadgeColorInfo[] = [
     activeTextColor: "#FFFFFF",
     inActiveColor: "#7B7B7B",
     inActiveTextColor: "#e2e2e2",
-    popupText:
-      "다른 트래커가 내가 등록한 코스를 처음으로 공유하면 주어지는 뱃지에요!",
+    popupText: "다른 트래커가 내가 등록한 코스를 처음으로 공유하면 주어지는 뱃지에요!",
   },
   {
     // 9. 소문난 트래커
@@ -341,8 +343,7 @@ const badgeColorInfos: BadgeColorInfo[] = [
     activeTextColor: "#FFFFFF",
     inActiveColor: "#5a5a5a",
     inActiveTextColor: "#f7f7f7",
-    popupText:
-      "픽퀘스트의 모든 뱃지를 획득하신 “진정한 픽퀘스트 마스터”에게만 주어지는 뱃지에요!",
+    popupText: "픽퀘스트의 모든 뱃지를 획득하신 “진정한 픽퀘스트 마스터”에게만 주어지는 뱃지에요!",
   },
 ];
 
@@ -371,9 +372,7 @@ interface BadgeComponentProps {
   activeTextColor: string;
   popupText: string;
   handleOpenPopUp?: (() => void) | undefined;
-  setBadgeInfo?:
-    | React.Dispatch<React.SetStateAction<BadgeInfoProps>>
-    | undefined;
+  setBadgeInfo?: React.Dispatch<React.SetStateAction<BadgeInfoProps>> | undefined;
 }
 
 // 뱃지 컴포넌트
@@ -420,22 +419,18 @@ function BadgeComponent({
     <div onClick={handleBadgePopUp}>
       <div
         style={{ borderColor: activeColor }}
-        className="rounded-full border-4 bg-white flex justify-center items-center m-auto w-24 h-24 sm:w-16 sm:h-16 mb-2 sm:my-0 relative"
+        className="relative m-auto mb-2 flex h-24 w-24 items-center justify-center rounded-full border-4 bg-white sm:my-0 sm:h-16 sm:w-16"
       >
-        <img
-          className="w-14 h-14 object-scale-down sm:w-8 sm:h-8"
-          src={image}
-          alt={name}
-        />
+        <img className="h-14 w-14 object-scale-down sm:h-8 sm:w-8" src={image} alt={name} />
       </div>
       <div className="relative">
         <div
           style={{ backgroundColor: activeColor }}
-          className="absolute flex justify-center items-center rounded-lg bottom-[6px] sm:-bottom-1 left-1/2 translate-x-[-50%]"
+          className="absolute bottom-[6px] left-1/2 flex translate-x-[-50%] items-center justify-center rounded-lg sm:-bottom-1"
         >
           <div
             style={{ color: activeTextColor }}
-            className="px-3 py-[2px] sm:px-[8px] rounded-md whitespace-nowrap text-md sm:text-sm text-center"
+            className="whitespace-nowrap rounded-md px-3 py-[2px] text-center text-md sm:px-[8px] sm:text-sm"
           >
             {window.innerWidth <= 345 ? shortName : name}
           </div>
@@ -467,18 +462,15 @@ function BadgePopupComponent({
         isClickPopUpOpen ? "translate-y-0" : "translate-y-[999px]"
       }`}
     >
+      <div onClick={handleClosePopUp} className="absolute inset-0 bg-black opacity-70" />
       <div
-        onClick={handleClosePopUp}
-        className="absolute inset-0 bg-black opacity-70"
-      />
-      <div
-        className={`w-full max-w-[430px] relative flex items-center justify-center rounded-t-lg bg-white p-5 text-center text-black shadow-3xl sm:p-2 ${
+        className={`relative flex w-full max-w-[430px] items-center justify-center rounded-t-lg bg-white p-5 text-center text-black shadow-3xl sm:p-2 ${
           isClickPopUpOpen
             ? "translate-y-0 transition duration-500"
             : "translate-y-[300px] transition duration-500"
         }`}
       >
-        <div className="py-5 px-2">
+        <div className="px-2 py-5">
           <BadgeComponent
             name={badgeInfo.name}
             shortName={badgeInfo.shortName}
@@ -490,17 +482,14 @@ function BadgePopupComponent({
           <div>
             {/* 팝업 내용 */}
             <div>
-              <div className="mt-5 my-2 text-lg text-darkGray sm:text-md">
+              <div className="my-2 mt-5 text-lg text-darkGray sm:text-md">
                 {badgeInfo.popupText}
               </div>
             </div>
           </div>
         </div>
         {/* 닫기 버튼 */}
-        <button
-          onClick={handleClosePopUp}
-          className="absolute right-2 top-2 text-gray"
-        >
+        <button onClick={handleClosePopUp} className="absolute right-2 top-2 text-gray">
           <IoClose size={20} />
         </button>
       </div>
@@ -527,27 +516,19 @@ function GetBadgePopupComponent({
 }: GetBadgePopupComponentProps) {
   return (
     <div className="fixed inset-0 z-10 flex items-center justify-center">
-      <div
-        onClick={handleCloseGetPopUp}
-        className="absolute inset-0 bg-black opacity-70"
-      />
-      <div className="max-w-[430px] relative flex items-center justify-center rounded-lg bg-white p-5 text-center text-black shadow-3xl sm:p-2">
+      <div onClick={handleCloseGetPopUp} className="absolute inset-0 bg-black opacity-70" />
+      <div className="relative flex max-w-[430px] items-center justify-center rounded-lg bg-white p-5 text-center text-black shadow-3xl sm:p-2">
         <div className="relative">
           {/* 랜덤한 도형 */}
-          <div className="absolute top-0 right-0">
-            <img
-              className="animate-float"
-              src={congratulations}
-              alt="축하 효과"
-            />
+          <div className="absolute right-0 top-0">
+            <img className="animate-float" src={congratulations} alt="축하 효과" />
           </div>
           {/* 팝업 내용 */}
           <div className="">
             <h2 className="text-2xl font-semibold text-black sm:mt-4 sm:text-xl">
               <p>축하해요!</p>
               <p>
-                <strong className="text-mint">{getBadgeInfo.name}</strong>{" "}
-                획득했어요
+                <strong className="text-mint">{getBadgeInfo.name}</strong> 획득했어요
               </p>
             </h2>
             {/* 뱃지 */}
@@ -561,15 +542,15 @@ function GetBadgePopupComponent({
                 popupText={getBadgeInfo.popupText}
               />
             </div>
-            <div className="text-center p-2 my-2 text-md text-darkGray bg-[#f8f8f8] py-2 rounded-lg">
+            <div className="my-2 rounded-lg bg-[#f8f8f8] p-2 py-2 text-center text-md text-darkGray">
               트레킹 정보통 , 트레킹 트랜드세터 뱃지도 모아 보세요!
             </div>
           </div>
           {/* 버튼 */}
-          <div className="mt-4 flex items-center space-x-3 justify-center sm:text-md">
+          <div className="mt-4 flex items-center justify-center space-x-3 sm:text-md">
             <div className="w-1/2">
               <Link to="/mypage/badgelist">
-                <button className="p-2 w-full cursor-pointer rounded-lg bg-mint text-white">
+                <button className="w-full cursor-pointer rounded-lg bg-mint p-2 text-white">
                   내 뱃지 둘러보기
                 </button>
               </Link>
@@ -577,7 +558,7 @@ function GetBadgePopupComponent({
             <div className="w-1/2">
               <button
                 onClick={handleCloseGetPopUp}
-                className="py-2 w-full rounded-lg bg-gray text-darkGray"
+                className="w-full rounded-lg bg-gray py-2 text-darkGray"
               >
                 돌아가기
               </button>
@@ -585,10 +566,7 @@ function GetBadgePopupComponent({
           </div>
         </div>
         {/* 닫기 버튼 */}
-        <button
-          onClick={handleCloseGetPopUp}
-          className="absolute right-2 top-2 text-gray"
-        >
+        <button onClick={handleCloseGetPopUp} className="absolute right-2 top-2 text-gray">
           <IoClose size={20} />
         </button>
       </div>

@@ -7,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import Profile from "../../components/user/mypage/Profile";
 import RecentCourse from "../../components/user/mypage/RecentCourse";
 import { useUserContext } from "../../context/userContext";
+import { onUserStateChanged } from "../../service/firebase";
 
 // 코스 타입 정의
 interface Course {
@@ -35,33 +36,31 @@ export default function MyPage() {
   // 최근 본 코스
   const [recentCourseList, setRecentCourseList] = useState<Course[]>([]);
 
-  const { user } = useUserContext();
+  const { user, setUser } = useUserContext();
+
+  // useEffect(() => {
+  //   // myCourse
+  //   // fetch(`/mock/user/myPage_myCourse_2.json`)
+  //   //   .then((res) => res.json())
+  //   //   .then((data) => {
+  //   //     setMakeCourseList(data.courses);
+  //   //   })
+  //   //   .catch((error) => {
+  //   //     console.error("Error fetching more courses:", error);
+  //   //   });
+  //   // // wishCourse
+  //   // fetch(`/mock/user/myPage_wishCourse.json`)
+  //   //   .then((res) => res.json())
+  //   //   .then((data) => {
+  //   //     setWishCourseList(data.courses);
+  //   //   })
+  //   //   .catch((error) => {
+  //   //     console.error("Error fetching more courses:", error);
+  //   //   });
+  // }, []);
 
   useEffect(() => {
-    // myCourse
-    // fetch(`/mock/user/myPage_myCourse_2.json`)
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     setMakeCourseList(data.courses);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error fetching more courses:", error);
-    //   });
-    // // wishCourse
-    // fetch(`/mock/user/myPage_wishCourse.json`)
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     setWishCourseList(data.courses);
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error fetching more courses:", error);
-    //   });
-  }, []);
-
-  useEffect(() => {
-    if (user) {
-      setRequireLogin(false);
-    }
+    onUserStateChanged(setUser);
   }, [user]);
 
   return (
@@ -78,12 +77,12 @@ export default function MyPage() {
         <p>마이페이지</p>
       </div>
       <div className="relative h-full w-full">
-        {requireLogin && (
+        {!user && (
           <div className="absolute left-[26%] top-[50%] z-10 flex h-[32px] w-[180px] items-center justify-center rounded-full border-[1px] border-green bg-lightGreen text-md font-bold text-green">
             로그인 후 이용 가능합니다.
           </div>
         )}
-        <div className={requireLogin ? "blur-sm" : ""}>
+        <div className={!user ? "blur-sm" : ""}>
           {/* 프로필 영역 */}
           <Profile />
           {/* 내가 만든 코스 */}
