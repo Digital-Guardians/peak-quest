@@ -24,7 +24,8 @@
     "react-kakao-maps-sdk": "^1.1.9",
     "react-router-dom": "^6.12.1",
     "react-slick": "^0.29.0",
-    "slick-carousel": "^1.8.1"
+    "slick-carousel": "^1.8.1",
+    "uuid": "^9.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.0.28",

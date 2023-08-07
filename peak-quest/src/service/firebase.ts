@@ -179,25 +179,37 @@ export async function getBannerItemList() {
 }
 
 //게시글 작성
-export async function addCourse(formData, img) {
-  return get(ref(database, "course")).then((res) => {
-    const data = res.val();
-    if (!data) {
-      set(ref(database, "course"), "");
-    }
-    const id = Object.keys(data).length + 1;
+export async function addCourse(formData, img, uid) {
+  const res = await get(ref(database, "course"));
+  const data = res.val();
+  if (!data) {
+    set(ref(database, "course"), "");
+  }
 
-    const newData = {
-      ...formData,
-      previewImgUrl: img,
-      id,
-    };
+  // const id = Object.keys(data).length + 1;
+  const id = await get(ref(database, "post"));
+  const newPost = id.val() + 1;
 
-    console.log(newData);
+  const newData = {
+    ...formData,
+    previewImgUrl: img,
+    id: newPost,
+    uid,
+    views: 0,
+    recommendations: 0,
+  };
 
-    set(ref(database, `course/${uuid}`), newData);
-    return newData;
-  });
+  set(ref(database, `course/${uuid}`), newData);
+  set(ref(database, "post"), newPost);
+  return newData;
+}
+
+export async function getCourseDetail(id) {
+  const res = await get(ref(database, "course"));
+  const data = res.val();
+  const detail = Object.values(data).filter((course) => course.id === id);
+
+  return detail;
 }
 
 // export function getBannerList() {

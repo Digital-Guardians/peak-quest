@@ -42,30 +42,42 @@ export default function CourseEditor({
   }, [setCourseEditorText]);
 
   // 이미지를 서버에 업도르
-  const uploadImageToServer = useCallback(
-    (blob: Blob, callback: (url: string, altText?: string) => void) => {
-      if (blob) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setEditorImage(reader.result as string);
-        };
-        reader.readAsDataURL(blob);
-      } else {
-        setEditorImage("");
-      }
+  // const uploadImageToServer = useCallback(
+  //   (blob: Blob, callback: (url: string, altText?: string) => void) => {
+  //     if (blob) {
+  //       const reader = new FileReader();
+  //       reader.onloadend = () => {
+  //         const base64Data = reader.result as string;
+  //         console.log("base", base64Data);
 
-      // 에디터 이미지 미리보기
-      const imageUrl = window.URL.createObjectURL(blob);
-      // altText
-      const fileName = blob.name;
+  //         // 서버에 이미지 업로드 API 호출
+  //         uploadImage(base64Data)
+  //           .then((response) => {
+  //             // 업로드 성공 시, 서버에서 받아온 이미지 URL을 콜백 함수로 전달
+  //             const imageUrl = response.data.imageUrl;
+  //             const altText = response.data.altText; // 선택적으로 대체 텍스트를 서버에서 받아올 수 있으면 사용합니다.
+  //             callback(imageUrl, altText);
+  //           })
+  //           .catch((error) => {
+  //             // 업로드 실패 시, 에러 처리
+  //             console.error("Image upload failed:", error);
+  //             setEditorImage(""); // 이미지 업로드 실패 시에도 상태 업데이트 필요
+  //           });
+  //       };
+  //       reader.readAsDataURL(blob);
+  //     } else {
+  //       setEditorImage("");
+  //     }
 
-      callback(imageUrl, fileName);
+  //     // 에디터 이미지 미리보기
+  //     const imageUrl = window.URL.createObjectURL(blob);
+  //     // altText
+  //     const fileName = blob.name;
 
-      // 서버에 이미지 전송하기
-      uploadImage(blob);
-    },
-    []
-  );
+  //     callback(imageUrl, fileName);
+  //   },
+  //   []
+  // );
 
   return (
     <div>
@@ -79,9 +91,9 @@ export default function CourseEditor({
         plugins={[colorSyntax]} // 글자 색
         useCommandShortcut={true} // 키보드 단축키 허용
         onChange={onChange} // 사용자가 에디터에 쓴 컨텐츠 담기
-        hooks={{
-          addImageBlobHook: uploadImageToServer,
-        }} // 이미지 파일을 서버에 업로드
+        //   hooks={{
+        //     addImageBlobHook: uploadImageToServer,
+        //   }} // 이미지 파일을 서버에 업로드
       />
     </div>
   );
