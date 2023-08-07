@@ -80,7 +80,7 @@ export default function CourseEdit() {
   // **이슈**
   // 이미지 URL로 보낼지 FormData로 보낼지 확인
   // previewImgUrl :string
-  const [previewImgUrl, setPreviewImgUrl] = useState<string | null>(null);
+  const [previewImgUrl, setPreviewImgUrl] = useState<string>("");
   const thumbnailRef = useRef<HTMLImageElement>(null);
   const handlePreviewImg = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -92,7 +92,7 @@ export default function CourseEdit() {
       };
       reader.readAsDataURL(file);
     } else {
-      setPreviewImgUrl(null);
+      setPreviewImgUrl("");
     }
   };
 
@@ -100,7 +100,10 @@ export default function CourseEdit() {
   // **참고**
   // /user/Filter 파일에 있는 AreaOption 가져옴
   // selectedOption :{ value: string, label: string }
-  const [selectedOption, setSelectedOption] = useState<AreaOption | null>(null);
+  const [selectedOption, setSelectedOption] = useState<AreaOption>({
+    value: "",
+    label: "",
+  });
   const [isOptionsVisible, setIsOptionsVisible] = useState<boolean>(false);
   const handleSelectOption = (option: AreaOption) => {
     setSelectedOption(option);
@@ -266,11 +269,15 @@ export default function CourseEdit() {
   const [courseEditorText, setCourseEditorText] = useState<string>("");
 
   // 공공데이터
-  const [originCourseLists, setOriginCourseLists] =
-    useState<TransformedResult[]>();
+  const [originCourseLists, setOriginCourseLists] = useState<
+    TransformedResult[]
+  >([]);
 
   const [selectOriginCourse, setSelectOriginCourse] =
-    useState<TransformedResult>();
+    useState<TransformedResult>({
+      frtrlNm: "",
+      position: [{ lat: 0, lng: 0 }],
+    });
 
   // 13. 최종 데이터
   const data = {
@@ -343,7 +350,10 @@ export default function CourseEdit() {
   interface formdata {
     myCourseTitle: string;
     previewImgUrl: string;
-    selectedOption: string;
+    selectedOption: {
+      value: string;
+      label: string;
+    };
     checkedItems: string[];
     level: number;
     totalTimes: {
@@ -351,38 +361,35 @@ export default function CourseEdit() {
       minutes: string;
     };
     totalDistances: string;
-    selectOriginCourse: {
-      value: string;
-      label: string;
-    };
-    lists: list[];
+    selectOriginCourse: TransformedResult;
+    lists: ListItem[];
     tags: string[];
     courseEditorText: string;
   }
 
-  const defaultFormData: formdata = {
-    myCourseTitle: "",
-    previewImgUrl: "",
-    selectedOption: "",
-    checkedItems: [""],
-    level: 0,
-    totalTimes: {
-      hours: "",
-      minutes: "",
-    },
-    totalDistances: "",
-    selectOriginCourse: {
-      value: "",
-      label: "",
-    },
-    lists: [],
-    tags: [""],
-    courseEditorText: "",
-  };
+  // const defaultFormData: formdata = {
+  //   myCourseTitle: "",
+  //   previewImgUrl: "",
+  //   selectedOption: "",
+  //   checkedItems: [""],
+  //   level: 0,
+  //   totalTimes: {
+  //     hours: "",
+  //     minutes: "",
+  //   },
+  //   totalDistances: "",
+  //   selectOriginCourse: {
+  //     value: "",
+  //     label: "",
+  //   },
+  //   lists: [],
+  //   tags: [""],
+  //   courseEditorText: "",
+  // };
 
-  const [formData, setFormData] = useState<formdata>(defaultFormData);
+  // const [formData, setFormData] = useState<formdata>(defaultFormData);
 
-  function handleSubmit(data) {
+  function handleSubmit(data: formdata) {
     uploadImage(data.previewImgUrl) //
       .then((url) => {
         addCourse(data, url, user.uid);

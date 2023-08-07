@@ -14,6 +14,11 @@ interface HasBadgeProp {
   hasBadge: BadgeStatus;
 }
 
+interface BadgeProps {
+  badge: HasBadgeProp;
+  index: number;
+}
+
 // 뱃지 인증 여부
 type BadgeStatus = "Y" | "N";
 
@@ -32,7 +37,7 @@ const hasBadgeInfos: { [key: string]: HasBadgeProp }[] = [
   { peakQuestMaster: { hasBadge: "N" } },
 ];
 
-const Badge = ({ badge, index }) => {
+const Badge = ({ badge, index }: any) => {
   const translateXValue = -15 * index;
   const badgeStyle = {
     transform: `translateX(${translateXValue}%)`,
@@ -91,19 +96,56 @@ export default function Profile() {
     alert("닉네임 변경이 완료되었습니다.");
   };
 
+  // useEffect(() => {
+  //   // 뱃지 가져오기
+  //   const fetchBadge = async () => {
+  //     const data = await getBagdes(user?.uid);
+  //     const newData = data.filter((el) => {
+  //       const badgeKey = Object.keys(el)[0];
+  //       return el[badgeKey]?.hasBadge === "Y";
+  //     });
+  //     if (user) setUserBadges(newData);
+  //   };
+  //   if (user) setNickname(user.displayName);
+  //   fetchBadge();
+  // }, [user]);
+
+  // useEffect(() => {
+  //   if (user) {
+  //     // 뱃지 가져오기
+  //     const fetchBadge = async () => {
+  //       const data = await getBagdes(user?.uid);
+  //       const newData = data.filter((el) => {
+  //         const badgeKey = Object.keys(el)[0];
+  //         return el[badgeKey]?.hasBadge === "Y";
+  //       });
+  //       setUserBadges(newData);
+  //     };
+  //     setNickname(user.displayName);
+  //     fetchBadge();
+  //   }
+  // }, [user]);
+
   useEffect(() => {
-    // 뱃지 가져오기
-    const fetchBadge = async () => {
-      const data = await getBagdes(user?.uid);
-      const newData = data.filter((el) => {
-        const badgeKey = Object.keys(el)[0];
-        return el[badgeKey]?.hasBadge === "Y";
-      });
-      if (user) setUserBadges(newData);
-    };
-    if (user) setNickname(user.displayName);
-    fetchBadge();
+    if (user) {
+      // 뱃지 가져오기
+      const fetchBadge = async () => {
+        const data = await getBagdes(user.uid);
+        const newData = data.filter((el) => {
+          const badgeKey = Object.keys(el)[0];
+          return isHasBadgeProp(el[badgeKey]);
+        });
+        setUserBadges(newData as any); // 타입 캐스팅
+      };
+      setNickname(user.displayName);
+      fetchBadge();
+    }
   }, [user]);
+
+  // 타입 가드 함수
+  function isHasBadgeProp(obj: any): obj is HasBadgeProp {
+    return obj && typeof obj === "object" && "hasBadge" in obj;
+  }
 
   useEffect(() => {
     // 뱃지 최대 6개까지 잘라서 보여주기

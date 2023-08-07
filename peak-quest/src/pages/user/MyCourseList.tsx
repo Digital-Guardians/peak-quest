@@ -7,15 +7,17 @@ import trophy from "../../assets/user/trophy.png";
 
 // 코스 타입 정의
 interface Course {
-  // 코스 속성들
-  id: string;
+  id: number;
   title: string;
   writer: string;
   thumbnail: string;
   views: number;
   recommendations: number;
-  distance: number;
   area: string;
+  position: {
+    lat: number;
+    lng: number;
+  };
 }
 
 export default function MyCourseList() {
