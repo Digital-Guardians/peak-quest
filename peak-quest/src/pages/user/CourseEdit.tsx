@@ -475,11 +475,11 @@ export default function CourseEdit() {
           setEditorImage={setEditorImage}
         />
       </div>
-      {/* 13. 추가 버튼 */}
+      {/* 13. 코스 등록 */}
       <div className="mb-5 px-2">
         <button
           className="mt-5 w-full rounded-md bg-green py-2 text-white"
-          onClick={() => handleSubmit(data)}
+          onClick={handleOpenPopup}
         >
           코스 등록하기
         </button>
