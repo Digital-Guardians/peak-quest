@@ -30,6 +30,8 @@ import CourseEditor from "../../components/user/course/CourseEditor";
 import { useNavigate } from "react-router-dom";
 import { TransformedResult } from "../../types/forestTypes";
 import OriginCourseLists from "../../components/user/course/OriginCourseLists";
+import { addCourse } from "../../service/firebase";
+import { uploadImage } from "../../service/imageUpLoader";
 
 // **타입 정의**
 // 7. 소요 시간
@@ -229,10 +231,7 @@ export default function CourseEdit() {
     setLists(updatedLists);
   };
   // 편의시설 선택
-  const handleToggleAmenity = (
-    itemId: number,
-    amenityType: keyof Amenities
-  ) => {
+  const handleToggleAmenity = (itemId: number, amenityType: keyof Amenities) => {
     const updatedLists = lists.map((list) => {
       if (list.id === itemId) {
         return {
@@ -261,6 +260,11 @@ export default function CourseEdit() {
   // courseEditorText :string
   const [courseEditorText, setCourseEditorText] = useState<string>("");
 
+  // 공공데이터
+  const [originCourseLists, setOriginCourseLists] = useState<TransformedResult[]>();
+
+  const [selectOriginCourse, setSelectOriginCourse] = useState<TransformedResult>();
+
   // 13. 최종 데이터
   const data = {
     myCourseTitle,
@@ -269,12 +273,12 @@ export default function CourseEdit() {
     checkedItems,
     level,
     totalTimes,
+    selectOriginCourse,
     totalDistances,
     lists,
     tags,
     courseEditorText,
   };
-  // console.log("total data", data);
 
   // console.log("myCourseTitle", myCourseTitle);
   // console.log("previewImgUrl", previewImgUrl);
@@ -286,13 +290,6 @@ export default function CourseEdit() {
   // console.log("lists", lists);
   // console.log("tags", tags);
   // console.log("courseEditorText", courseEditorText);
-
-  // 공공데이터
-  const [originCourseLists, setOriginCourseLists] =
-    useState<TransformedResult[]>();
-
-  const [selectOriginCourse, setSelectOriginCourse] =
-    useState<TransformedResult>();
 
   const selectedOriginCourse = (selectOrigin: TransformedResult) => {
     setSelectOriginCourse(selectOrigin);
@@ -323,6 +320,68 @@ export default function CourseEdit() {
     // 페이지 진입 시 맨 위로 스크롤 이동
     window.scrollTo(0, 0);
   }, []);
+
+  interface list {
+    id: number;
+    place: string;
+    amenities: Amenities;
+    position: {
+      lat: string;
+      lng: string;
+    };
+    address_name: string;
+  }
+
+  interface formdata {
+    myCourseTitle: string;
+    previewImgUrl: string;
+    selectedOption: string;
+    checkedItems: string[];
+    level: number;
+    totalTimes: {
+      hours: string;
+      minutes: string;
+    };
+    totalDistances: string;
+    selectOriginCourse: {
+      value: string;
+      label: string;
+    };
+    lists: list[];
+    tags: string[];
+    courseEditorText: string;
+  }
+
+  const defaultFormData: formdata = {
+    myCourseTitle: "",
+    previewImgUrl: "",
+    selectedOption: "",
+    checkedItems: [""],
+    level: 0,
+    totalTimes: {
+      hours: "",
+      minutes: "",
+    },
+    totalDistances: "",
+    selectOriginCourse: {
+      value: "",
+      label: "",
+    },
+    lists: [],
+    tags: [""],
+    courseEditorText: "",
+  };
+
+  const [formData, setFormData] = useState<formdata>(defaultFormData);
+
+  function handleSubmit(data) {
+    uploadImage(data.previewImgUrl) //
+      .then((url) => {
+        addCourse(data, url);
+      });
+  }
+
+  useState();
   return (
     <div>
       {/* 0. 메뉴탭 */}
@@ -368,10 +427,7 @@ export default function CourseEdit() {
       </div>
       {/* 5. 코스 분류 */}
       <div className="mb-8 px-3">
-        <CourseCategory
-          checkedItems={checkedItems}
-          handleCheckboxChange={handleCheckboxChange}
-        />
+        <CourseCategory checkedItems={checkedItems} handleCheckboxChange={handleCheckboxChange} />
       </div>
       {/* 6. 난이도 */}
       <div className="mb-8 px-3">
@@ -379,10 +435,7 @@ export default function CourseEdit() {
       </div>
       {/* 7. 소요 시간 */}
       <div className="mb-8 px-3">
-        <CourseTotalTimes
-          totalTimes={totalTimes}
-          handleTotalTimes={handleTotalTimes}
-        />
+        <CourseTotalTimes totalTimes={totalTimes} handleTotalTimes={handleTotalTimes} />
       </div>
       {/* 8. 총 거리 */}
       <div className="mb-8 px-3">
@@ -423,7 +476,10 @@ export default function CourseEdit() {
       </div>
       {/* 13. 추가 버튼 */}
       <div className="mb-5 px-2">
-        <button className="mt-5 w-full rounded-md bg-green py-2 text-white">
+        <button
+          className="mt-5 w-full rounded-md bg-green py-2 text-white"
+          onClick={() => handleSubmit(data)}
+        >
           코스 등록하기
         </button>
       </div>

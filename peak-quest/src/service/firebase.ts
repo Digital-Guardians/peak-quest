@@ -1,5 +1,5 @@
 import { initializeApp } from "firebase/app";
-import { v4 as uuid } from "uuid";
+import { v4 as uuidv4 } from "uuid";
 import { getDatabase, ref, get, set } from "firebase/database";
 import {
   getAuth,
@@ -11,6 +11,8 @@ import {
 import { banner, userData } from "../types/type";
 
 // import { getAnalytics } from "firebase/analytics";
+
+const uuid = uuidv4();
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -170,8 +172,25 @@ export async function getBannerItemList() {
 }
 
 //게시글 작성
-export function addCourse(formData, img) {
-  set(ref(database, `bannerItem/${bannerData.title}`), newData);
+export async function addCourse(formData, img) {
+  return get(ref(database, "course")).then((res) => {
+    const data = res.val();
+    if (!data) {
+      set(ref(database, "course"), "");
+    }
+    const id = Object.keys(data).length + 1;
+
+    const newData = {
+      ...formData,
+      previewImgUrl: img,
+      id,
+    };
+
+    console.log(newData);
+
+    set(ref(database, `course/${uuid}`), newData);
+    return newData;
+  });
 }
 
 // export function getBannerList() {
