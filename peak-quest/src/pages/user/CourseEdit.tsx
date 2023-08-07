@@ -392,7 +392,7 @@ export default function CourseEdit() {
   function handleSubmit(data: formdata) {
     uploadImage(data.previewImgUrl) //
       .then((url) => {
-        addCourse(data, url, user.uid);
+        addCourse(data, url, user);
       });
   }
 

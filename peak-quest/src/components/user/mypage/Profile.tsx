@@ -114,12 +114,14 @@ export default function Profile() {
   //   if (user) {
   //     // 뱃지 가져오기
   //     const fetchBadge = async () => {
-  //       const data = await getBagdes(user?.uid);
+  //       const data = await getBagdes(user.uid);
   //       const newData = data.filter((el) => {
   //         const badgeKey = Object.keys(el)[0];
-  //         return el[badgeKey]?.hasBadge === "Y";
+  //         // el[badgeKey]?.hasBadge === "Y";
+  //         // console.log(el[badgeKey].hasBadge);
+  //         return isHasBadgeProp(el[badgeKey]?.hasBadge === "Y");
   //       });
-  //       setUserBadges(newData);
+  //       setUserBadges(newData as any); // 타입 캐스팅
   //     };
   //     setNickname(user.displayName);
   //     fetchBadge();
@@ -131,9 +133,9 @@ export default function Profile() {
       // 뱃지 가져오기
       const fetchBadge = async () => {
         const data = await getBagdes(user.uid);
-        const newData = data.filter((el) => {
+        const newData = data.filter((el: any) => {
           const badgeKey = Object.keys(el)[0];
-          return isHasBadgeProp(el[badgeKey]);
+          return isHasBadgeProp(el[badgeKey]) && el[badgeKey].hasBadge === "Y";
         });
         setUserBadges(newData as any); // 타입 캐스팅
       };
