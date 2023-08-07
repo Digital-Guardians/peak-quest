@@ -1,0 +1,212 @@
+{
+  "courses": [
+    {
+      "id": 1,
+      "title": "북한산 정복하기",
+      "writer": "천둥치는 날의 정현",
+      "thumbnail": "/images/course/course1.png",
+      "views": 112,
+      "recommendations": 394,
+      "area": "수도권",
+      "level": 3,
+      "option": ["편의시설이 있는", "당일치기 가능한"],
+      "position": {
+        "lat": 37.661409,
+        "lng": 127.0163137
+      }
+    },
+    {
+      "id": 2,
+      "title": "북한강 자전거 트래킹",
+      "writer": "트래킹 고수 진희",
+      "thumbnail": "/images/course/course2.png",
+      "views": 100,
+      "recommendations": 200,
+      "area": "수도권",
+      "level": 1,
+      "option": [
+        "편의시설이 있는",
+        "당일치기 가능한",
+        "자전거 타고 갈 수 있는"
+      ],
+      "position": {
+        "lat": 37.5470222,
+        "lng": 127.2408023
+      }
+    },
+    {
+      "id": 3,
+      "title": "관악산 트래킹 코스",
+      "writer": "트래킹 고수 진희",
+      "thumbnail": "/images/course/course3.png",
+      "views": 226,
+      "recommendations": 168,
+      "area": "수도권",
+      "level": 2,
+      "option": ["반려동물과 함께 갈 수 있는", "혼자서도 갈 수 있는"],
+      "position": {
+        "lat": 37.4672323,
+        "lng": 126.9469113
+      }
+    },
+    {
+      "id": 4,
+      "title": "관악산을 올라보자",
+      "writer": "발 빠른 정재",
+      "thumbnail": "/images/course/course4.png",
+      "views": 113,
+      "recommendations": 226,
+      "area": "수도권",
+      "level": 3,
+      "option": ["편의시설이 있는", "혼자서도 갈 수 있는"],
+      "position": {
+        "lat": 37.4672323,
+        "lng": 126.9469113
+      }
+    },
+    {
+      "id": 5,
+      "title": "도봉산 정상 찍기",
+      "writer": "천둥치는 날의 정현",
+      "thumbnail": "/images/course/course3.png",
+      "views": 20,
+      "recommendations": 168,
+      "area": "수도권",
+      "level": 1,
+      "option": ["편의시설이 있는"],
+      "position": {
+        "lat": 37.7004635,
+        "lng": 127.0156843
+      }
+    },
+    {
+      "id": 6,
+      "title": "무악재 하늘다리 둘러보기",
+      "writer": "천둥치는 날의 정현",
+      "thumbnail": "/images/course/course5.png",
+      "views": 150,
+      "recommendations": 259,
+      "area": "수도권",
+      "option": ["당일치기 가능한"],
+      "level": 5,
+      "position": {
+        "lat": 37.5787077,
+        "lng": 126.9538599
+      }
+    },
+    {
+      "id": 7,
+      "title": "반려동물과 함께 하기 좋은 곳",
+      "writer": "하늘을 나는 문정",
+      "thumbnail": "/images/course/course6.png",
+      "views": 126,
+      "recommendations": 318,
+      "distance": 32,
+      "area": "수도권",
+      "level": 4,
+      "option": [
+        "편의시설이 있는",
+        "반려동물과 함께 갈 수 있는",
+        "혼자서도 갈 수 있는"
+      ],
+      "position": {
+        "lat": 37.5787077,
+        "lng": 126.9538599
+      }
+    },
+    {
+      "id": 8,
+      "title": "북한산 정복하기22222",
+      "writer": "천둥치는 날의 정현",
+      "thumbnail": "/images/course/course1.png",
+      "views": 112,
+      "recommendations": 394,
+      "area": "수도권",
+      "level": 4,
+      "option": ["편의시설이 있는", "혼자서도 갈 수 있는"],
+      "position": {
+        "lat": 37.661409,
+        "lng": 127.0163137
+      }
+    },
+    {
+      "id": 9,
+      "title": "북한강 자전거 트래킹22222",
+      "writer": "트래킹 고수 진희",
+      "thumbnail": "/images/course/course2.png",
+      "views": 100,
+      "recommendations": 200,
+      "area": "수도권",
+      "level": 1,
+      "option": [
+        "편의시설이 있는",
+        "혼자서도 갈 수 있는",
+        "자전거 타고 갈 수 있는"
+      ],
+      "position": {
+        "lat": 37.5470222,
+        "lng": 127.2408023
+      }
+    },
+    {
+      "id": 10,
+      "title": "관악산 트래킹 코스22222",
+      "writer": "트래킹 고수 진희",
+      "thumbnail": "/images/course/course3.png",
+      "views": 226,
+      "recommendations": 168,
+      "area": "수도권",
+      "level": 5,
+      "option": ["편의시설이 있는"],
+      "position": {
+        "lat": 37.4672323,
+        "lng": 126.9469113
+      }
+    },
+    {
+      "id": 11,
+      "title": "관악산을 올라보자222222",
+      "writer": "발 빠른 정재",
+      "thumbnail": "/images/course/course4.png",
+      "views": 113,
+      "recommendations": 226,
+      "area": "수도권",
+      "level": 2,
+      "option": ["혼자서도 갈 수 있는", "자전거 타고 갈 수 있는"],
+      "position": {
+        "lat": 37.4672323,
+        "lng": 126.9469113
+      }
+    },
+    {
+      "id": 12,
+      "title": "도봉산 정상 찍기222222",
+      "writer": "천둥치는 날의 정현",
+      "thumbnail": "/images/course/course3.png",
+      "views": 20,
+      "recommendations": 168,
+      "area": "수도권",
+      "level": 4,
+      "option": [],
+      "position": {
+        "lat": 37.7004635,
+        "lng": 127.0156843
+      }
+    },
+    {
+      "id": 13,
+      "title": "무악재 하늘다리 둘러보기22222",
+      "writer": "천둥치는 날의 정현",
+      "thumbnail": "/images/course/course5.png",
+      "views": 150,
+      "recommendations": 259,
+      "area": "수도권",
+      "level": 3,
+      "option": [],
+      "position": {
+        "lat": 37.5787077,
+        "lng": 126.9538599
+      }
+    }
+  ]
+}
