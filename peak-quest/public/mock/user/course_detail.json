@@ -4,75 +4,70 @@
     "writer": "하늘을 나는 트래커",
     "title": "강원도 주민이 추천하는 경치좋은 코스",
     "area": "강원권",
-    "detail_area": "강원도 인제군",
     "thumbnail": "/images/course/course1.png",
-    "course_option": {
-      "go_alone": "Y",
-      "day_to_day": "N",
-      "with_pet": "Y",
-      "with_amenities": "N",
-      "can_bike": "Y"
+    "checkedItems": ["반려동물과 함께 갈 수 있는", "혼자서도 갈 수 있는"],
+    "totalTimes": {
+      "hours": "3",
+      "minutes": "3"
     },
-    "time": 180,
-    "distance": 12,
+    "totalDistances": 22,
     "level": 1,
-    "info": [
+    "lists": [
       {
         "id": 1,
         "place": "설악산",
-        "image": "/images/course/detail/detail_mountain.png",
+        "address_name": "충남 논산시 연산면 고정리 산 13-1",
         "amenities": {
-          "water": "Y",
-          "restaurant": "N",
-          "restroom": "N"
+          "hasFood": "",
+          "hasRestroom": "",
+          "hasWater": "Y"
         },
         "position": {
           "lat": 38.1195504,
           "lng": 128.4655581
-        },
-        "content": "안녕하세요 설악산입니다."
+        }
       },
       {
         "id": 2,
         "place": "설악 휴게소",
-        "image": "/images/course/detail/detail_rest.png",
+        "address_name": "충남 논산시 연산면 고정리 산 13-1",
         "amenities": {
-          "water": "N",
-          "restaurant": "Y",
-          "restroom": "Y"
+          "hasFood": "",
+          "hasRestroom": "",
+          "hasWater": "Y"
         },
         "position": {
           "lat": 38.1724445,
           "lng": 128.4943473
-        },
-        "content": "안녕하세요 설악 휴게소입니다."
+        }
       },
       {
         "id": 3,
         "place": "대관령 양떼목장",
-        "image": "/images/course/detail/detail_sheep.png",
+        "address_name": "충남 논산시 연산면 고정리 산 13-1",
         "amenities": {
           "water": "Y",
-          "restaurant": "N",
-          "restroom": "N"
+          "restaurant": "",
+          "restroom": ""
         },
         "position": {
           "lat": 37.688488,
           "lng": 128.7527571
-        },
-        "content": "안녕하세요 대관령 양떼목장입니다."
+        }
       }
     ],
-    "alreadyCourse": [
-      {
-        "id": 1,
-        "name": "강원 트래킹 A코스"
-      },
-      {
-        "id": 2,
-        "name": "설악 트래킹 2코스"
-      }
-    ],
-    "tag": ["강원도 즐기기", "설악산 트래킹", "한국 트래킹"]
+    "courseEditorText": "<p>히히히ㅣ힣<img src=\"blob:http://localhost:5173/6d9876db-232b-4c15-9dc7-008f627ed022\" alt=\"4997260_3376-removebg-preview.png\" contenteditable=\"false\"><br></p>",
+    "selectOriginCourse": {
+      "id": 1,
+      "frtrlNm": "강원 트래킹 A코스",
+      "position": [
+        {
+          "lat": 36.631634,
+          "lng": 126.650002
+        }
+      ]
+    },
+    "tag": ["강원도 즐기기", "설악산 트래킹", "한국 트래킹"],
+    "uid": "S0pRzM9U5pT2Bg0Aft2vVkja4qK2"
   }
 }

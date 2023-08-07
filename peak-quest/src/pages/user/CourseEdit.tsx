@@ -30,8 +30,9 @@ import CourseEditor from "../../components/user/course/CourseEditor";
 import { useNavigate } from "react-router-dom";
 import { TransformedResult } from "../../types/forestTypes";
 import OriginCourseLists from "../../components/user/course/OriginCourseLists";
-import { addCourse } from "../../service/firebase";
+import { addCourse, onUserStateChanged } from "../../service/firebase";
 import { uploadImage } from "../../service/imageUpLoader";
+import { useUserContext } from "../../context/userContext";
 
 // **타입 정의**
 // 7. 소요 시간
@@ -63,6 +64,7 @@ export interface OriginCourseNms {
 }
 
 export default function CourseEdit() {
+  const { user, setUser } = useUserContext();
   // 0.페이지 이동을 위함
   const navigate = useNavigate();
 
@@ -231,7 +233,10 @@ export default function CourseEdit() {
     setLists(updatedLists);
   };
   // 편의시설 선택
-  const handleToggleAmenity = (itemId: number, amenityType: keyof Amenities) => {
+  const handleToggleAmenity = (
+    itemId: number,
+    amenityType: keyof Amenities
+  ) => {
     const updatedLists = lists.map((list) => {
       if (list.id === itemId) {
         return {
@@ -261,9 +266,11 @@ export default function CourseEdit() {
   const [courseEditorText, setCourseEditorText] = useState<string>("");
 
   // 공공데이터
-  const [originCourseLists, setOriginCourseLists] = useState<TransformedResult[]>();
+  const [originCourseLists, setOriginCourseLists] =
+    useState<TransformedResult[]>();
 
-  const [selectOriginCourse, setSelectOriginCourse] = useState<TransformedResult>();
+  const [selectOriginCourse, setSelectOriginCourse] =
+    useState<TransformedResult>();
 
   // 13. 최종 데이터
   const data = {
@@ -296,6 +303,7 @@ export default function CourseEdit() {
   };
 
   useEffect(() => {
+    onUserStateChanged(setUser);
     const fetchData = async () => {
       try {
         // const fvsnStsfnFrtrlInfo =
@@ -377,7 +385,7 @@ export default function CourseEdit() {
   function handleSubmit(data) {
     uploadImage(data.previewImgUrl) //
       .then((url) => {
-        addCourse(data, url);
+        addCourse(data, url, user.uid);
       });
   }
 
@@ -427,7 +435,10 @@ export default function CourseEdit() {
       </div>
       {/* 5. 코스 분류 */}
       <div className="mb-8 px-3">
-        <CourseCategory checkedItems={checkedItems} handleCheckboxChange={handleCheckboxChange} />
+        <CourseCategory
+          checkedItems={checkedItems}
+          handleCheckboxChange={handleCheckboxChange}
+        />
       </div>
       {/* 6. 난이도 */}
       <div className="mb-8 px-3">
@@ -435,7 +446,10 @@ export default function CourseEdit() {
       </div>
       {/* 7. 소요 시간 */}
       <div className="mb-8 px-3">
-        <CourseTotalTimes totalTimes={totalTimes} handleTotalTimes={handleTotalTimes} />
+        <CourseTotalTimes
+          totalTimes={totalTimes}
+          handleTotalTimes={handleTotalTimes}
+        />
       </div>
       {/* 8. 총 거리 */}
       <div className="mb-8 px-3">

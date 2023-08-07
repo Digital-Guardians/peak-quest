@@ -102,7 +102,13 @@ export default function CourseItem({ courseList, isMine }: CourseItemProps) {
               }}
             >
               <p className="text-lg font-bold text-black">{course.title}</p>
-              <p className="mb-1 text-md text-darkGray">{course.writer}님</p>
+              {isMine ? (
+                <></>
+              ) : (
+                <p className="mb-1 text-md text-darkGray">
+                  {course.writer}님의 코스
+                </p>
+              )}
               <div className="flex w-full items-center justify-start text-sm text-darkGray sm:justify-end">
                 <div className="mr-2 flex items-center justify-center">
                   <AiFillEye />

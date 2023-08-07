@@ -71,7 +71,12 @@ export async function userLogin() {
         name: user.displayName,
         nick_name: user.displayName,
         registration_date: formattedDate,
-        ban: { ban_content: "", ban_end_date: "", ban_state_date: "", ban_type: "" },
+        ban: {
+          ban_content: "",
+          ban_end_date: "",
+          ban_state_date: "",
+          ban_type: "",
+        },
         delete: { delete_content: "", delete_State: "N", delete_at: "" },
         badges,
         role: "user",
@@ -105,7 +110,9 @@ export function onUserStateChanged(callback: any) {
 export async function getBagdes(uid: string) {
   const res = await get(ref(database, "userTest"));
   const data = res.val();
-  const newData = Object.entries(data[uid].badges).map(([key, value]) => ({ [key]: value }));
+  const newData = Object.entries(data[uid].badges).map(([key, value]) => ({
+    [key]: value,
+  }));
   return newData;
 }
 
@@ -172,21 +179,23 @@ export async function getBannerItemList() {
 }
 
 //게시글 작성
-export async function addCourse(formData, img) {
+export async function addCourse(formData, img, uid) {
   return get(ref(database, "course")).then((res) => {
     const data = res.val();
     if (!data) {
       set(ref(database, "course"), "");
     }
+
     const id = Object.keys(data).length + 1;
 
     const newData = {
       ...formData,
       previewImgUrl: img,
       id,
+      uid,
+      views: 0,
+      recommendations: 0,
     };
-
-    console.log(newData);
 
     set(ref(database, `course/${uuid}`), newData);
     return newData;
@@ -330,7 +339,9 @@ export function getDeleteUser() {
   return get(ref(database, "users")) //
     .then((res) => {
       const data = res.val();
-      return Object.values(data).filter((user) => user.delete.delete_state === "N");
+      return Object.values(data).filter(
+        (user) => user.delete.delete_state === "N"
+      );
     });
 }
 
@@ -361,7 +372,11 @@ export function userSuspend(
           user.state = "ban";
           user.ban.ban_type = banType;
           user.ban.ban_content = content;
-          if (banType === "temporary" && startDate !== undefined && endDate !== undefined) {
+          if (
+            banType === "temporary" &&
+            startDate !== undefined &&
+            endDate !== undefined
+          ) {
             user.ban.ban_start_date = startDate;
             user.ban.ban_end_date = endDate;
           } else if (banType === "permanent") {
@@ -440,6 +455,60 @@ export async function getMainBanner() {
   }
 
   // console.log(newData);
+
+  return newData;
+}
+
+// 내 코스 보기(마이페이지용)
+
+export async function getMyCourse(user) {
+  const res = await get(ref(database, "course"));
+  const data = res.val();
+  const myCourse = Object.values(data).filter(
+    (course) => course.uid === user.uid
+  );
+
+  const newArray = [];
+
+  myCourse.map((item) => {
+    const newData = {
+      id: item.id,
+      title: item.myCourseTitle,
+      writer: user.displayName,
+      thumbnail: item.previewImgUrl,
+      views: item.views,
+      recommendations: item.recommendations,
+      area: item.selectedOption?.label,
+      position: {
+        lat: item.selectOriginCourse.position[0].lat,
+        lng: item.selectOriginCourse.position[0].lng,
+      },
+    };
+    newArray.push(newData);
+  });
+
+  return newArray;
+}
+
+// 코스 상세
+export async function getCourseDetail(id) {
+  console.log(id);
+  const res = await get(ref(database, "course"));
+  const data = res.val();
+  const detail = Object.values(data).filter((course) => course.id === id);
+  const item = detail[0];
+
+  const newData = {
+    ...item,
+    title: item.myCourseTitle,
+    area: item.selectedOption?.label,
+    thumbnail: item.previewImgUrl,
+    recommendations: item.recommendations,
+    position: {
+      lat: item.selectOriginCourse.position[0].lat,
+      lng: item.selectOriginCourse.position[0].lng,
+    },
+  };
 
   return newData;
 }

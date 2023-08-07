@@ -5,17 +5,16 @@ interface CourseInfoProps {
     {
       id: number;
       place: string;
-      image: string;
+      address_name: string;
       amenities: {
-        water: string;
-        restaurant: string;
-        restroom: string;
+        hasFood: string;
+        hasRestroom: string;
+        hasWater: string;
       };
       position: {
         lat: number;
         lng: number;
       };
-      content: string;
     }
   ];
 }
@@ -26,10 +25,11 @@ export default function KakaoMapLine({ courseInfo }: CourseInfoProps) {
   const center =
     filterLists.length > 0
       ? {
-          lat: +filterLists[Math.ceil(filterLists.length / 2)].lat,
-          lng: +filterLists[Math.ceil(filterLists.length / 2)].lng,
+          lat: +filterLists[Math.ceil(filterLists.length / 2) - 1].lat,
+          lng: +filterLists[Math.ceil(filterLists.length / 2) - 1].lng,
         }
-      : { lat: 33.450701, lng: 126.570667 };
+      : { lat: 37.5274984, lng: 126.9165114 };
+
   const path =
     filterLists.length > 1
       ? filterLists.map((position) => ({
