@@ -70,7 +70,6 @@ export default function MyPage() {
 
   useEffect(() => {
     onUserStateChanged(setUser);
-    // getMyCourse(user);
     //  내코스 가져오기
     const fetchMyCourse = async () => {
       const data = await getMyCourse(user);
@@ -103,6 +102,7 @@ export default function MyPage() {
         <div className={!user ? "blur-sm" : ""}>
           {/* 프로필 영역 */}
           <Profile />
+          {/* <Profile /> */}
           {/* 내가 만든 코스 */}
           <div className="mt-3 w-full border-b-[1px] border-lightGray bg-white pb-2">
             <div className="flex items-center justify-between px-[8px] pt-[15px]">

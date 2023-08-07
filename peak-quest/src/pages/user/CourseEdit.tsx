@@ -33,6 +33,8 @@ import OriginCourseLists from "../../components/user/course/OriginCourseLists";
 import { addCourse, onUserStateChanged } from "../../service/firebase";
 import { uploadImage } from "../../service/imageUpLoader";
 import { useUserContext } from "../../context/userContext";
+import { IoClose } from "react-icons/io5";
+import User from "../admin/User";
 
 // **타입 정의**
 // 7. 소요 시간
@@ -389,14 +391,36 @@ export default function CourseEdit() {
 
   // const [formData, setFormData] = useState<formdata>(defaultFormData);
 
-  function handleSubmit(data: formdata) {
-    uploadImage(data.previewImgUrl) //
-      .then((url) => {
-        addCourse(data, url, user);
-      });
-  }
+  // function handleSubmit(data: formdata) {
+  //   uploadImage(data.previewImgUrl) //
+  //     .then((url) => {
+  //       addCourse(data, url, user);
+  //     });
+  // }
 
-  useState();
+  // 최종 확인 팝업
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const handleOpenPopup = () => {
+    setIsPopupOpen(true); // 팝업 열기
+  };
+
+  const handleClosePopup = () => {
+    setIsPopupOpen(false); // 팝업 닫기
+  };
+
+  const handleSubmit = (data: formdata) => {
+    console.log("최종", data);
+    handleOpenPopup();
+    uploadImage(data.previewImgUrl).then((url) => addCourse(data, url, user));
+  };
+
+  const onSubmitMyCourse = (data: formdata) => {
+    handleSubmit(data);
+    handleOpenPopup();
+    navigate("/");
+  };
+
   return (
     <div>
       {/* 0. 메뉴탭 */}
@@ -499,11 +523,58 @@ export default function CourseEdit() {
       <div className="mb-5 px-2">
         <button
           className="mt-5 w-full rounded-md bg-green py-2 text-white"
-          onClick={() => handleSubmit(data)}
+          // onClick={() => handleSubmit(data)}
+          onClick={handleOpenPopup}
         >
           코스 등록하기
         </button>
       </div>
+      {/* 팝업 */}
+      {isPopupOpen && (
+        <div className="fixed inset-0 z-30 flex items-center justify-center">
+          <div
+            className="absolute inset-0 bg-black opacity-70"
+            onClick={handleClosePopup}
+          />
+          <div className="relative flex items-center justify-center rounded-lg bg-white p-5 text-center text-black shadow-3xl sm:p-2">
+            <div className="p-2">
+              {/* 팝업 내용 */}
+              <div className="">
+                <h2 className="my-3 text-xl font-medium text-black">
+                  코스를 <strong className="text-mint">등록</strong>
+                  하시겠습니까?
+                </h2>
+              </div>
+              {/* 버튼 */}
+              <div className="mt-4 flex items-center justify-center sm:text-md">
+                <div>
+                  <button
+                    className="mr-2 cursor-pointer rounded-lg bg-gray px-8 py-2 text-darkGray  sm:px-4 sm:py-2"
+                    onClick={handleClosePopup}
+                  >
+                    취소
+                  </button>
+                </div>
+                <div>
+                  <button
+                    className="rounded-lg  bg-mint px-8  py-2  text-white sm:px-4 sm:py-2"
+                    onClick={() => onSubmitMyCourse(data)}
+                  >
+                    확인
+                  </button>
+                </div>
+              </div>
+            </div>
+            {/* 닫기 버튼 */}
+            <button
+              className="absolute right-2 top-2 text-darkGray"
+              onClick={handleClosePopup}
+            >
+              <IoClose size={20} />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

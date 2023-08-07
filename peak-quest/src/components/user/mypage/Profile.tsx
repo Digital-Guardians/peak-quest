@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { MdEditNote } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import { getBagdes } from "../../../service/firebase";
+import { getBagdes, onUserStateChanged } from "../../../service/firebase";
 import { useUserContext } from "../../../context/userContext";
 
 interface FormData {
@@ -64,6 +64,8 @@ export default function Profile() {
   // 유저정보
   const { user, setUser } = useUserContext();
 
+  console.log(user);
+
   // 뱃지
   const [userBadges, setUserBadges] = useState<
     {
@@ -96,39 +98,8 @@ export default function Profile() {
     alert("닉네임 변경이 완료되었습니다.");
   };
 
-  // useEffect(() => {
-  //   // 뱃지 가져오기
-  //   const fetchBadge = async () => {
-  //     const data = await getBagdes(user?.uid);
-  //     const newData = data.filter((el) => {
-  //       const badgeKey = Object.keys(el)[0];
-  //       return el[badgeKey]?.hasBadge === "Y";
-  //     });
-  //     if (user) setUserBadges(newData);
-  //   };
-  //   if (user) setNickname(user.displayName);
-  //   fetchBadge();
-  // }, [user]);
-
-  // useEffect(() => {
-  //   if (user) {
-  //     // 뱃지 가져오기
-  //     const fetchBadge = async () => {
-  //       const data = await getBagdes(user.uid);
-  //       const newData = data.filter((el) => {
-  //         const badgeKey = Object.keys(el)[0];
-  //         // el[badgeKey]?.hasBadge === "Y";
-  //         // console.log(el[badgeKey].hasBadge);
-  //         return isHasBadgeProp(el[badgeKey]?.hasBadge === "Y");
-  //       });
-  //       setUserBadges(newData as any); // 타입 캐스팅
-  //     };
-  //     setNickname(user.displayName);
-  //     fetchBadge();
-  //   }
-  // }, [user]);
-
   useEffect(() => {
+    onUserStateChanged(setUser);
     if (user) {
       // 뱃지 가져오기
       const fetchBadge = async () => {
@@ -161,7 +132,7 @@ export default function Profile() {
       <div className="flex max-h-[108px] items-center border-y-[1px] border-lightGray p-5 px-[20px]">
         <img
           className="mr-3 max-h-[58px] max-w-[58px] rounded-full border-[1px]"
-          src={`${user.photoURL}`}
+          src={user ? user.photoURL : ""}
           alt="프로필 image"
         />
         <div>
