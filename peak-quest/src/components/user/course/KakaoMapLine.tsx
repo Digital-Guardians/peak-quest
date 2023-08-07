@@ -1,15 +1,35 @@
 import { Map, Polyline, MapInfoWindow } from "react-kakao-maps-sdk";
 
-export default function KakaoMapLine() {
-  const filterLists = lists.map((v) => v.position);
+interface CourseInfoProps {
+  courseInfo: [
+    {
+      id: number;
+      place: string;
+      address_name: string;
+      amenities: {
+        hasFood: string;
+        hasRestroom: string;
+        hasWater: string;
+      };
+      position: {
+        lat: number;
+        lng: number;
+      };
+    }
+  ];
+}
+
+export default function KakaoMapLine({ courseInfo }: CourseInfoProps) {
+  const filterLists = courseInfo.map((v) => v.position);
 
   const center =
     filterLists.length > 0
       ? {
-          lat: +filterLists[Math.ceil(filterLists.length / 2)].lat,
-          lng: +filterLists[Math.ceil(filterLists.length / 2)].lng,
+          lat: +filterLists[Math.ceil(filterLists.length / 2) - 1].lat,
+          lng: +filterLists[Math.ceil(filterLists.length / 2) - 1].lng,
         }
-      : { lat: 33.450701, lng: 126.570667 };
+      : { lat: 37.5274984, lng: 126.9165114 };
+
   const path =
     filterLists.length > 1
       ? filterLists.map((position) => ({
@@ -18,10 +38,8 @@ export default function KakaoMapLine() {
         }))
       : [];
 
-  const startPosition = lists[0]?.position;
-  const endPosition = lists[lists.length - 1].position;
-
-  console.log(startPosition);
+  const startPosition = courseInfo[0]?.position;
+  const endPosition = courseInfo[courseInfo.length - 1].position;
 
   return (
     <Map // 지도를 표시할 Container
@@ -31,7 +49,7 @@ export default function KakaoMapLine() {
         width: "100%",
         height: "100%",
       }}
-      level={8} // 지도의 확대 레벨
+      level={12} // 지도의 확대 레벨
     >
       <Polyline
         path={[path]}
@@ -50,14 +68,12 @@ export default function KakaoMapLine() {
       >
         <div
           style={{
-            width: "100%",
-            height: "100%",
             fontSize: "12px",
             padding: "5px",
             color: "#009288",
           }}
         >
-          코스 시작 !
+          Start🚴🏻: {courseInfo[0].place}
         </div>
       </MapInfoWindow>
       <MapInfoWindow
@@ -70,20 +86,19 @@ export default function KakaoMapLine() {
         <div
           style={{
             width: "100%",
-            height: "100%",
-            fontSize: "12px",
-            padding: "5px",
+            fontSize: "11px",
+            padding: "5px 10px",
             color: "#009288",
           }}
         >
-          코스 완주 !
+          Finish🚩: {courseInfo[courseInfo.length - 1].place}
         </div>
       </MapInfoWindow>
     </Map>
   );
 }
 
-const lists = [
+const courseInfo = [
   {
     id: 1831976441,
     place: "월류봉광장",
@@ -155,29 +170,3 @@ const lists = [
     address_name: "충북 영동군 황간면 우매리 산 3",
   },
 ];
-
-// // 하버사인(harvesine) 공식사용 : https://en.wikipedia.org/wiki/Haversine_formula
-// function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
-//   // 위, 경도를 라디안으로 변환하는 함수
-//   function d2r(deg) {
-//     return (deg * Math.PI) / 180;
-//   }
-
-//   const R = 6371; // 지구 반지름(km) => WGS84좌표계
-
-//   // 위,경도를 라디안으로 변환
-//   const dLat = d2r(Math.abs(lat1 - lat2));
-//   const dLon = d2r(Math.abs(lon1 - lon2));
-
-//   // 변환한 라디안 값을 sin에 대입
-//   const sinDLat = Math.sin(dLat / 2);
-//   const sinDLon = Math.sin(dLon / 2);
-
-//   const sqrt = Math.sqrt(
-//     sinDLat * sinDLat +
-//       Math.cos(d2r(lat1)) * Math.cos(d2r(lat2)) * (sinDLon * sinDLon)
-//   );
-
-//   // 두 지점 사이의 거리
-//   return 2 * R * Math.asin(sqrt);
-// }

@@ -14,14 +14,17 @@ interface CourseItemProps {
 }
 
 interface Course {
-  id: string;
+  id: number;
   title: string;
   writer: string;
   thumbnail: string;
   views: number;
   recommendations: number;
-  distance: number;
   area: string;
+  position: {
+    lat: number;
+    lng: number;
+  };
 }
 
 export default function CourseItem({ courseList, isMine }: CourseItemProps) {
@@ -49,7 +52,7 @@ export default function CourseItem({ courseList, isMine }: CourseItemProps) {
           >
             {/* 코스 이미지 */}
             <div
-              className="relative h-[100px] max-w-full sm:h-[110px]"
+              className="relative h-[100px] max-w-full cursor-pointer sm:h-[110px]"
               onClick={() => {
                 navigate(
                   `/area/${changeEnglish(
@@ -89,7 +92,7 @@ export default function CourseItem({ courseList, isMine }: CourseItemProps) {
             )}
             {/* 코스 설명 */}
             <div
-              className="flex h-[96px] w-full flex-col items-start justify-evenly p-2 sm:h-[86px]"
+              className="flex h-[96px] w-full cursor-pointer flex-col items-start justify-evenly p-2 sm:h-[86px]"
               onClick={() => {
                 navigate(
                   `/area/${changeEnglish(
@@ -99,7 +102,13 @@ export default function CourseItem({ courseList, isMine }: CourseItemProps) {
               }}
             >
               <p className="text-lg font-bold text-black">{course.title}</p>
-              <p className="mb-1 text-md text-darkGray">{course.writer}님</p>
+              {isMine ? (
+                <></>
+              ) : (
+                <p className="mb-1 text-md text-darkGray">
+                  {course.writer}님의 코스
+                </p>
+              )}
               <div className="flex w-full items-center justify-start text-sm text-darkGray sm:justify-end">
                 <div className="mr-2 flex items-center justify-center">
                   <AiFillEye />

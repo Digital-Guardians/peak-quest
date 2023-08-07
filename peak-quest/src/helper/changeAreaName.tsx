@@ -1,4 +1,4 @@
-import React from "react";
+// 코스 이름 변경
 
 export const changeKorean = (areaName: string | undefined) => {
   areaName = areaName?.toLocaleLowerCase();
@@ -18,11 +18,14 @@ export const changeKorean = (areaName: string | undefined) => {
       return "제주도";
     // 없는 경우 => NotFound
     default:
-      return "area/notfound";
+      // window.open("/notfound");
+      window.stop();
+    // return "area/notfound";
   }
 };
 
 export const changeEnglish = (areaName: string | undefined) => {
+  console.log(areaName);
   // 한글 => 영어
   switch (areaName) {
     case "수도권":
@@ -42,4 +45,3 @@ export const changeEnglish = (areaName: string | undefined) => {
       return "area/notfound";
   }
 };
-

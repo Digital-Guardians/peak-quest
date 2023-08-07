@@ -9,95 +9,116 @@ import { MdOutlineLocationOn } from "react-icons/md";
 import { WiTime7 } from "react-icons/wi";
 import { BiCurrentLocation } from "react-icons/bi";
 import WishBtn from "../../components/user/WishBtn";
-import {
-  AiOutlineLike,
-  AiFillLike,
-  AiFillQuestionCircle,
-} from "react-icons/ai";
+import { AiOutlineLike, AiFillLike } from "react-icons/ai";
 import { BsShieldFillExclamation } from "react-icons/bs";
-import water from "../../assets/user/water.png";
-import restroom from "../../assets/user/restroom.png";
-import restaurant from "../../assets/user/restroom.png";
-import KakaoMapLine from "../../components/user/course/KakaoMapLine";
+import CourseInfo from "../../components/user/courseDetail/CourseInfo";
+import AlreadyModal from "../../components/user/courseDetail/AlreadyModal";
+import ReportModal from "../../components/user/courseDetail/ReportModal";
+import { getCourseDetail, onUserStateChanged } from "../../service/firebase";
+import { useUserContext } from "../../context/userContext";
 
 // 코스 타입 정의
 interface Course {
-  // 코스 속성들
   id: number;
   writer: string;
   title: string;
   area: string;
-  detail_area: string;
   thumbnail: string;
-  course_option: {
-    go_alone: string;
-    day_to_day: string;
-    with_pet: string;
-    with_amenities: string;
-    can_bike: string;
+  checkedItems: string[];
+  totalTimes: {
+    hours: string;
+    minutes: string;
   };
-  time: number;
-  distance: number;
+  totalDistances: string;
   level: number;
-  info: [
+  lists: [
     {
       id: number;
       place: string;
+      address_name: string;
       amenities: {
-        water: string;
-        restaurant: string;
-        restroom: string;
+        hasFood: string;
+        hasRestroom: string;
+        hasWater: string;
+      };
+      position: {
+        lat: number;
+        lng: number;
       };
     }
   ];
-  content: string;
+  courseEditorText: string;
+  selectOriginCourse: {
+    id: number;
+    frtrlNm: string;
+    position: [{ lat: number; lng: number }];
+  };
   tag: string[];
+  uid: string;
 }
 
 export default function CourseDetail() {
+  const { user, setUser } = useUserContext();
   // navigate
   const navigate = useNavigate();
   // 해당 코스의 id 가져오기
-  const { id } = useParams();
+  const { courseId } = useParams();
   // 코스
   const [course, setCourse] = useState<Course>();
-  // 코스 옵션
-  const [courseOption, setCourseOption] = useState<string[]>();
   // 추천버튼
   const [isRecommend, setIsRecommend] = useState<boolean>(false);
   // 신고 모달
-  const [open, setOpen] = useState<boolean>(false);
+  const [openReport, setOpenReport] = useState<boolean>(false);
+  // 관련코스 모달
+  const [openAlready, setOpenAlready] = useState<boolean>(false);
 
   useEffect(() => {
-    // api 연결
-    fetch(`/mock/user/course_detail.json`)
-      .then((res) => res.json())
-      .then((data) => {
-        setCourse(data.course);
-        // console.log(data.course);
-      })
-      .catch((error) => {
-        console.error("Error fetching more courses:", error);
-      });
-    // 최근 본 코스 테스트용 코드
-    saveRecentCourse({
-      id: 1,
-      title: "최근adsfa sfsafaㅇㅁㄹㄴㅁ ㅇㄹㄴㄻㄹㅇㄴ",
-      thumbnail: "/images/course/course2.png",
-      area: "제주도",
-    });
-    saveRecentCourse({
-      id: 2,
-      title: "서울 속 시원한 숲 ㅇㅇㅇㅇ",
-      thumbnail: "/images/course/course2.png",
-      area: "수도권",
-    });
-  }, []);
+    onUserStateChanged(setUser);
+
+    // 코스상세 가져오기
+    const fetchCourseDetail = async () => {
+      const data = await getCourseDetail(parseInt(courseId));
+      setCourse(data);
+      if (data) {
+        // 최근 본 코스 추가
+        saveRecentCourse({
+          id: parseInt(courseId),
+          title: data.course.title,
+          thumbnail: data.course.thumbnail,
+          area: data.course.area,
+        });
+      }
+    };
+
+    fetchCourseDetail();
+
+    // (async () => {
+    //   const data = await getCourseDetail(parseInt(courseId));
+    //   setCourse(data);
+    //   console.log(data);
+    //   if (data) {
+    //     // 최근 본 코스 추가
+    //     saveRecentCourse({
+    //       id: data.course.id,
+    //       title: data.course.title,
+    //       thumbnail: data.course.thumbnail,
+    //       area: data.course.area,
+    //     });
+    //   }
+    // })();
+  }, [courseId]);
 
   return (
     <>
       {course && (
         <div className="relative w-full">
+          {openReport && <ReportModal setOpenReport={setOpenReport} />}
+          {openAlready && (
+            <AlreadyModal
+              selectOriginCourse={course.selectOriginCourse}
+              setOpenAlready={setOpenAlready}
+            />
+          )}
           {/* header */}
           <div className="absolute top-0 z-50 h-[50px] w-full pt-1 text-center text-xl font-bold leading-loose text-white duration-300 ease-linear sm:h-[48px] sm:pt-2 sm:text-lg">
             {/* 뒤로 가기 버튼 */}
@@ -124,7 +145,7 @@ export default function CourseDetail() {
             </div>
           </div>
           {/* 썸네일 */}
-          <div className="relative h-[450px] w-full max-w-[430px] overflow-hidden text-white sm:h-[380px]">
+          <div className="relative h-[390px] w-full max-w-[430px] overflow-hidden text-white sm:h-[380px]">
             <img
               className="h-full w-full"
               src={`${course.thumbnail}`}
@@ -139,54 +160,38 @@ export default function CourseDetail() {
                 <div className="mr-2 mt-2 rounded-full border-[1px] border-white  p-2 text-md font-bold sm:py-1">
                   {course.area}
                 </div>
-                {course.course_option.go_alone === "Y" && (
-                  <div className="mr-2 mt-2 rounded-full border-[1px] border-white p-2 text-md font-bold sm:py-1">
-                    혼자서도 가능한
-                  </div>
-                )}
-                {course.course_option.can_bike === "Y" && (
-                  <div className="mr-2 mt-2 rounded-full border-[1px] border-white p-2 text-md font-bold sm:py-1">
-                    자전거 타고 갈 수 있는
-                  </div>
-                )}
-                {course.course_option.day_to_day === "Y" && (
-                  <div className="mr-2 mt-2 rounded-full border-[1px] border-white p-2 text-md font-bold sm:py-1">
-                    당일치기 가능한
-                  </div>
-                )}
-                {course.course_option.with_amenities === "Y" && (
-                  <div className="mr-2 mt-2 rounded-full border-[1px] border-white p-2 text-md font-bold sm:py-1">
-                    편의시설이 있는
-                  </div>
-                )}
-                {course.course_option.with_pet === "Y" && (
-                  <div className="mr-2 mt-2 rounded-full border-[1px] border-white p-2 text-md font-bold sm:py-1">
-                    반려동물과 함께 갈 수 있는
-                  </div>
-                )}
+                {course.checkedItems &&
+                  course.checkedItems.map((items, idx) => (
+                    <div
+                      key={idx}
+                      className="mr-2 mt-2 rounded-full border-[1px] border-white p-2 text-md font-bold sm:py-1"
+                    >
+                      {items}
+                    </div>
+                  ))}
               </div>
             </div>
           </div>
           <div className="px-3">
             {/* 지역, 시간, km */}
             <div className="flex h-[60px] w-full items-center justify-start border-b-[1px] border-gray text-md  text-darkGray sm:h-[55px]">
-              <div className="mr-2 flex items-center justify-start">
+              <div className="mr-5 flex items-center justify-start">
                 <div className="mr-1 text-xl sm:text-lg">
                   <MdOutlineLocationOn />
                 </div>
-                {course.detail_area}
+                {course.area}
               </div>
-              <div className="mr-2 flex items-center justify-start">
+              <div className="mr-5 flex items-center justify-start">
                 <div className="mr-1  text-xl sm:text-lg">
                   <WiTime7 />
                 </div>
-                {course.time}시간
+                {course.totalTimes.hours}시 {course.totalTimes.minutes}분
               </div>
               <div className="flex items-center justify-start">
                 <div className="mr-1  text-xl sm:text-lg">
                   <BiCurrentLocation />
                 </div>
-                {course.distance}km
+                {course.totalDistances}km
               </div>
             </div>
             {/* 신고 */}
@@ -195,128 +200,20 @@ export default function CourseDetail() {
               <p className="ml-2">이 코스 정보에 문제가 있나요?</p>
               <button
                 className="absolute right-3 flex items-center justify-center font-bold"
-                onClick={() => setOpen(true)}
+                onClick={() => setOpenReport(true)}
               >
                 신고하기
                 <IoIosArrowForward />
               </button>
             </div>
-
-            {/* 코스소개 */}
-            <div className="my-5 text-xl font-bold text-black sm:text-lg">
-              <p className="border-b-[1px] border-gray pb-3">코스 소개</p>
-              <div className="mt-8 h-[270px] w-full rounded-lg bg-gray">
-                <KakaoMapLine />
-              </div>
-              <div className="mt-10 ">
-                {/* <div className="w-[8px] min-h-[210px] bg-mint absolute left-3 " /> */}
-                <div>
-                  {course.info.map((el, idx) => (
-                    <div
-                      key={idx}
-                      className="mb-5 flex h-[50px] w-full items-center"
-                    >
-                      <div className="mr-2 flex h-[30px] w-[30px] items-center justify-center rounded-full border-4 border-mint bg-white text-md font-bold text-mint sm:h-[25px] sm:w-[25px] sm:border-[3px]">
-                        {idx + 1}
-                      </div>
-                      <div className="text-darkGray">{el.place}</div>
-                      {/* 편의시설 */}
-                      {el.amenities && (
-                        <div className="ml-3 flex w-[100px] items-center justify-start">
-                          {el.amenities.restaurant === "Y" && (
-                            <img
-                              className="mr-3 w-[25px] sm:mr-2 sm:w-[20px]"
-                              src={restaurant}
-                            />
-                          )}
-                          {el.amenities.restroom === "Y" && (
-                            <img
-                              className="mr-3 w-[25px] sm:mr-2 sm:w-[20px]"
-                              src={restroom}
-                            />
-                          )}
-                          {el.amenities.water === "Y" && (
-                            <img
-                              className="mr-3 w-[25px] sm:w-[20px]"
-                              src={water}
-                            />
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  ))}
-                </div>
-                {/* 관련 코스 */}
-                <div className="relative mt-3 flex h-[40px] items-center justify-start rounded-lg bg-lightGreen px-3 text-md font-normal text-green sm:h-[55px]">
-                  <div className="text-lg">
-                    <AiFillQuestionCircle />
-                  </div>
-                  <p className="ml-2">
-                    관련있는 산림청 코스 정보가
-                    <br className="hidden sm:block " />
-                    궁금하신가요?
-                  </p>
-                  <button
-                    className="absolute right-3 flex items-center justify-center font-bold"
-                    onClick={() => setOpen(true)}
-                  >
-                    보러가기
-                    <IoIosArrowForward />
-                  </button>
-                </div>
-              </div>
-            </div>
-            {/* 코스설명 */}
-            <div className="my-10 text-xl font-bold text-black sm:text-lg">
-              <p className="mb-8 border-b-[1px] border-gray pb-3 sm:mb-5">
-                코스 설명
-              </p>
-              <div className="my-8 sm:my-8">
-                <div className="flex items-center justify-start">
-                  <div className="mr-2 flex h-[30px] w-[30px] items-center justify-center rounded-full border-4 border-mint bg-white text-md font-bold text-mint sm:h-[25px] sm:w-[25px] sm:border-[3px]">
-                    1
-                  </div>
-                  <div className="text-darkGray ">설악산</div>
-                </div>
-                <img
-                  className="mt-5 h-[270px] w-full rounded-lg bg-gray"
-                  src="#"
-                />
-                <div className="mt-5 text-md font-normal">
-                  <p>어쩌구저쩌구 .. editor</p>
-                </div>
-              </div>
-              <div className="my-8 sm:my-8">
-                <div className="flex items-center justify-start">
-                  <div className="mr-2 flex h-[30px] w-[30px] items-center justify-center rounded-full border-4 border-mint bg-white text-md font-bold text-mint sm:h-[25px] sm:w-[25px] sm:border-[3px]">
-                    2
-                  </div>
-                  <div className="text-darkGray">설악산 휴게소</div>
-                </div>
-                <img
-                  className="mt-5 h-[270px] w-full rounded-lg bg-gray"
-                  src="#"
-                />
-                <div className="mt-5 text-md font-normal">
-                  <p>어쩌구저쩌구 .. editor</p>
-                </div>
-              </div>
-              <div className="my-10 sm:my-8">
-                <div className="flex items-center justify-start">
-                  <div className="mr-2 flex h-[30px] w-[30px] items-center justify-center rounded-full border-4 border-mint bg-white text-md font-bold text-mint sm:h-[25px] sm:w-[25px] sm:border-[3px]">
-                    3
-                  </div>
-                  <div className="text-darkGray">대관령 양떼목장</div>
-                </div>
-                <img
-                  className="mt-5 h-[270px] w-full rounded-lg bg-gray"
-                  src="#"
-                />
-                <div className="mt-5 text-md font-normal">
-                  <p>어쩌구저쩌구 .. editor</p>
-                </div>
-              </div>
-            </div>
+            {/* 코스소개 & 설명 */}
+            <CourseInfo
+              courseInfo={course.lists}
+              selectOriginCourse={course.selectOriginCourse}
+              openAlready={openAlready}
+              setOpenAlready={setOpenAlready}
+              courseEditorText={course.courseEditorText}
+            />
             {/* hashtag */}
             {course.tag && (
               <div className="mb-8 flex items-center justify-start border-b-[1px] border-gray pb-5">

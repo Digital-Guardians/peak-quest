@@ -1,5 +1,5 @@
 // 관련 컴포넌트
-import React, { ChangeEvent, useRef, useState } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 // 0. 메뉴탭
 import { IoIosArrowBack } from "react-icons/io";
 // 1. 배너
@@ -28,8 +28,11 @@ import CourseTags from "../../components/user/course/CourseTags";
 // 12. 코스 상세 설명
 import CourseEditor from "../../components/user/course/CourseEditor";
 import { useNavigate } from "react-router-dom";
-import KakaoMap from "../../components/user/course/KakaoMap";
-import KakaoMapLine from "../../components/user/course/KakaoMapLine";
+import { TransformedResult } from "../../types/forestTypes";
+import OriginCourseLists from "../../components/user/course/OriginCourseLists";
+import { addCourse, onUserStateChanged } from "../../service/firebase";
+import { uploadImage } from "../../service/imageUpLoader";
+import { useUserContext } from "../../context/userContext";
 
 // **타입 정의**
 // 7. 소요 시간
@@ -54,7 +57,14 @@ export interface Amenities {
   hasWater: "Y" | "N" | "";
 }
 
+export interface OriginCourseNms {
+  originCourse: string;
+  lat: number;
+  lng: number;
+}
+
 export default function CourseEdit() {
+  const { user, setUser } = useUserContext();
   // 0.페이지 이동을 위함
   const navigate = useNavigate();
 
@@ -62,7 +72,8 @@ export default function CourseEdit() {
   // myCourseTitle :string
   const [myCourseTitle, setMyCourseTitle] = useState<string>("");
   const handleMyCourseTitle = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setMyCourseTitle(event.target.value);
+    const value = event.target.value.slice(0, 20);
+    setMyCourseTitle(value);
   };
 
   // 3. 썸네일
@@ -190,8 +201,6 @@ export default function CourseEdit() {
     hasWater: "",
   });
 
-  console.log("lists", lists);
-
   // 새로운 입력창을 추가하는 함수
   const handleAddNewInput = () => {
     const newItem: ListItem = {
@@ -256,6 +265,13 @@ export default function CourseEdit() {
   // courseEditorText :string
   const [courseEditorText, setCourseEditorText] = useState<string>("");
 
+  // 공공데이터
+  const [originCourseLists, setOriginCourseLists] =
+    useState<TransformedResult[]>();
+
+  const [selectOriginCourse, setSelectOriginCourse] =
+    useState<TransformedResult>();
+
   // 13. 최종 데이터
   const data = {
     myCourseTitle,
@@ -264,12 +280,12 @@ export default function CourseEdit() {
     checkedItems,
     level,
     totalTimes,
+    selectOriginCourse,
     totalDistances,
     lists,
     tags,
     courseEditorText,
   };
-  // console.log("total data", data);
 
   // console.log("myCourseTitle", myCourseTitle);
   // console.log("previewImgUrl", previewImgUrl);
@@ -282,6 +298,98 @@ export default function CourseEdit() {
   // console.log("tags", tags);
   // console.log("courseEditorText", courseEditorText);
 
+  const selectedOriginCourse = (selectOrigin: TransformedResult) => {
+    setSelectOriginCourse(selectOrigin);
+  };
+
+  useEffect(() => {
+    onUserStateChanged(setUser);
+    const fetchData = async () => {
+      try {
+        // const fvsnStsfnFrtrlInfo =
+        //   await openDataAPI.getFvsnStsfnFrtrlInfoList();
+        // console.log(fvsnStsfnFrtrlInfo);
+
+        const response = await fetch("/mock/user/origin_course.json");
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+        setOriginCourseLists(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    // 페이지 진입 시 맨 위로 스크롤 이동
+    window.scrollTo(0, 0);
+  }, []);
+
+  interface list {
+    id: number;
+    place: string;
+    amenities: Amenities;
+    position: {
+      lat: string;
+      lng: string;
+    };
+    address_name: string;
+  }
+
+  interface formdata {
+    myCourseTitle: string;
+    previewImgUrl: string;
+    selectedOption: string;
+    checkedItems: string[];
+    level: number;
+    totalTimes: {
+      hours: string;
+      minutes: string;
+    };
+    totalDistances: string;
+    selectOriginCourse: {
+      value: string;
+      label: string;
+    };
+    lists: list[];
+    tags: string[];
+    courseEditorText: string;
+  }
+
+  const defaultFormData: formdata = {
+    myCourseTitle: "",
+    previewImgUrl: "",
+    selectedOption: "",
+    checkedItems: [""],
+    level: 0,
+    totalTimes: {
+      hours: "",
+      minutes: "",
+    },
+    totalDistances: "",
+    selectOriginCourse: {
+      value: "",
+      label: "",
+    },
+    lists: [],
+    tags: [""],
+    courseEditorText: "",
+  };
+
+  const [formData, setFormData] = useState<formdata>(defaultFormData);
+
+  function handleSubmit(data) {
+    uploadImage(data.previewImgUrl) //
+      .then((url) => {
+        addCourse(data, url, user.uid);
+      });
+  }
+
+  useState();
   return (
     <div>
       {/* 0. 메뉴탭 */}
@@ -289,7 +397,13 @@ export default function CourseEdit() {
         {/* 뒤로 가기 버튼 */}
         <div
           className="absolute left-3 top-3 cursor-pointer text-2xl"
-          onClick={() => navigate(-1)}
+          onClick={() => {
+            if (location.pathname === "/area/create") {
+              navigate("/");
+            } else {
+              navigate(-1);
+            }
+          }}
         >
           <IoIosArrowBack />
         </div>
@@ -359,8 +473,13 @@ export default function CourseEdit() {
         />
       </div>
       {/* 10. 기존 코스 정보 */}
-      <div className="mb-8 px-3">기존 코스 정보</div>
-      <KakaoMapLine />
+      <div className="mb-8 px-3">
+        <OriginCourseLists
+          originCourseLists={originCourseLists}
+          selectOriginCourse={selectOriginCourse}
+          selectedOriginCourse={selectedOriginCourse}
+        />
+      </div>
       {/* 11. 해시 태그 */}
       <div className="mb-8 px-3">
         <CourseTags tags={tags} handleTagsChange={handleTagsChange} />
@@ -370,8 +489,11 @@ export default function CourseEdit() {
         <CourseEditor setCourseEditorText={setCourseEditorText} />
       </div>
       {/* 13. 추가 버튼 */}
-      <div className="mb-8 px-2">
-        <button className="mt-12 w-full rounded-md bg-green py-2 text-white">
+      <div className="mb-5 px-2">
+        <button
+          className="mt-5 w-full rounded-md bg-green py-2 text-white"
+          onClick={() => handleSubmit(data)}
+        >
           코스 등록하기
         </button>
       </div>

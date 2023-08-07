@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import createCourse from "../../assets/course/create-course.png";
 import courseList from "../../assets/course/course-lists.png";
 import { Link } from "react-router-dom";
@@ -7,8 +7,21 @@ import EventBanner from "./EventBanner";
 import Nearby from "../../components/user/Nearby";
 import Header from "../../components/Header";
 import Login from "../../components/Login";
+import { useUserContext } from "../../context/userContext";
 
 export default function Main() {
+  const { user } = useUserContext();
+
+  // useEffect(() => {
+  //   console.log(user);
+
+  //   if (user) {
+  //     setInterval(() => {
+  //       console.log(user);
+  //     }, 2000);
+  //   }
+  // }, [user]);
+
   return (
     <div className="bg-lightGray text-black">
       <Header />
@@ -20,11 +33,7 @@ export default function Main() {
               <br />
               코스 만들기
             </p>
-            <img
-              className="shadow-3xl"
-              src={createCourse}
-              alt="create-course"
-            />
+            <img className="shadow-3xl" src={createCourse} alt="create-course" />
           </div>
         </Link>
         <Link to={"/area"}>

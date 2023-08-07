@@ -12,9 +12,7 @@ interface CourseEditorProp {
   setCourseEditorText: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function CourseEditor({
-  setCourseEditorText,
-}: CourseEditorProp) {
+export default function CourseEditor({ setCourseEditorText }: CourseEditorProp) {
   const editorRef = useRef<Editor | null>(null);
 
   // 툴바 항목

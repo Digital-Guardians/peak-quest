@@ -4,6 +4,8 @@ export interface UserContextType {
   isOpenLogin: boolean;
   handleOpenLoginPopup: () => void;
   handleCloseLoginPopup: () => void;
+  user: any;
+  setUser: (user: any) => void;
 }
 
 export const UserContext = createContext<UserContextType>(null!);
