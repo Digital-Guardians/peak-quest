@@ -30,9 +30,12 @@ import CourseEditor from "../../components/user/course/CourseEditor";
 import { useNavigate } from "react-router-dom";
 import { TransformedResult } from "../../types/forestTypes";
 import OriginCourseLists from "../../components/user/course/OriginCourseLists";
-import { addCourse, onUserStateChanged } from "../../service/firebase";
-import { uploadImage } from "../../service/imageUpLoader";
+import { uploadImage } from "../../service/imageUploader";
+import { addCourse } from "../../service/firebase";
 import { useUserContext } from "../../context/userContext";
+import { IoClose } from "react-icons/io5";
+import { addCourse, onUserStateChanged } from "../../service/firebase";
+
 
 // **타입 정의**
 // 7. 소요 시간
@@ -67,6 +70,7 @@ export default function CourseEdit() {
   const { user, setUser } = useUserContext();
   // 0.페이지 이동을 위함
   const navigate = useNavigate();
+  const { user } = useUserContext();
 
   // 2. 코스 제목
   // myCourseTitle :string
@@ -80,7 +84,7 @@ export default function CourseEdit() {
   // **이슈**
   // 이미지 URL로 보낼지 FormData로 보낼지 확인
   // previewImgUrl :string
-  const [previewImgUrl, setPreviewImgUrl] = useState<string | null>(null);
+  const [previewImgUrl, setPreviewImgUrl] = useState<string>("");
   const thumbnailRef = useRef<HTMLImageElement>(null);
   const handlePreviewImg = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -92,7 +96,7 @@ export default function CourseEdit() {
       };
       reader.readAsDataURL(file);
     } else {
-      setPreviewImgUrl(null);
+      setPreviewImgUrl("");
     }
   };
 
@@ -100,7 +104,10 @@ export default function CourseEdit() {
   // **참고**
   // /user/Filter 파일에 있는 AreaOption 가져옴
   // selectedOption :{ value: string, label: string }
-  const [selectedOption, setSelectedOption] = useState<AreaOption | null>(null);
+  const [selectedOption, setSelectedOption] = useState<AreaOption>({
+    value: "",
+    label: "",
+  });
   const [isOptionsVisible, setIsOptionsVisible] = useState<boolean>(false);
   const handleSelectOption = (option: AreaOption) => {
     setSelectedOption(option);
@@ -254,49 +261,16 @@ export default function CourseEdit() {
 
   // 10. 기존 코스 정보
 
-  // 11. 해시 태그
-  // tags :string[]
-  const [tags, setTags] = useState<string[]>([]);
-  const handleTagsChange = (newTags: string[]) => {
-    setTags(newTags);
-  };
-
-  // 12. 코스 상세 설명
-  // courseEditorText :string
-  const [courseEditorText, setCourseEditorText] = useState<string>("");
-
   // 공공데이터
-  const [originCourseLists, setOriginCourseLists] =
-    useState<TransformedResult[]>();
+  const [originCourseLists, setOriginCourseLists] = useState<
+    TransformedResult[]
+  >([]);
 
   const [selectOriginCourse, setSelectOriginCourse] =
-    useState<TransformedResult>();
-
-  // 13. 최종 데이터
-  const data = {
-    myCourseTitle,
-    previewImgUrl,
-    selectedOption,
-    checkedItems,
-    level,
-    totalTimes,
-    selectOriginCourse,
-    totalDistances,
-    lists,
-    tags,
-    courseEditorText,
-  };
-
-  // console.log("myCourseTitle", myCourseTitle);
-  // console.log("previewImgUrl", previewImgUrl);
-  // console.log("selectedOption", selectedOption);
-  // console.log("checkedItems", checkedItems);
-  // console.log("level", level);
-  // console.log("totalTimes", totalTimes);
-  // console.log("totalDistances", totalDistances);
-  // console.log("lists", lists);
-  // console.log("tags", tags);
-  // console.log("courseEditorText", courseEditorText);
+    useState<TransformedResult>({
+      frtrlNm: "",
+      position: [{ lat: 0, lng: 0 }],
+    });
 
   const selectedOriginCourse = (selectOrigin: TransformedResult) => {
     setSelectOriginCourse(selectOrigin);
@@ -324,26 +298,47 @@ export default function CourseEdit() {
     fetchData();
   }, []);
 
+  // 11. 해시 태그
+  // tags :string[]
+  const [tags, setTags] = useState<string[]>([]);
+  const handleTagsChange = (newTags: string[]) => {
+    setTags(newTags);
+  };
+
+  // 12. 코스 상세 설명
+  // courseEditorText :string
+  const [courseEditorText, setCourseEditorText] = useState<string>("");
+
   useEffect(() => {
     // 페이지 진입 시 맨 위로 스크롤 이동
     window.scrollTo(0, 0);
   }, []);
 
-  interface list {
-    id: number;
-    place: string;
-    amenities: Amenities;
-    position: {
-      lat: string;
-      lng: string;
-    };
-    address_name: string;
-  }
+  // (서버에 전달할) 에디터 이미지
+  const [editorImage, setEditorImage] = useState<string>("");
+
+  // 13. 최종 데이터
+  const data = {
+    myCourseTitle,
+    previewImgUrl,
+    selectedOption,
+    checkedItems,
+    level,
+    totalTimes,
+    selectOriginCourse,
+    totalDistances,
+    lists,
+    tags,
+    courseEditorText,
+  };
 
   interface formdata {
     myCourseTitle: string;
     previewImgUrl: string;
-    selectedOption: string;
+    selectedOption: {
+      value: string;
+      label: string;
+    };
     checkedItems: string[];
     level: number;
     totalTimes: {
@@ -351,45 +346,36 @@ export default function CourseEdit() {
       minutes: string;
     };
     totalDistances: string;
-    selectOriginCourse: {
-      value: string;
-      label: string;
-    };
-    lists: list[];
+    selectOriginCourse: TransformedResult;
+    lists: ListItem[];
     tags: string[];
     courseEditorText: string;
   }
 
-  const defaultFormData: formdata = {
-    myCourseTitle: "",
-    previewImgUrl: "",
-    selectedOption: "",
-    checkedItems: [""],
-    level: 0,
-    totalTimes: {
-      hours: "",
-      minutes: "",
-    },
-    totalDistances: "",
-    selectOriginCourse: {
-      value: "",
-      label: "",
-    },
-    lists: [],
-    tags: [""],
-    courseEditorText: "",
+  // 최종 확인 팝업
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const handleOpenPopup = () => {
+    setIsPopupOpen(true); // 팝업 열기
   };
 
-  const [formData, setFormData] = useState<formdata>(defaultFormData);
+  const handleClosePopup = () => {
+    setIsPopupOpen(false); // 팝업 닫기
+  };
 
-  function handleSubmit(data) {
-    uploadImage(data.previewImgUrl) //
-      .then((url) => {
-        addCourse(data, url, user.uid);
-      });
-  }
+  const handleSubmit = (data: formdata) => {
+    console.log("최종", data);
+    handleOpenPopup();
+    uploadImage(data.previewImgUrl).then((url) =>
+      addCourse(data, url, user.uid)
+    );
+  };
 
-  useState();
+  const onSubmitMyCourse = (data: formdata) => {
+    handleSubmit(data);
+    handleOpenPopup();
+    navigate("/");
+  };
   return (
     <div>
       {/* 0. 메뉴탭 */}
@@ -486,17 +472,67 @@ export default function CourseEdit() {
       </div>
       {/* 12. 코스 상세 설명 */}
       <div className="mb-8 px-2">
-        <CourseEditor setCourseEditorText={setCourseEditorText} />
+        <CourseEditor
+          setCourseEditorText={setCourseEditorText}
+          editorImage={editorImage}
+          setEditorImage={setEditorImage}
+        />
       </div>
-      {/* 13. 추가 버튼 */}
+      {/* 13. 코스 등록 */}
       <div className="mb-5 px-2">
         <button
           className="mt-5 w-full rounded-md bg-green py-2 text-white"
-          onClick={() => handleSubmit(data)}
+          onClick={handleOpenPopup}
         >
           코스 등록하기
         </button>
       </div>
+      {/* 팝업 */}
+      {isPopupOpen && (
+        <div className="fixed inset-0 z-30 flex items-center justify-center">
+          <div
+            className="absolute inset-0 bg-black opacity-70"
+            onClick={handleClosePopup}
+          />
+          <div className="relative flex items-center justify-center rounded-lg bg-white p-5 text-center text-black shadow-3xl sm:p-2">
+            <div className="p-2">
+              {/* 팝업 내용 */}
+              <div className="">
+                <h2 className="my-3 text-xl font-medium text-black">
+                  코스를 <strong className="text-mint">등록</strong>
+                  하시겠습니까?
+                </h2>
+              </div>
+              {/* 버튼 */}
+              <div className="mt-4 flex items-center justify-center sm:text-md">
+                <div>
+                  <button
+                    className="mr-2 cursor-pointer rounded-lg bg-gray px-8 py-2 text-darkGray  sm:px-4 sm:py-2"
+                    onClick={handleClosePopup}
+                  >
+                    취소
+                  </button>
+                </div>
+                <div>
+                  <button
+                    className="rounded-lg  bg-mint px-8  py-2  text-white sm:px-4 sm:py-2"
+                    onClick={() => onSubmitMyCourse(data)}
+                  >
+                    확인
+                  </button>
+                </div>
+              </div>
+            </div>
+            {/* 닫기 버튼 */}
+            <button
+              className="absolute right-2 top-2 text-darkGray"
+              onClick={handleClosePopup}
+            >
+              <IoClose size={20} />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
