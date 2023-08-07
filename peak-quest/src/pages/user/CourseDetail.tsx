@@ -14,62 +14,57 @@ import { BsShieldFillExclamation } from "react-icons/bs";
 import CourseInfo from "../../components/user/courseDetail/CourseInfo";
 import AlreadyModal from "../../components/user/courseDetail/AlreadyModal";
 import ReportModal from "../../components/user/courseDetail/ReportModal";
+import { getCourseDetail, onUserStateChanged } from "../../service/firebase";
+import { useUserContext } from "../../context/userContext";
 
 // 코스 타입 정의
 interface Course {
-  // 코스 속성들
   id: number;
   writer: string;
   title: string;
   area: string;
-  detail_area: string;
   thumbnail: string;
-  course_option: {
-    go_alone: string;
-    day_to_day: string;
-    with_pet: string;
-    with_amenities: string;
-    can_bike: string;
+  checkedItems: string[];
+  totalTimes: {
+    hours: string;
+    minutes: string;
   };
-  time: number;
-  distance: number;
+  totalDistances: string;
   level: number;
-  info: [
+  lists: [
     {
       id: number;
       place: string;
-      image: string;
+      address_name: string;
       amenities: {
-        water: string;
-        restaurant: string;
-        restroom: string;
+        hasFood: string;
+        hasRestroom: string;
+        hasWater: string;
       };
       position: {
         lat: number;
         lng: number;
       };
-      content: string;
     }
   ];
-  alreadyCourse: [
-    {
-      id: number;
-      name: string;
-    }
-  ];
-  content: string;
+  courseEditorText: string;
+  selectOriginCourse: {
+    id: number;
+    frtrlNm: string;
+    position: [{ lat: number; lng: number }];
+  };
   tag: string[];
+  uid: string;
 }
 
 export default function CourseDetail() {
+  const { user, setUser } = useUserContext();
   // navigate
   const navigate = useNavigate();
   // 해당 코스의 id 가져오기
-  const { id } = useParams();
+  const { courseId } = useParams();
   // 코스
   const [course, setCourse] = useState<Course>();
-  // 코스 옵션
-  const [courseOption, setCourseOption] = useState<string[]>();
   // 추천버튼
   const [isRecommend, setIsRecommend] = useState<boolean>(false);
   // 신고 모달
@@ -78,26 +73,40 @@ export default function CourseDetail() {
   const [openAlready, setOpenAlready] = useState<boolean>(false);
 
   useEffect(() => {
-    // api 연결
-    fetch(`/mock/user/course_detail.json`)
-      .then((res) => res.json())
-      .then((data) => {
-        setCourse(data.course);
-        // console.log(data.course);
-        if (data.course) {
-          // 최근 본 코스 추가
-          saveRecentCourse({
-            id: data.course.id,
-            title: data.course.title,
-            thumbnail: data.course.thumbnail,
-            area: data.course.area,
-          });
-        }
-      })
-      .catch((error) => {
-        console.error("Error fetching more courses:", error);
-      });
-  }, []);
+    onUserStateChanged(setUser);
+
+    // 코스상세 가져오기
+    const fetchCourseDetail = async () => {
+      const data = await getCourseDetail(parseInt(courseId));
+      setCourse(data);
+      if (data) {
+        // 최근 본 코스 추가
+        saveRecentCourse({
+          id: parseInt(courseId),
+          title: data.course.title,
+          thumbnail: data.course.thumbnail,
+          area: data.course.area,
+        });
+      }
+    };
+
+    fetchCourseDetail();
+
+    // (async () => {
+    //   const data = await getCourseDetail(parseInt(courseId));
+    //   setCourse(data);
+    //   console.log(data);
+    //   if (data) {
+    //     // 최근 본 코스 추가
+    //     saveRecentCourse({
+    //       id: data.course.id,
+    //       title: data.course.title,
+    //       thumbnail: data.course.thumbnail,
+    //       area: data.course.area,
+    //     });
+    //   }
+    // })();
+  }, [courseId]);
 
   return (
     <>
@@ -106,7 +115,7 @@ export default function CourseDetail() {
           {openReport && <ReportModal setOpenReport={setOpenReport} />}
           {openAlready && (
             <AlreadyModal
-              alreadyCourse={course.alreadyCourse}
+              selectOriginCourse={course.selectOriginCourse}
               setOpenAlready={setOpenAlready}
             />
           )}
@@ -136,7 +145,7 @@ export default function CourseDetail() {
             </div>
           </div>
           {/* 썸네일 */}
-          <div className="relative h-[450px] w-full max-w-[430px] overflow-hidden text-white sm:h-[380px]">
+          <div className="relative h-[390px] w-full max-w-[430px] overflow-hidden text-white sm:h-[380px]">
             <img
               className="h-full w-full"
               src={`${course.thumbnail}`}
@@ -151,54 +160,38 @@ export default function CourseDetail() {
                 <div className="mr-2 mt-2 rounded-full border-[1px] border-white  p-2 text-md font-bold sm:py-1">
                   {course.area}
                 </div>
-                {course.course_option.go_alone === "Y" && (
-                  <div className="mr-2 mt-2 rounded-full border-[1px] border-white p-2 text-md font-bold sm:py-1">
-                    혼자서도 가능한
-                  </div>
-                )}
-                {course.course_option.can_bike === "Y" && (
-                  <div className="mr-2 mt-2 rounded-full border-[1px] border-white p-2 text-md font-bold sm:py-1">
-                    자전거 타고 갈 수 있는
-                  </div>
-                )}
-                {course.course_option.day_to_day === "Y" && (
-                  <div className="mr-2 mt-2 rounded-full border-[1px] border-white p-2 text-md font-bold sm:py-1">
-                    당일치기 가능한
-                  </div>
-                )}
-                {course.course_option.with_amenities === "Y" && (
-                  <div className="mr-2 mt-2 rounded-full border-[1px] border-white p-2 text-md font-bold sm:py-1">
-                    편의시설이 있는
-                  </div>
-                )}
-                {course.course_option.with_pet === "Y" && (
-                  <div className="mr-2 mt-2 rounded-full border-[1px] border-white p-2 text-md font-bold sm:py-1">
-                    반려동물과 함께 갈 수 있는
-                  </div>
-                )}
+                {course.checkedItems &&
+                  course.checkedItems.map((items, idx) => (
+                    <div
+                      key={idx}
+                      className="mr-2 mt-2 rounded-full border-[1px] border-white p-2 text-md font-bold sm:py-1"
+                    >
+                      {items}
+                    </div>
+                  ))}
               </div>
             </div>
           </div>
           <div className="px-3">
             {/* 지역, 시간, km */}
             <div className="flex h-[60px] w-full items-center justify-start border-b-[1px] border-gray text-md  text-darkGray sm:h-[55px]">
-              <div className="mr-2 flex items-center justify-start">
+              <div className="mr-5 flex items-center justify-start">
                 <div className="mr-1 text-xl sm:text-lg">
                   <MdOutlineLocationOn />
                 </div>
-                {course.detail_area}
+                {course.area}
               </div>
-              <div className="mr-2 flex items-center justify-start">
+              <div className="mr-5 flex items-center justify-start">
                 <div className="mr-1  text-xl sm:text-lg">
                   <WiTime7 />
                 </div>
-                {course.time}분
+                {course.totalTimes.hours}시 {course.totalTimes.minutes}분
               </div>
               <div className="flex items-center justify-start">
                 <div className="mr-1  text-xl sm:text-lg">
                   <BiCurrentLocation />
                 </div>
-                {course.distance}km
+                {course.totalDistances}km
               </div>
             </div>
             {/* 신고 */}
@@ -215,10 +208,11 @@ export default function CourseDetail() {
             </div>
             {/* 코스소개 & 설명 */}
             <CourseInfo
-              courseInfo={course.info}
-              alreadyCourse={course.alreadyCourse}
+              courseInfo={course.lists}
+              selectOriginCourse={course.selectOriginCourse}
               openAlready={openAlready}
               setOpenAlready={setOpenAlready}
+              courseEditorText={course.courseEditorText}
             />
             {/* hashtag */}
             {course.tag && (

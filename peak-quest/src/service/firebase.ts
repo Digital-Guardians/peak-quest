@@ -468,3 +468,57 @@ export async function getMainBanner() {
 
   return newData;
 }
+
+// 내 코스 보기(마이페이지용)
+
+export async function getMyCourse(user) {
+  const res = await get(ref(database, "course"));
+  const data = res.val();
+  const myCourse = Object.values(data).filter(
+    (course) => course.uid === user.uid
+  );
+
+  const newArray = [];
+
+  myCourse.map((item) => {
+    const newData = {
+      id: item.id,
+      title: item.myCourseTitle,
+      writer: user.displayName,
+      thumbnail: item.previewImgUrl,
+      views: item.views,
+      recommendations: item.recommendations,
+      area: item.selectedOption?.label,
+      position: {
+        lat: item.selectOriginCourse.position[0].lat,
+        lng: item.selectOriginCourse.position[0].lng,
+      },
+    };
+    newArray.push(newData);
+  });
+
+  return newArray;
+}
+
+// 코스 상세
+export async function getCourseDetail(id) {
+  console.log(id);
+  const res = await get(ref(database, "course"));
+  const data = res.val();
+  const detail = Object.values(data).filter((course) => course.id === id);
+  const item = detail[0];
+
+  const newData = {
+    ...item,
+    title: item.myCourseTitle,
+    area: item.selectedOption?.label,
+    thumbnail: item.previewImgUrl,
+    recommendations: item.recommendations,
+    position: {
+      lat: item.selectOriginCourse.position[0].lat,
+      lng: item.selectOriginCourse.position[0].lng,
+    },
+  };
+
+  return newData;
+}

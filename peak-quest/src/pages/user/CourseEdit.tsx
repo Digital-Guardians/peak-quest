@@ -34,6 +34,8 @@ import { uploadImage } from "../../service/imageUploader";
 import { addCourse } from "../../service/firebase";
 import { useUserContext } from "../../context/userContext";
 import { IoClose } from "react-icons/io5";
+import { addCourse, onUserStateChanged } from "../../service/firebase";
+
 
 // **타입 정의**
 // 7. 소요 시간
@@ -65,6 +67,7 @@ export interface OriginCourseNms {
 }
 
 export default function CourseEdit() {
+  const { user, setUser } = useUserContext();
   // 0.페이지 이동을 위함
   const navigate = useNavigate();
   const { user } = useUserContext();
@@ -274,6 +277,7 @@ export default function CourseEdit() {
   };
 
   useEffect(() => {
+    onUserStateChanged(setUser);
     const fetchData = async () => {
       try {
         // const fvsnStsfnFrtrlInfo =
@@ -372,7 +376,6 @@ export default function CourseEdit() {
     handleOpenPopup();
     navigate("/");
   };
-
   return (
     <div>
       {/* 0. 메뉴탭 */}

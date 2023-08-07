@@ -56,7 +56,7 @@ export default function Address(location: AddressProps) {
     if (location)
       searchAddrFromCoords(
         new kakao.maps.LatLng(location.location.lat, location.location.lng),
-        // new kakao.maps.LatLng(36.3597629, 127.385063),
+        // new kakao.maps.LatLng(36.3597629, 127.385063) => 대전 산림청
         displayLocationInfo
       );
   }, [location]);

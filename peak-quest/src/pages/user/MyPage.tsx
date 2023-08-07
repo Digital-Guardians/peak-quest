@@ -7,60 +7,78 @@ import { useNavigate } from "react-router-dom";
 import Profile from "../../components/user/mypage/Profile";
 import RecentCourse from "../../components/user/mypage/RecentCourse";
 import { useUserContext } from "../../context/userContext";
-import { onUserStateChanged } from "../../service/firebase";
+import {
+  getBagdes,
+  getMyCourse,
+  onUserStateChanged,
+} from "../../service/firebase";
 
 // 코스 타입 정의
 interface Course {
-  // 코스 속성들
-  id: string;
+  id: number;
   title: string;
   writer: string;
   thumbnail: string;
   views: number;
   recommendations: number;
-  distance: number;
   area: string;
+  position: {
+    lat: number;
+    lng: number;
+  };
 }
+
+// 뱃지 인증 상태 타입 정의
+interface HasBadgeProp {
+  hasBadge: BadgeStatus;
+}
+
+// 뱃지 인증 여부
+type BadgeStatus = "Y" | "N";
+
+const hasBadgeInfos: { [key: string]: HasBadgeProp }[] = [
+  { gold: { hasBadge: "N" } },
+  { silver: { hasBadge: "N" } },
+  { bronze: { hasBadge: "N" } },
+  { allClear: { hasBadge: "N" } },
+  { start: { hasBadge: "N" } },
+  { firstWish: { hasBadge: "N" } },
+  { firstRecommand: { hasBadge: "N" } },
+  { firstShare: { hasBadge: "N" } },
+  { bestInformation: { hasBadge: "N" } },
+  { bestShare: { hasBadge: "N" } },
+  { bestRecommand: { hasBadge: "N" } },
+  { peakQuestMaster: { hasBadge: "N" } },
+];
 
 export default function MyPage() {
   // 페이지 이동을 위함
   const navigate = useNavigate();
 
-  // 로그인 필요 여부
-  const [requireLogin, setRequireLogin] = useState<boolean>(true);
+  const [userBadges, setUserBadges] = useState<
+    {
+      [key: string]: HasBadgeProp;
+    }[]
+  >(hasBadgeInfos);
 
   // 내가 만든 코스
-  const [makeCourseList, setMakeCourseList] = useState<Course[]>([]);
+  const [myCourseList, setMyourseList] = useState<Course[]>([]);
   // 스크랩 코스
   const [wishCourseList, setWishCourseList] = useState<Course[]>([]);
-  // 최근 본 코스
-  const [recentCourseList, setRecentCourseList] = useState<Course[]>([]);
 
   const { user, setUser } = useUserContext();
 
-  // useEffect(() => {
-  //   // myCourse
-  //   // fetch(`/mock/user/myPage_myCourse_2.json`)
-  //   //   .then((res) => res.json())
-  //   //   .then((data) => {
-  //   //     setMakeCourseList(data.courses);
-  //   //   })
-  //   //   .catch((error) => {
-  //   //     console.error("Error fetching more courses:", error);
-  //   //   });
-  //   // // wishCourse
-  //   // fetch(`/mock/user/myPage_wishCourse.json`)
-  //   //   .then((res) => res.json())
-  //   //   .then((data) => {
-  //   //     setWishCourseList(data.courses);
-  //   //   })
-  //   //   .catch((error) => {
-  //   //     console.error("Error fetching more courses:", error);
-  //   //   });
-  // }, []);
-
   useEffect(() => {
     onUserStateChanged(setUser);
+    // getMyCourse(user);
+    //  내코스 가져오기
+    const fetchMyCourse = async () => {
+      const data = await getMyCourse(user);
+      setMyourseList(data);
+      console.log(data);
+    };
+
+    fetchMyCourse();
   }, [user]);
 
   return (
@@ -98,13 +116,16 @@ export default function MyPage() {
                 전체보기
               </button>
             </div>
-            {!requireLogin && makeCourseList.length > 0 ? (
-              <CourseItem courseList={makeCourseList} isMine={true} />
+            {user && myCourseList.length > 0 ? (
+              <CourseItem courseList={myCourseList} isMine={true} />
             ) : (
-              !requireLogin && (
+              user && (
                 <div className=" flex h-[115px] flex-col items-center justify-center p-3 text-[14px]">
                   <p>
-                    당신의 <span className="font-bold text-green">멋진 코스를 기록</span>
+                    당신의{" "}
+                    <span className="font-bold text-green">
+                      멋진 코스를 기록
+                    </span>
                     하러 떠나볼까요?
                   </p>
                   <a
@@ -133,7 +154,7 @@ export default function MyPage() {
             {wishCourseList.length > 0 ? (
               <CourseItem courseList={wishCourseList} isMine={false} />
             ) : (
-              !requireLogin && (
+              user && (
                 <div className=" flex h-[115px] flex-col items-center justify-center p-3 text-[14px]">
                   <p>
                     마음에 드는

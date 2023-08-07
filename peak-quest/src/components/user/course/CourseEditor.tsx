@@ -15,11 +15,13 @@ interface CourseEditorProp {
   setEditorImage: React.Dispatch<React.SetStateAction<string>>;
 }
 
+
 export default function CourseEditor({
   setCourseEditorText,
   editorImage,
   setEditorImage,
 }: CourseEditorProp) {
+
   const editorRef = useRef<Editor | null>(null);
 
   // 툴바 항목
