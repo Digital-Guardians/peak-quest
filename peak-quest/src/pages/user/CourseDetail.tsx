@@ -77,16 +77,18 @@ export default function CourseDetail() {
 
     // 코스상세 가져오기
     const fetchCourseDetail = async () => {
-      const data = await getCourseDetail(parseInt(courseId));
-      setCourse(data);
-      if (data) {
-        // 최근 본 코스 추가
-        saveRecentCourse({
-          id: parseInt(courseId),
-          title: data.course.title,
-          thumbnail: data.course.thumbnail,
-          area: data.course.area,
-        });
+      if (courseId) {
+        const data = await getCourseDetail(parseInt(courseId));
+        setCourse(data);
+        if (data) {
+          // 최근 본 코스 추가
+          saveRecentCourse({
+            id: parseInt(courseId),
+            title: data.course.title,
+            thumbnail: data.course.thumbnail,
+            area: data.course.area,
+          });
+        }
       }
     };
 
