@@ -161,7 +161,7 @@ export default function Profile() {
       <div className="flex max-h-[108px] items-center border-y-[1px] border-lightGray p-5 px-[20px]">
         <img
           className="mr-3 max-h-[58px] max-w-[58px] rounded-full border-[1px]"
-          src=""
+          src={`${user.photoURL}`}
           alt="프로필 image"
         />
         <div>
