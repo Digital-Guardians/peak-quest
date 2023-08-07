@@ -1,4 +1,4 @@
-import { useCallback, useRef } from "react";
+import { useCallback, useRef, SetStateAction } from "react";
 // 에디터 라이브러리
 import { Editor } from "@toast-ui/react-editor";
 // 글자 색 관련 플러그인
@@ -7,13 +7,18 @@ import "@toast-ui/editor/dist/toastui-editor.css";
 import "tui-color-picker/dist/tui-color-picker.css";
 // 툴바 커스텀
 import "./CourseEditor.css";
+import { uploadImage } from "../../../service/imageUploader";
 
 interface CourseEditorProp {
   setCourseEditorText: React.Dispatch<React.SetStateAction<string>>;
+  editorImage: string;
+  setEditorImage: React.Dispatch<React.SetStateAction<string>>;
 }
 
 export default function CourseEditor({
   setCourseEditorText,
+  editorImage,
+  setEditorImage,
 }: CourseEditorProp) {
   const editorRef = useRef<Editor | null>(null);
 
@@ -36,6 +41,32 @@ export default function CourseEditor({
     }
   }, [setCourseEditorText]);
 
+  // 이미지를 서버에 업도르
+  const uploadImageToServer = useCallback(
+    (blob: Blob, callback: (url: string, altText?: string) => void) => {
+      if (blob) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setEditorImage(reader.result as string);
+        };
+        reader.readAsDataURL(blob);
+      } else {
+        setEditorImage("");
+      }
+
+      // 에디터 이미지 미리보기
+      const imageUrl = window.URL.createObjectURL(blob);
+      // altText
+      const fileName = blob.name;
+
+      callback(imageUrl, fileName);
+
+      // 서버에 이미지 전송하기
+      uploadImage(blob);
+    },
+    []
+  );
+
   return (
     <div>
       <h1 className="mb-2 text-xl font-medium text-black">코스 상세 설명</h1>
@@ -48,6 +79,9 @@ export default function CourseEditor({
         plugins={[colorSyntax]} // 글자 색
         useCommandShortcut={true} // 키보드 단축키 허용
         onChange={onChange} // 사용자가 에디터에 쓴 컨텐츠 담기
+        hooks={{
+          addImageBlobHook: uploadImageToServer,
+        }} // 이미지 파일을 서버에 업로드
       />
     </div>
   );
