@@ -1,4 +1,4 @@
-export async function uploadImage(file: any) {
+export async function uploadImages(file: any) {
   const data = new FormData();
   data.append("file", file);
   data.append("upload_preset", import.meta.env.VITE_CLOUDINARY_PRESET);

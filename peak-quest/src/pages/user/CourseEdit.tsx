@@ -36,7 +36,7 @@ import { IoClose } from "react-icons/io5";
 import User from "../admin/User";
 import { v4 as uuidv4 } from "uuid";
 import CourseEditor from "../../components/user/course/CourseEditor";
-import { uploadImage } from "../../service/imageUpLoader";
+import { uploadImages } from "../../service/imageUpLoader";
 
 // **타입 정의**
 // 7. 소요 시간
@@ -417,7 +417,7 @@ export default function CourseEdit() {
   const handleSubmit = (data: formdata) => {
     console.log("최종", data);
     handleOpenPopup();
-    uploadImage(data.previewImgUrl).then((url) =>
+    uploadImages(data.previewImgUrl).then((url) =>
       addCourse(data, url, user, uuid)
     );
   };
