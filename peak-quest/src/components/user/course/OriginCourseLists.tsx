@@ -54,7 +54,7 @@ export default function OriginCourseLists({
         선택하신 지역 위치 기반 기존 산림청 코스 목록 결과 입니다.
       </h6>
 
-      <div className="mb-2 w-full rounded-lg border-2 border-gray p-2 text-center">
+      <div className="mb-2 w-full rounded-lg border border-gray p-2 text-center">
         {isSelectedOriginCourse ? (
           selectOriginCourse?.frtrlNm
         ) : (

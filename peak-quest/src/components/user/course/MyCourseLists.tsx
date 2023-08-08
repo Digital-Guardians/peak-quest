@@ -2,7 +2,6 @@ import { Dispatch, SetStateAction, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { Amenities, ListItem } from "../../../pages/user/CourseEdit";
 import KakaoMapSearch from "./KakaoMapSearch";
-import { MapBtn } from "../../../assets/icon";
 
 // Tailwind CSS classes
 const buttonClasses = "w-1/3 h-10 transition-colors duration-300";
@@ -214,14 +213,9 @@ export default function MyCourseLists({
                 className="w-full rounded-t-lg border border-gray px-11 py-2 text-center text-darkGray focus:outline-none"
                 value={place}
                 onChange={handlePlaceChange}
+                placeholder="검색할 장소를 입력해주세요"
               />
             </form>
-            <div
-              onClick={handleOpenMapPopup}
-              className="absolute right-[16px] top-[10px] cursor-pointer opacity-70 transition-all duration-200 hover:opacity-100"
-            >
-              <MapBtn />
-            </div>
             {/* 편의시설 버튼 */}
             <div className="relative -mt-[1px] mb-3 flex items-center justify-evenly rounded-b-lg border border-gray">
               {/* 화장실 */}
@@ -280,15 +274,9 @@ export default function MyCourseLists({
               className="w-full rounded-t-lg border border-gray p-2 text-center text-darkGray"
               value={place}
               onChange={handlePlaceChange}
+              placeholder="검색할 장소를 입력해주세요"
             />
           </form>
-          <div
-            onClick={handleOpenMapPopup}
-            className="absolute right-[16px] top-[10px] cursor-pointer opacity-70 transition-all duration-200 hover:opacity-100"
-          >
-            <MapBtn />
-          </div>
-
           {/* 편의시설 버튼 */}
           <div className="relative -mt-[1px] mb-3 flex items-center justify-evenly rounded-b-lg border border-gray">
             {/* 화장실 */}
