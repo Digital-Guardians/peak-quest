@@ -360,10 +360,6 @@ export async function getAreaCourseList(area: any) {
       recommendations: item.recommendations,
       area: item.selectedOption?.label,
       option: item.checkedItems,
-      position: {
-        lat: item.lists[0].position.lat,
-        lng: item.lists[0].position.lng,
-      },
     };
     return newData;
   });
