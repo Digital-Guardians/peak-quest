@@ -1,0 +1,96 @@
+{
+  "courses": [
+    {
+      "id": 1,
+      "title": "북한산 정복하기",
+      "writer": "천둥치는 날의 정현",
+      "thumbnail": "/images/course/course1.png",
+      "views": 112,
+      "recommendations": 394,
+      "area": "수도권",
+      "position": {
+        "lat": 37.661409,
+        "lng": 127.0163137
+      }
+    },
+    {
+      "id": 2,
+      "title": "북한강 자전거 트래킹",
+      "writer": "트래킹 고수 진희",
+      "thumbnail": "/images/course/course2.png",
+      "views": 100,
+      "recommendations": 200,
+      "area": "수도권",
+      "position": {
+        "lat": 37.5470222,
+        "lng": 127.2408023
+      }
+    },
+    {
+      "id": 3,
+      "title": "관악산 트래킹 코스",
+      "writer": "트래킹 고수 진희",
+      "thumbnail": "/images/course/course3.png",
+      "views": 226,
+      "recommendations": 168,
+      "area": "수도권",
+      "position": {
+        "lat": 37.4672323,
+        "lng": 126.9469113
+      }
+    },
+    {
+      "id": 4,
+      "title": "관악산을 올라보자",
+      "writer": "발 빠른 정재",
+      "thumbnail": "/images/course/course4.png",
+      "views": 113,
+      "recommendations": 226,
+      "area": "수도권",
+      "position": {
+        "lat": 37.4672323,
+        "lng": 126.9469113
+      }
+    },
+    {
+      "id": 5,
+      "title": "도봉산 정상 찍기",
+      "writer": "천둥치는 날의 정현",
+      "thumbnail": "/images/course/course3.png",
+      "views": 20,
+      "recommendations": 168,
+      "area": "수도권",
+      "position": {
+        "lat": 37.7004635,
+        "lng": 127.0156843
+      }
+    },
+    {
+      "id": 6,
+      "title": "무악재 하늘다리 둘러보기",
+      "writer": "천둥치는 날의 정현",
+      "thumbnail": "/images/course/course5.png",
+      "views": 150,
+      "recommendations": 259,
+      "area": "수도권",
+      "position": {
+        "lat": 37.5787077,
+        "lng": 126.9538599
+      }
+    },
+    {
+      "id": 7,
+      "title": "반려동물과 함께 하기 좋은 곳",
+      "writer": "하늘을 나는 문정",
+      "thumbnail": "/images/course/course6.png",
+      "views": 126,
+      "recommendations": 318,
+      "distance": 32,
+      "area": "수도권",
+      "position": {
+        "lat": 37.5787077,
+        "lng": 126.9538599
+      }
+    }
+  ]
+}

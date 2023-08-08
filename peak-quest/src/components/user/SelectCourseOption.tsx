@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { GrPowerReset } from "react-icons/gr";
 
 // SelectCourseOption 속성
 interface SelectCourseOptionProps {
@@ -64,8 +65,13 @@ export default function SelectCourseOption({
     }
   };
 
+  // 옵션을 초기화하는 함수
+  const handleResetOptions = () => {
+    setCourseOption([]); // courseOption을 빈 배열로 초기화
+  };
+
   return (
-    <div className="w-[91%] max-h-[200px] flex flex-col justify-around px-3 py-3 text-md text-darkGray font-bold sm:font-medium shadow-lg bg-white rounded-lg absolute top-[80px] z-50">
+    <div className="absolute top-[80px] z-50 flex min-h-[160px] w-[91%] flex-col justify-around rounded-lg bg-white px-3 py-3 text-md font-bold text-darkGray shadow-lg sm:font-medium">
       <div>
         <OptionButton
           value={"편의시설이 있는"}
@@ -99,9 +105,18 @@ export default function SelectCourseOption({
         />
       </div>
 
-      <div className="h-[35px] flex justify-between items-center text-white mt-1">
+      <button
+        className="absolute right-8 text-xl"
+        onClick={() => {
+          handleResetOptions(); // 옵션 초기화 버튼
+        }}
+      >
+        <GrPowerReset />
+      </button>
+
+      <div className="mt-1 flex h-[35px] items-center justify-between text-white">
         <button
-          className="w-[48%] h-full  bg-green rounded-[8px]"
+          className="h-full w-[48%]  rounded-[8px] bg-green"
           onClick={() => {
             handleSelect(courseOption);
             setOpen(false);
@@ -109,8 +124,9 @@ export default function SelectCourseOption({
         >
           적용하기
         </button>
+
         <button
-          className="w-[48%] h-full  bg-gray rounded-[8px]"
+          className="h-full w-[48%]  rounded-[8px] bg-gray"
           onClick={() => setOpen(false)}
         >
           취소
