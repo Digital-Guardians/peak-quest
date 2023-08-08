@@ -172,7 +172,7 @@ export default function Nearby() {
               <TbMoodCry />
             </div>
             <div className="flex flex-col items-center justify-center text-[14px]">
-              <p className="mb-2">해당하는 거리에 위치한 코스가 없어요</p>
+              <p className="mb-2">{distance}km 내에 위치한 코스가 없어요</p>
               <p className="mb-2">
                 혹시 좋은 코스를 알고 계시다면{" "}
                 <span className="font-bold text-green">코스를 만들어 공유</span>
