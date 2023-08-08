@@ -113,7 +113,12 @@ export default function MyPage() {
                 </div>
                 <p className="text-xl sm:text-lg">내가 만든 코스</p>
               </div>
-              <button className="h-[32px] w-[26%] rounded-full border-[1px] border-mint text-md text-mint sm:h-[28px] sm:w-[24%]">
+              <button
+                className="h-[32px] w-[26%] rounded-full border-[1px] border-mint text-md text-mint sm:h-[28px] sm:w-[24%]"
+                onClick={() =>
+                  navigate("/mypage/mycourselist", { state: { myCourseList } })
+                }
+              >
                 전체보기
               </button>
             </div>
