@@ -45,7 +45,7 @@ export default function CourseList() {
   // 스크롤 시 업데이트 될 코스 목록 => 현재 보여지는 코스목록
   const [courseList, setCourseList] = useState<Course[]>([]);
   // 몇개씩 보여줄지?
-  const itemPerPage = 8;
+  const itemPerPage = 5;
   // 스크롤 여부
   const [isScroll, setIsScroll] = useState<boolean>(false);
   // 데이터를 불러오는 중인지 확인
