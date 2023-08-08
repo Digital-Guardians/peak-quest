@@ -67,12 +67,12 @@ export default function User() {
         console.log("all");
 
         getUserListAll() //
-          .then((res) => {
+          .then((res: any) => {
             const all = res;
             console.log(all);
 
             const user = res.filter(
-              (user) => user.state !== "ban" && user.delete.delete_state !== "Y"
+              (user: any) => user.state !== "ban" && user.delete.delete_state !== "Y"
             ).length;
             const deleteUser = res.filter((user: any) => user.delete.delete_state === "Y").length;
             const ban = res.filter((user: any) => user.state === "ban").length;
@@ -91,17 +91,17 @@ export default function User() {
         console.log("user");
 
         getUserList() //
-          .then((res) => setUserList(res));
+          .then((res: any) => setUserList(res));
         break;
       case "delete":
         console.log("delete");
         getDeleteUser() //
-          .then((res) => setUserList(res));
+          .then((res: any) => setUserList(res));
         break;
       case "ban":
         console.log("ban");
         getSuspendedUser() //
-          .then((res) => setUserList(res));
+          .then((res: any) => setUserList(res));
         break;
     }
   }, [selectList, data]);
@@ -118,7 +118,7 @@ export default function User() {
     setSelectType(banType);
   }
 
-  function handleInput(e) {
+  function handleInput(e: any) {
     e.preventDefault();
     if (inputRef.current) {
       if (inputRef.current.value.length === 0) {
@@ -127,7 +127,7 @@ export default function User() {
         setSelectList("");
       }
       searchUser(inputRef.current.value) //
-        .then((res) => setUserList(res));
+        .then((res: any) => setUserList(res));
     }
   }
 

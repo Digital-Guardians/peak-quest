@@ -10,7 +10,7 @@ interface props {
   selectBanType: string;
   selectType: any;
   handleSelectBan: Dispatch<SetStateAction<any>>;
-  setData: Dispatch<SetStateAction<userData[]>>;
+  setData:any
 }
 
 interface date {
@@ -31,17 +31,16 @@ export default function Ban({
   const [content, setContent] = useState("");
   const [banDate, setBanDate] = useState<date>(defaultDate);
   const { userInfo } = useService();
-  const [user, setUser] = useState(userInfo);
   const { name } = userInfo;
   const { ban_type, ban_content, ban_end_date, ban_start_date } = userInfo.ban;
 
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const inputRef: any = useRef<HTMLInputElement>();
 
   useEffect(() => {
     setContent(ban_content);
     setSelectValue(ban_type);
     setBanDate((prev) => ({ ...prev, start: ban_start_date, end: ban_end_date }));
-    setData((prev) => ({ ...prev }));
+    setData((prev:any) => ({ ...prev }));
   }, [userInfo]);
 
   const handleBanTypeChange = (e: any) => {
@@ -52,11 +51,11 @@ export default function Ban({
 
   const handleinputValue = () => {
     if (inputRef.current) {
-      setContent((prev) => inputRef.current.value);
+      setContent((prev): any => inputRef.current.value);
     }
   };
 
-  const changeDate = (e) => {
+  const changeDate = (e: any) => {
     if (e.target.name === "start") {
       setBanDate((prev) => ({ ...prev, start: e.target.value }));
     } else {
@@ -65,16 +64,16 @@ export default function Ban({
   };
 
   return (
-    <div className="flex flex-col min-w-[648px] max-h-[992px]">
+    <div className="flex max-h-[992px] min-w-[648px] flex-col">
       {/* 회원관리 */}
 
       <form>
-        <div className="mt-[22px] mb-1 text-xl text-darkGray">회원 정지 기간</div>
+        <div className="mb-1 mt-[22px] text-xl text-darkGray">회원 정지 기간</div>
         <div className="flex">
           <select
-            className={`w-1/3 h-[60px] ${
+            className={`h-[60px] w-1/3 ${
               select ? "pr-2 text-lg" : ""
-            } border border-[#D9D9D9] mr-[6px] pl-4 rounded-[10px] half:mx-1`}
+            } mr-[6px] rounded-[10px] border border-[#D9D9D9] pl-4 half:mx-1`}
             value={selectType ? selectType : ""}
             onChange={handleBanTypeChange}
           >
@@ -89,18 +88,18 @@ export default function Ban({
                 name="start"
                 onChange={changeDate}
                 value={banDate.start ? banDate.start : ""}
-                className={`w-1/2  h-[60px] ${
+                className={`h-[60px]  w-1/2 ${
                   select ? "pr-2 text-lg" : ""
-                } border border-[#D9D9D9] mr-[6px] pl-4 rounded-[10px] half:mx-1`}
+                } mr-[6px] rounded-[10px] border border-[#D9D9D9] pl-4 half:mx-1`}
               />
               <input
                 type="date"
                 name="end"
                 onChange={changeDate}
                 value={banDate.end ? banDate.end : ""}
-                className={`w-1/2  h-[60px] ${
+                className={`h-[60px]  w-1/2 ${
                   select ? "pr-2 text-lg" : ""
-                } border border-[#D9D9D9] mr-[6px] pl-4 rounded-[10px] half:mx-1`}
+                } mr-[6px] rounded-[10px] border border-[#D9D9D9] pl-4 half:mx-1`}
               />
             </div>
           ) : (
@@ -109,19 +108,19 @@ export default function Ban({
         </div>
       </form>
       <div>
-        <div className="mt-[22px] mb-1 text-xl text-darkGray">정지사유</div>
+        <div className="mb-1 mt-[22px] text-xl text-darkGray">정지사유</div>
         <input
           ref={inputRef}
           onChange={handleinputValue}
-          className={`w-full h-[207px] pl-4 pt-2 text-lg border border-[#D9D9D9] mr-[6px] rounded-[10px]`}
+          className={`mr-[6px] h-[207px] w-full rounded-[10px] border border-[#D9D9D9] pl-4 pt-2 text-lg`}
           value={content ? content : ""}
         />
       </div>
-      <div className="relative mt-[30px] mb-[50px]">
+      <div className="relative mb-[50px] mt-[30px]">
         <div className="flex font-bold">
           <button
             onClick={() => userUnsuspend(name)}
-            className={`w-full h-[60px] mr-2 text-lg text-purple bg-white border border-purple rounded-[10px]`}
+            className={`mr-2 h-[60px] w-full rounded-[10px] border border-purple bg-white text-lg text-purple`}
           >
             회원 정지 취소
           </button>
@@ -130,7 +129,7 @@ export default function Ban({
               const newData = userSuspend(name, selectValue, content, banDate.start, banDate.end);
               setData(newData);
             }}
-            className={`w-full h-[60px] text-lg text-white bg-purple border border-purple rounded-[10px]`}
+            className={`h-[60px] w-full rounded-[10px] border border-purple bg-purple text-lg text-white`}
           >
             회원 정지
           </button>

@@ -4,6 +4,7 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { useService } from "../../context/ContextProvider";
 import { adminLogin, adminLogOut } from "../../service/firebase";
 import { useNavigate } from "react-router-dom";
+import { PeakQuestLogo } from "../../assets/icon";
 
 export default function Header() {
   const { setToggle, admin, setAdmin } = useService();
@@ -23,7 +24,7 @@ export default function Header() {
             className="absolute text-white text-2xl font-bold ml-5 cursor-pointer"
             onClick={() => setToggle((prev) => !prev)}
           />
-          <div className="ml-16 min-w-[100px] bg-white">⭐️</div>
+          <div className="ml-16 min-w-[100px] bg-white"></div>
           <div className="flex min-w-[453px] text-base leading-6 font-light mr-5">
             <button className="border px-4 py-[5px] mr-3 text-white border-white rounded-lg">
               위젯 수정

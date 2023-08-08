@@ -1,12 +1,10 @@
 import React, { useEffect } from "react";
-// import { useAuthContext } from "../../context/AuthContextProvider";
 import { useNavigate } from "react-router-dom";
 import { useService } from "../../context/ContextProvider";
 import { adminLogOut } from "../../service/firebase";
 
 export default function DashBoard() {
-  const { admin, test } = useService();
-  const navigate = useNavigate();
+  const { admin } = useService();
 
   return (
     <>

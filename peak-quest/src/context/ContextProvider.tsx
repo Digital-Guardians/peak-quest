@@ -10,7 +10,7 @@ import {
 import { bannerData, reportData, userData } from "../types/type";
 import { useLocation } from "react-router-dom";
 
-const defaultBannerData: bannerData = {
+const defaultBannerData: any = {
   id: "",
   img_url: "",
   link: "",
@@ -19,7 +19,7 @@ const defaultBannerData: bannerData = {
   title: "",
 };
 
-const defaultReportData: reportData = {
+const defaultReportData: any = {
   id: 0,
   user_name: "",
   state: "",
@@ -30,7 +30,7 @@ const defaultReportData: reportData = {
   delete: "",
 };
 
-const defaultUserData: userData = {
+const defaultUserData: any = {
   user_name: "",
   role: "",
   email: "",
@@ -104,7 +104,7 @@ export default function ContextProvider({ children }: { children: ReactNode }) {
     }
   }, [outerWidth]);
 
-  const value = {
+  const value: any = {
     bannerInfo,
     setBannerInfo,
     reportInfo,

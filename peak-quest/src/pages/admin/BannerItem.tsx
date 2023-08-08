@@ -1,11 +1,10 @@
 import React, { Dispatch, SetStateAction, useEffect } from "react";
 import { useService } from "../../context/ContextProvider";
-import { bannerData } from "../../types/type";
 import { Draggable } from "react-beautiful-dnd";
 
 interface propBanner {
   index: number;
-  info: bannerData;
+  info: any;
   select: boolean;
   setSelect: Dispatch<SetStateAction<boolean>>;
 }

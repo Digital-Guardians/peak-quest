@@ -3,13 +3,7 @@ import { onAdminStateChanged } from "../../service/firebase";
 import { useService } from "../../context/ContextProvider";
 import { useNavigate } from "react-router-dom";
 
-export default function ProtectedRoute({
-  children,
-  requireAdmin,
-}: {
-  children: ReactNode;
-  requireAdmin: boolean;
-}) {
+export default function ProtectedRoute({ children, requireAdmin }: any) {
   const { admin, setAdmin } = useService();
 
   const nav = useNavigate();

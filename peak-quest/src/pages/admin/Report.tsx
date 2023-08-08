@@ -100,7 +100,7 @@ export default function Report() {
         setReportSelect("");
       }
       searchReportUser(inputRef.current.value) //
-        .then((res) => setReportList(res as reportData[]));
+        .then((res: any) => setReportList(res as reportData[]));
     }
   }
 
@@ -254,7 +254,7 @@ export default function Report() {
                     삭제하기
                   </button>
                   <button
-                    onClick={() => reportChecked(name).then((res) => setData(res))}
+                    onClick={() => reportChecked(name).then((res: any) => setData(res))}
                     className={`w-1/2 h-[60px]text-lg text-white bg-purple border border-purple rounded-[10px]`}
                   >
                     신고확인

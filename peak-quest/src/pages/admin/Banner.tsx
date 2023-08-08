@@ -8,7 +8,7 @@ import { useService } from "../../context/ContextProvider";
 import { IoIosArrowBack } from "react-icons/io";
 import { DragDropContext, Draggable, DropResult, Droppable } from "react-beautiful-dnd";
 import { bannerData } from "../../types/type";
-import { uploadImage } from "../../service/imageUpLoader";
+import { uploadImages } from "../../service/imageUpLoader";
 import {
   addBanner,
   addBannerImage,
@@ -44,6 +44,7 @@ interface formData {
   link: string;
   date1: string;
   date2: string;
+  tag: string;
 }
 
 const defaultFormData: formData = {
@@ -53,13 +54,14 @@ const defaultFormData: formData = {
   link: "",
   date1: "",
   date2: "",
+  tag: "",
 };
 
 export default function Banner() {
   const [select, setSelect] = useState(false);
   const [list, setList] = useState<banner[]>([]);
   const [banner, setBanner] = useState<banner[]>([]);
-  const [selectImg, setSelectImg] = useState<File | null>(null);
+  const [selectImg, setSelectImg] = useState<File | any>(null);
   const [formData, setFormData] = useState<formData>(defaultFormData);
   const [data, setData] = useState<bannerData[]>([defaultBannerData]);
 
@@ -118,12 +120,12 @@ export default function Banner() {
       event.preventDefault();
       if (target.name === "save") {
         console.log("이미지");
-        uploadImage(selectImg)
+        uploadImages(selectImg)
           .then((url) => addBannerImage(formData, url))
           .then((res) => setData(res));
         console.log("업로드 완료");
       } else if (target.name === "delete") {
-        deleteBanner(id).then((res) => setData(res));
+        deleteBanner(id).then((res: any) => setData(res));
       }
     }
   }

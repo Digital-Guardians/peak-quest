@@ -10,7 +10,7 @@ function App() {
   const location = useLocation();
 
   const nav = useNavigate();
-  const t = [];
+  const t: any = [];
 
   useEffect(() => {
     window.addEventListener("keydown", (e) => {
