@@ -1,137 +1,343 @@
-import React, { useEffect, useState } from "react";
-import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
-import CourseItem from "../../components/user/CourseItem";
-import UserModal from "../../components/user/mypage/UserModal";
-import trophy from "../../assets/user/trophy.png";
+import { Dispatch, SetStateAction, useState } from "react";
+import { IoClose } from "react-icons/io5";
+import { Amenities, ListItem } from "./CourseEdit";
+import KakaoMapSearch from "../../components/user/course/KakaoMapSearch";
 
-// 코스 타입 정의
-interface Course {
-  id: number;
-  title: string;
-  writer: string;
-  thumbnail: string;
-  views: number;
-  recommendations: number;
-  area: string;
-  position: {
-    lat: number;
-    lng: number;
-  };
+// Tailwind CSS classes
+const buttonClasses = "w-1/3 h-10 transition-colors duration-300";
+const defaultButtonClasses = "text-darkGray bg-[#F9FAFB]";
+const activeButtonClasses = "text-white bg-mint";
+
+interface MyCourseListsProps {
+  lists: ListItem[];
+  setLists: Dispatch<SetStateAction<ListItem[]>>;
+  place: string;
+  amenities: Amenities;
+  onAddNewInput: () => void;
+  onRemoveListItem: (id: number) => void;
+  onToggleAmenity: (itemId: number, amenityType: keyof Amenities) => void;
+  onPlaceChange: (place: string) => void;
+  onAmenitiesChange: (amenities: Amenities) => void;
 }
 
-export default function MyCourseList() {
-  // 페이지 이동을 위함
-  const navigate = useNavigate();
-  // 내가 만든 코스
-  const [myCourseList, setMyCourseList] = useState<Course[]>([]);
-  // 데이터를 불러오는 중인지 확인
-  let isFetching = false;
-  // 모달
-  const [open, setOpen] = useState<boolean>(false);
+export default function MyCourseLists({
+  lists,
+  setLists,
+  place,
+  amenities,
+  onAddNewInput,
+  onRemoveListItem,
+  onToggleAmenity,
+  onPlaceChange,
+  onAmenitiesChange,
+}: MyCourseListsProps) {
+  // 삭제 팝업
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+  const [selectedItemId, setSelectedItemId] = useState<number | null>(null);
 
-  useEffect(() => {
-    // 첫 렌더링시 데이터 호출
-    moreMyCourses();
+  const handleOpenPopup = (itemId: number) => {
+    setIsPopupOpen(true); // 팝업 열기
+    setSelectedItemId(itemId); // 선택된 아이템 아이디 설정
+  };
 
-    // courseList를 담는 div 컴포넌트
-    const content = document.getElementById("my-courseList");
+  const handleClosePopup = () => {
+    setIsPopupOpen(false); // 팝업 닫기
+  };
 
-    // 스크롤 핸들러
-    const handleScroll = () => {
-      if (content && myCourseList.length > 0) {
-        console.log("scroll");
+  const handleDelete = () => {
+    // 선택된 아이템 삭제 로직
+    if (selectedItemId) {
+      onRemoveListItem(selectedItemId); // 선택된 아이템 삭제 콜백 호출
+      setIsPopupOpen(false); // 팝업 닫기
+      setSelectedItemId(null); // 선택된 아이템 초기화
+    }
+  };
 
-        const scrollPosition = window.scrollY;
-        const windowHeight = window.innerHeight;
-        const { scrollHeight } = content;
+  // 카카오맵 팝업
+  const [isMapOpen, setIsMapOpen] = useState(false);
 
-        if (!isFetching && scrollPosition + windowHeight >= scrollHeight) {
-          console.log("END");
-          isFetching = true;
-          moreMyCourses();
-        }
-      }
-    };
+  // 카카오맵 팝업 열기
+  const handleOpenMapPopup = (event: React.FormEvent) => {
+    event.preventDefault();
+    if (place.trim() === "") return;
+    setIsMapOpen(true);
+  };
 
-    // 스크롤 이벤트 리스너 추가
-    window?.addEventListener("scroll", handleScroll);
+  // 카카오맵 팝업 닫기
+  const handleCloseMapPopup = () => {
+    setIsMapOpen(false);
+  };
 
-    // 컴포넌트 언마운트 시 스크롤 이벤트 리스너 제거
-    return () => {
-      window?.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+  // 장소 입력
+  const handlePlaceChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    onPlaceChange(e.target.value);
+  };
 
-  const moreMyCourses = () => {
-    // myCourse
-    // fetch(`/mock/user/myPage.json`)
-    //   .then((res) => res.json())
-    //   .then((data) => {
-    //     setMyCourseList((prevCourseList) => [
-    //       ...prevCourseList,
-    //       ...data.courses,
-    //     ]);
-    //     if (data.courses.length === 0) {
-    //       document.body.style.overflow = "hidden";
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error("Error fetching more courses:", error);
-    //   });
-    isFetching = false;
+  // 편의시설 유무 여부
+  const handleAmenitiesChange = (amenityType: keyof Amenities) => {
+    onAmenitiesChange({
+      ...amenities,
+      [amenityType]: amenities[amenityType] === "N" ? "Y" : "N",
+    });
   };
 
   return (
-    <div className="w-max-[430px] flex flex-col items-center justify-center bg-[#f9f9f9]">
-      {/* header */}
-      <div className="sticky top-0 z-20 h-[50px] w-full bg-white pt-1 text-center text-xl font-bold leading-loose shadow-3xl duration-300 ease-linear sm:h-[48px] sm:pt-2 sm:text-lg">
-        {/* 뒤로 가기 버튼 */}
-        <div
-          className="absolute left-3 top-3 text-2xl duration-300 ease-linear sm:text-xl"
-          onClick={() => navigate(-1)}
-        >
-          <IoIosArrowBack />
-        </div>
-        <p>내가 만든 코스</p>
-      </div>
-      <div id="my-courseList" className="relative h-full w-full">
-        {open && (
-          <UserModal
-            order={["delete", "/mock/user/myPage_myCourseList.json"]}
-            setOpen={setOpen}
-            content={"이 코스를 삭제하시겠습니까?"}
-            subContent={["삭제하시면 코스 정보가 영구적으로 사라져요!"]}
-            firstStatus={"삭제"}
-            secondStatus={"취소"}
-          />
-        )}
-        {/* 내가 만든 코스 */}
-        {myCourseList.length > 0 ? (
-          <>
-            <CourseItem courseList={myCourseList} isMine={true} />
-          </>
-        ) : (
-          <div className="flex h-screen flex-col items-center justify-center p-3 text-lg sm:text-md">
-            <img className="mb-3 h-[55px] w-[40px]" src={trophy} />
-            <p className="mb-1">앗 ! 아직 만들어진 코스가 없어요.</p>
-            <p>
-              <span className="font-bold text-green">나만의 코스</span>를
-              공유하고 <span className="font-bold text-green">랭킹 1위</span>에
-              도전하세요.
-            </p>
-            <a
-              className="mt-4 flex h-[30px] w-[43%] items-center justify-center rounded-lg border-b-[1px] border-mint bg-mint text-md font-bold text-white sm:mt-2 sm:h-[25px]  sm:w-[51%]"
-              href="/area/create"
-            >
-              지금 코스 만들러 가기
-              <div className="text-lg">
-                <IoIosArrowForward />
+    <div>
+      <h1 className="mb-2 text-xl font-medium text-black">나만의 코스 목록</h1>
+      {/* 코스 목록 */}
+      {lists.length > 0 ? (
+        <ul>
+          {/* 코스 리스트 */}
+          {lists.map((item) => (
+            <li key={item.id} className="relative">
+              {/* 팝업 */}
+              {isPopupOpen && (
+                <div className="fixed inset-0 z-30 flex items-center justify-center">
+                  <div
+                    className="absolute inset-0 bg-black opacity-70"
+                    onClick={handleClosePopup}
+                  />
+                  <div className="relative flex items-center justify-center rounded-lg bg-white p-5 text-center text-black shadow-3xl sm:p-2">
+                    <div className="p-2">
+                      {/* 팝업 내용 */}
+                      <div className="">
+                        <h2 className="text-2xl font-medium text-black sm:mt-4 sm:text-xl">
+                          지점을 <strong className="text-mint">삭제</strong>
+                          할까요?
+                        </h2>
+                        <div className="my-2 text-lg text-darkGray sm:text-md">
+                          <p>삭제하시면 등록하신</p>
+                          <p>편의시설 정보도 사라져요!</p>
+                        </div>
+                      </div>
+                      {/* 버튼 */}
+                      <div className="mt-4 flex items-center justify-center sm:text-md">
+                        <div>
+                          <button
+                            className="mr-2 cursor-pointer rounded-lg bg-mint px-8 py-2 text-white sm:px-4 sm:py-2"
+                            onClick={handleDelete}
+                          >
+                            삭제하기
+                          </button>
+                        </div>
+                        <div>
+                          <button
+                            className="rounded-lg bg-gray px-8 py-2 text-darkGray sm:px-4 sm:py-2"
+                            onClick={handleClosePopup}
+                          >
+                            돌아가기
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                    {/* 닫기 버튼 */}
+                    <button
+                      className="absolute right-2 top-2 text-darkGray"
+                      onClick={handleClosePopup}
+                    >
+                      <IoClose size={20} />
+                    </button>
+                  </div>
+                </div>
+              )}
+              {/* 코스 장소 입력 */}
+              <input
+                type="text"
+                className="w-full rounded-t-lg border border-gray p-2 text-center font-medium text-darkGray"
+                value={item.place}
+                readOnly
+              />
+              {/* 편의시설 버튼 */}
+              <div className="relative -mt-[1px] mb-3 flex items-center justify-evenly rounded-b-lg border border-gray">
+                {/* 화장실 */}
+                <button
+                  className={`${buttonClasses} ${
+                    item.amenities.hasRestroom === "Y" ? activeButtonClasses : defaultButtonClasses
+                  } whitespace-nowrap rounded-bl-lg`}
+                  onClick={() => onToggleAmenity(item.id, "hasRestroom")}
+                >
+                  화장실
+                </button>
+                {/* 음식점 */}
+                <button
+                  className={`${buttonClasses} ${
+                    item.amenities.hasFood === "Y" ? activeButtonClasses : defaultButtonClasses
+                  } whitespace-nowrap `}
+                  onClick={() => onToggleAmenity(item.id, "hasFood")}
+                >
+                  음식점
+                </button>
+                {/* border */}
+                <div
+                  className={`absolute bottom-0 right-1/3 h-full w-[1px] ${
+                    item.amenities.hasFood === "Y" ? " bg-white" : "bg-gray"
+                  }`}
+                />
+                <div
+                  className={`absolute bottom-0 left-1/3 h-full w-[1px] ${
+                    item.amenities.hasFood === "Y" ? " bg-white" : "bg-gray"
+                  }`}
+                />
+                {/* 식수대 */}
+                <button
+                  className={`${buttonClasses} ${
+                    item.amenities.hasWater === "Y" ? activeButtonClasses : defaultButtonClasses
+                  } whitespace-nowrap rounded-br-lg`}
+                  onClick={() => onToggleAmenity(item.id, "hasWater")}
+                >
+                  식수대
+                </button>
               </div>
-            </a>
+
+              {/* 삭제 버튼 => 팝업으로 열림 */}
+              <button
+                className="absolute right-2 top-2 tracking-widest text-darkGray "
+                onClick={() => handleOpenPopup(item.id)}
+              >
+                <IoClose />
+              </button>
+            </li>
+          ))}
+          {/* 코스 입력창 */}
+          <div className="relative">
+            {/* 코스 장소 입력 */}
+            <form onSubmit={handleOpenMapPopup}>
+              <input
+                type="text"
+                className="w-full rounded-t-lg border border-gray px-11 py-2 text-center text-darkGray focus:outline-none"
+                value={place}
+                onChange={handlePlaceChange}
+                placeholder="검색할 장소를 입력해주세요"
+              />
+            </form>
+            {/* 편의시설 버튼 */}
+            <div className="relative -mt-[1px] mb-3 flex items-center justify-evenly rounded-b-lg border border-gray">
+              {/* 화장실 */}
+              <button
+                className={`${buttonClasses} ${
+                  amenities.hasRestroom === "Y" ? activeButtonClasses : defaultButtonClasses
+                } whitespace-nowrap rounded-bl-lg`}
+                onClick={() => handleAmenitiesChange("hasRestroom")}
+              >
+                화장실
+              </button>
+              {/* 음식점 */}
+              <button
+                className={`${buttonClasses} ${
+                  amenities.hasFood === "Y" ? activeButtonClasses : defaultButtonClasses
+                } whitespace-nowrap `}
+                onClick={() => handleAmenitiesChange("hasFood")}
+              >
+                음식점
+              </button>
+              {/* border */}
+              <div
+                className={`absolute bottom-0 right-1/3 h-full w-[1px] ${
+                  amenities.hasFood === "Y" ? " bg-white" : "bg-gray"
+                }`}
+              />
+              <div
+                className={`absolute bottom-0 left-1/3 h-full w-[1px] ${
+                  amenities.hasFood === "Y" ? " bg-white" : "bg-gray"
+                }`}
+              />
+              {/* 식수대 */}
+              <button
+                className={`${buttonClasses} ${
+                  amenities.hasWater === "Y" ? activeButtonClasses : defaultButtonClasses
+                } whitespace-nowrap rounded-br-lg`}
+                onClick={() => handleAmenitiesChange("hasWater")}
+              >
+                식수대
+              </button>
+            </div>
           </div>
-        )}
-      </div>
+        </ul>
+      ) : (
+        <div className="relative">
+          {/* 코스 장소 입력 */}
+          <form onSubmit={handleOpenMapPopup}>
+            <input
+              type="text"
+              className="w-full rounded-t-lg border border-gray p-2 text-center text-darkGray"
+              value={place}
+              onChange={handlePlaceChange}
+              placeholder="검색할 장소를 입력해주세요"
+            />
+          </form>
+          {/* 편의시설 버튼 */}
+          <div className="relative -mt-[1px] mb-3 flex items-center justify-evenly rounded-b-lg border border-gray">
+            {/* 화장실 */}
+            <button
+              className={`${buttonClasses} ${
+                amenities.hasRestroom === "Y" ? activeButtonClasses : defaultButtonClasses
+              } whitespace-nowrap rounded-bl-lg`}
+              onClick={() => handleAmenitiesChange("hasRestroom")}
+            >
+              화장실
+            </button>
+            {/* 음식점 */}
+            <button
+              className={`${buttonClasses} ${
+                amenities.hasFood === "Y" ? activeButtonClasses : defaultButtonClasses
+              } whitespace-nowrap `}
+              onClick={() => handleAmenitiesChange("hasFood")}
+            >
+              음식점
+            </button>
+            {/* border */}
+            <div
+              className={`absolute bottom-0 right-1/3 h-full w-[1px] ${
+                amenities.hasFood === "Y" ? " bg-white" : "bg-gray"
+              }`}
+            />
+            <div
+              className={`absolute bottom-0 left-1/3 h-full w-[1px] ${
+                amenities.hasFood === "Y" ? " bg-white" : "bg-gray"
+              }`}
+            />
+            {/* 식수대 */}
+            <button
+              className={`${buttonClasses} ${
+                amenities.hasWater === "Y" ? activeButtonClasses : defaultButtonClasses
+              } whitespace-nowrap rounded-br-lg`}
+              onClick={() => handleAmenitiesChange("hasWater")}
+            >
+              식수대
+            </button>
+          </div>
+        </div>
+      )}
+      {/* 추가 버튼 */}
+      <button
+        className="borer-gray w-full cursor-pointer rounded-lg border py-1 text-xl text-gray hover:bg-mint hover:text-white"
+        onClick={onAddNewInput}
+        disabled={!place}
+      >
+        +
+      </button>
+      {/* 카카오맵 팝업 */}
+      {isMapOpen && (
+        <div className="fixed inset-0 z-30 m-auto flex max-w-[430px] items-center justify-center px-5">
+          <div className="absolute inset-0 bg-black opacity-70" onClick={handleCloseMapPopup} />
+          <div className="relative flex w-full items-center justify-center rounded-lg bg-white p-5 text-center text-black shadow-3xl sm:p-2">
+            <div className="w-full p-4">
+              <KakaoMapSearch
+                place={place}
+                lists={lists}
+                setLists={setLists}
+                onPlaceChange={onPlaceChange}
+                handleCloseMapPopup={handleCloseMapPopup}
+                amenities={amenities}
+              />
+            </div>
+            {/* 닫기 버튼 */}
+            <button className="absolute right-2 top-2 text-darkGray" onClick={handleCloseMapPopup}>
+              <IoClose size={20} />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
