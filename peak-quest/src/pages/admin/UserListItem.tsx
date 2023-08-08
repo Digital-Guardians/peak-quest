@@ -7,7 +7,7 @@ interface props {
   select: boolean;
   setSelect: Dispatch<SetStateAction<boolean>>;
   handleSelectBan: Dispatch<SetStateAction<any>>;
-  user: userData;
+  user: any;
 }
 
 export default function UserListItem({ select, setSelect, user, index, handleSelectBan }: props) {
@@ -18,24 +18,24 @@ export default function UserListItem({ select, setSelect, user, index, handleSel
   const { setUserInfo } = useService();
 
   return (
-    <div className="flex w-full h-[84px] text-lg text-darkGray font-normal mb-5 border-b border-[#F2F2F2]">
-      <div className={`flex justify-center items-center w-[12%] text-xl`}>{index + 1}</div>
-      <div className={`flex justify-center items-center w-[30%] ${select ? "text-lg" : "text-xl"}`}>
+    <div className="mb-5 flex h-[84px] w-full border-b border-[#F2F2F2] text-lg font-normal text-darkGray">
+      <div className={`flex w-[12%] items-center justify-center text-xl`}>{index + 1}</div>
+      <div className={`flex w-[30%] items-center justify-center ${select ? "text-lg" : "text-xl"}`}>
         {name}
       </div>
-      <div className={`flex justify-center items-center w-[15%] ${select ? "text-lg" : "text-xl"}`}>
+      <div className={`flex w-[15%] items-center justify-center ${select ? "text-lg" : "text-xl"}`}>
         {delete_state}
       </div>
-      <div className={`flex justify-center items-center w-[25%] text-lg text-center`}>
+      <div className={`flex w-[25%] items-center justify-center text-center text-lg`}>
         {state === "user" && <NormalUser />}
         {state === "ban" && <BanUser />}
       </div>
-      <div className="flex justify-center items-center w-[18%] text-lg">
+      <div className="flex w-[18%] items-center justify-center text-lg">
         {
           <button
             className={`${
               select ? "w-1/2" : ""
-            }  w-[110px] h-[44px] text-lg text-purple border border-purple rounded-[10px] transition-all duration-[1s] ease-in-out`}
+            }  h-[44px] w-[110px] rounded-[10px] border border-purple text-lg text-purple transition-all duration-[1s] ease-in-out`}
             onClick={() => {
               if (!select) {
                 setSelect((prev) => !prev);
@@ -57,7 +57,7 @@ export default function UserListItem({ select, setSelect, user, index, handleSel
 
 function BanUser() {
   return (
-    <div className="flex justify-center items-center w-[84px] h-[32px] rounded-[10px] bg-darkGray text-white">
+    <div className="flex h-[32px] w-[84px] items-center justify-center rounded-[10px] bg-darkGray text-white">
       정지 회원
     </div>
   );
@@ -65,7 +65,7 @@ function BanUser() {
 NormalUser;
 function NormalUser() {
   return (
-    <div className="flex justify-center items-center w-[84px] h-[32px] rounded-[10px] bg-lightPurple text-purple">
+    <div className="flex h-[32px] w-[84px] items-center justify-center rounded-[10px] bg-lightPurple text-purple">
       정상 회원
     </div>
   );

@@ -8,7 +8,7 @@ import { useService } from "../../context/ContextProvider";
 import { IoIosArrowBack } from "react-icons/io";
 import { DragDropContext, Draggable, DropResult, Droppable } from "react-beautiful-dnd";
 import { bannerData } from "../../types/type";
-import { uploadImages } from "../../service/imageUpLoader";
+import { imgUpload } from "../../service/imgUploader";
 import {
   addBanner,
   addBannerImage,
@@ -25,7 +25,7 @@ interface banner {
   url: string;
 }
 
-const defaultBannerData: bannerData = {
+const defaultBannerData: any = {
   id: "",
   url: "",
   link: "",
@@ -120,7 +120,7 @@ export default function Banner() {
       event.preventDefault();
       if (target.name === "save") {
         console.log("이미지");
-        uploadImages(selectImg)
+        imgUpload(selectImg)
           .then((url) => addBannerImage(formData, url))
           .then((res) => setData(res));
         console.log("업로드 완료");
@@ -208,16 +208,16 @@ export default function Banner() {
             <div className="flex w-full"></div>
             {/* bannerContainer */}
             <DragDropContext onDragEnd={onDragEnd}>
-              <div className="flex flex-col w-full h-4/5 transition-all duration-[1s]">
-                <div className="w-full h-1/3 mb-9">
+              <div className="flex h-4/5 w-full flex-col transition-all duration-[1s]">
+                <div className="mb-9 h-1/3 w-full">
                   <div className="flex justify-between">
-                    <div className="text-xl font-bold mb-[24px] ml-[5px]">
+                    <div className="mb-[24px] ml-[5px] text-xl font-bold">
                       메인 배너를 최대 5개까지 선택해주세요.
                     </div>
                     <div
                       className={`cursor-pointer ${
                         select ? "w-12" : ""
-                      } w-20 h-10 py-[6px] text-center text-lg text-purple border border-purple rounded-[10px] ease-in-out hover:text-white hover:bg-purple`}
+                      } h-10 w-20 rounded-[10px] border border-purple py-[6px] text-center text-lg text-purple ease-in-out hover:bg-purple hover:text-white`}
                       onClick={() => {
                         addBanner(list);
                         alert("저장되었습니다.");
@@ -231,7 +231,7 @@ export default function Banner() {
                       <div
                         {...provided.droppableProps}
                         ref={provided.innerRef}
-                        className="flex justify-center items-center w-full h-[186px] border border-purple rounded-[10px]"
+                        className="flex h-[186px] w-full items-center justify-center rounded-[10px] border border-purple"
                       >
                         {list &&
                           list.map((item, i) => (
@@ -244,14 +244,14 @@ export default function Banner() {
                                 >
                                   <div className="relative">
                                     <img
-                                      className="w-[86px] h-[86px] ml-2 rounded-xl"
+                                      className="ml-2 h-[86px] w-[86px] rounded-xl"
                                       src={item.url}
                                     />
                                     <TiDeleteOutline
                                       onClick={() => {
                                         deleteItem(item.url);
                                       }}
-                                      className="flex justify-center items-center absolute w-4 h-4 top-[-4px] right-[-4px] bg-white rounded-[50%] cursor-pointer"
+                                      className="absolute right-[-4px] top-[-4px] flex h-4 w-4 cursor-pointer items-center justify-center rounded-[50%] bg-white"
                                     ></TiDeleteOutline>
                                   </div>
                                 </div>
@@ -263,20 +263,20 @@ export default function Banner() {
                     )}
                   </Droppable>
                 </div>
-                <div className="w-full h-2/3">
-                  <div className="flex text-xl text-darkGray font-bold">
-                    <div className="w-[12%] text-center pb-[13px] border-b border-gray">선택</div>
-                    <div className="w-[15%] text-center pb-[13px] border-b border-gray">이미지</div>
-                    <div className="w-[58%] text-center pb-[13px] border-b border-gray">
+                <div className="h-2/3 w-full">
+                  <div className="flex text-xl font-bold text-darkGray">
+                    <div className="w-[12%] border-b border-gray pb-[13px] text-center">선택</div>
+                    <div className="w-[15%] border-b border-gray pb-[13px] text-center">이미지</div>
+                    <div className="w-[58%] border-b border-gray pb-[13px] text-center">
                       제목/설명
                     </div>
-                    <div className="w-[15%] text-center pb-[13px] border-b border-gray">관리</div>
+                    <div className="w-[15%] border-b border-gray pb-[13px] text-center">관리</div>
                   </div>
                 </div>
                 <Droppable droppableId="bannerItems">
                   {(provided) => (
                     <div
-                      className="flex flex-col text-xl text-darkGray font-bold"
+                      className="flex flex-col text-xl font-bold text-darkGray"
                       {...provided.droppableProps}
                       ref={provided.innerRef}
                     >
@@ -294,10 +294,10 @@ export default function Banner() {
                         })}
                       {provided.placeholder}
                       <div
-                        className="flex justify-center items-center my-6 cursor-pointer"
+                        className="my-6 flex cursor-pointer items-center justify-center"
                         onClick={handleAddBannerItem}
                       >
-                        <div className="flex justify-center items-center w-32 h-12 rounded-xl border-[1px] border-gray hover:bg-gray hover:text-white">
+                        <div className="flex h-12 w-32 items-center justify-center rounded-xl border-[1px] border-gray hover:bg-gray hover:text-white">
                           + 추가하기
                         </div>
                       </div>
@@ -309,23 +309,23 @@ export default function Banner() {
           </PageLeft>
           {/* 확인하기 648px */}
           <PageRight select={select}>
-            <form data-id="form" className="flex flex-col min-w-[648px]" onClick={handleSubmit}>
+            <form data-id="form" className="flex min-w-[648px] flex-col" onClick={handleSubmit}>
               <div
-                className="relative flex text-2xl font-bold cursor-pointer"
+                className="relative flex cursor-pointer text-2xl font-bold"
                 onClick={() => {
                   setSelect((prev) => !prev);
                 }}
               >
-                <IoIosArrowBack className="mt-[5px] mr-1 text-[28px]" />
+                <IoIosArrowBack className="mr-1 mt-[5px] text-[28px]" />
                 <div className="">{bannerInfo.id === "" ? "배너 추가하기" : "베너 관리하기"}</div>
               </div>
               <div>
-                <div className="mt-[42px] mb-1 text-xl text-darkGray">배너 제목</div>
+                <div className="mb-1 mt-[42px] text-xl text-darkGray">배너 제목</div>
                 <input
                   data-id="title"
-                  className={`w-full  h-[60px] ${
+                  className={`h-[60px]  w-full ${
                     select ? "pl-2 text-lg" : ""
-                  } border border-[#D9D9D9] mr-[6px] pl-4 rounded-[10px] half:mx-1`}
+                  } mr-[6px] rounded-[10px] border border-[#D9D9D9] pl-4 half:mx-1`}
                   onChange={handleInput}
                   value={title ? title : formData.title}
                   placeholder="이벤트나 행사 내용을 잘 나타낼 수 있는 제목을 적어주세요."
@@ -337,7 +337,7 @@ export default function Banner() {
               <div className="relative mt-[28px]">
                 <div className="mb-1 text-xl text-darkGray">간단 설명</div>
                 <textarea
-                  className={`w-full h-[207px] pl-4 pt-2 text-lg border border-[#D9D9D9] mr-[6px] rounded-[10px]`}
+                  className={`mr-[6px] h-[207px] w-full rounded-[10px] border border-[#D9D9D9] pl-4 pt-2 text-lg`}
                   data-id="content"
                   onChange={handleInput}
                   value={content ? content : formData.content}
@@ -354,11 +354,11 @@ export default function Banner() {
                   name="file"
                   data-id="img"
                   onChange={handleImageChange}
-                  className={`flex justify-center overflow-hidden pl-4 pt-2 pb-2 text-lg mr-[6px]`}
+                  className={`mr-[6px] flex justify-center overflow-hidden pb-2 pl-4 pt-2 text-lg`}
                 />
                 <div className="mb-1 text-xl text-darkGray">미리보기</div>
                 <div
-                  className={`flex justify-center overflow-hidden pl-4 pt-2 pb-2 text-lg border border-[#D9D9D9] mr-[6px] rounded-[10px]`}
+                  className={`mr-[6px] flex justify-center overflow-hidden rounded-[10px] border border-[#D9D9D9] pb-2 pl-4 pt-2 text-lg`}
                 >
                   <img className="max-h-[200px]" src={url ? url : selectImg} alt="미리보기" />
                 </div>
@@ -369,7 +369,7 @@ export default function Banner() {
                   data-id="tag"
                   value={tag ? tag : formData.tag}
                   onChange={handleInput}
-                  className={`w-full h-[60px] pl-4 pt-2 text-lg border border-[#D9D9D9] mr-[6px] rounded-[10px]`}
+                  className={`mr-[6px] h-[60px] w-full rounded-[10px] border border-[#D9D9D9] pl-4 pt-2 text-lg`}
                 />
                 <div className="mt-1 text-md text-darkGray">
                   글자 사이에 ,를 넣어서 작성해주세요 ex ) 서울,동대문
@@ -381,7 +381,7 @@ export default function Banner() {
                   data-id="link"
                   value={link ? link : formData.link}
                   onChange={handleInput}
-                  className={`w-full h-[60px] pl-4 pt-2 text-lg border border-[#D9D9D9] mr-[6px] rounded-[10px]`}
+                  className={`mr-[6px] h-[60px] w-full rounded-[10px] border border-[#D9D9D9] pl-4 pt-2 text-lg`}
                 />
               </div>
               <div className="relative mt-[28px]">
@@ -392,25 +392,25 @@ export default function Banner() {
                     data-id="date1"
                     value={date1 ? date1 : formData.date1}
                     onChange={handleInput}
-                    className={`w-1/2 h-[60px] pl-4 pt-2 text-lg border border-[#D9D9D9] mr-[6px] rounded-[10px]`}
+                    className={`mr-[6px] h-[60px] w-1/2 rounded-[10px] border border-[#D9D9D9] pl-4 pt-2 text-lg`}
                   />
                   <input
                     type="date"
                     data-id="date2"
                     value={date2 ? date2 : formData.date2}
                     onChange={handleInput}
-                    className={`w-1/2 h-[60px] pl-4 pt-2 text-lg border border-[#D9D9D9] mr-[6px] rounded-[10px]`}
+                    className={`mr-[6px] h-[60px] w-1/2 rounded-[10px] border border-[#D9D9D9] pl-4 pt-2 text-lg`}
                   />
                 </div>
               </div>
-              <div className="relative mt-[48px] mb-[120px]">
+              <div className="relative mb-[120px] mt-[48px]">
                 <div className="flex font-bold">
                   <button
                     data-id="button"
                     name="delete"
                     className={`${
                       bannerInfo.id === "" ? "hidden" : ""
-                    } w-1/2 h-[60px] mr-2 text-lg text-purple bg-white border border-purple rounded-[10px]`}
+                    } mr-2 h-[60px] w-1/2 rounded-[10px] border border-purple bg-white text-lg text-purple`}
                   >
                     삭제하기
                   </button>
@@ -419,7 +419,7 @@ export default function Banner() {
                     name="save"
                     className={`${
                       bannerInfo.id === "" ? "w-full" : "w-1/2"
-                    } h-[60px] text-lg text-white bg-purple border border-purple rounded-[10px]`}
+                    } h-[60px] rounded-[10px] border border-purple bg-purple text-lg text-white`}
                   >
                     저장하기
                   </button>

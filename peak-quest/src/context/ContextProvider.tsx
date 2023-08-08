@@ -49,18 +49,18 @@ const defaultUserData: any = {
 };
 
 interface State {
-  bannerInfo: bannerData;
-  setBannerInfo: Dispatch<SetStateAction<bannerData>>;
-  reportInfo: reportData;
-  setReportInfo: Dispatch<SetStateAction<reportData>>;
-  userInfo: userData;
-  setUserInfo: Dispatch<SetStateAction<userData>>;
-  toggle: boolean;
-  setToggle: Dispatch<SetStateAction<boolean>>;
-  outerWidth: number;
-  setOuterWidth: Dispatch<SetStateAction<number>>;
-  select: string;
-  setSelect: Dispatch<SetStateAction<string>>;
+  bannerInfo: any;
+  setBannerInfo: any;
+  reportInfo: any;
+  setReportInfo: any;
+  userInfo: any;
+  setUserInfo: any;
+  toggle: any;
+  setToggle: any;
+  outerWidth: any;
+  setOuterWidth: any;
+  select: any;
+  setSelect: any;
   user: any;
   setUser: any;
   admin: any;

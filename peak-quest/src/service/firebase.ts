@@ -452,7 +452,7 @@ export function getReportStateFalse() {
     });
 }
 
-export function searchReportUser(userName: string) {
+export function searchReportUser(userName: string): any {
   get(ref(database, "report")) //
     .then((res) => {
       const data = res.val();
@@ -460,7 +460,7 @@ export function searchReportUser(userName: string) {
     });
 }
 
-export function reportChecked(userName: string) {
+export function reportChecked(userName: string): any {
   get(ref(database, "report")).then((res) => {
     const data = res.val();
     Object.values(data).forEach((user: any) => {

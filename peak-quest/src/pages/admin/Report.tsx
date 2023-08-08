@@ -6,7 +6,6 @@ import ReportItem from "./ReportItem";
 import { useService } from "../../context/ContextProvider";
 import { reportData } from "../../types/type";
 import { IoIosArrowBack } from "react-icons/io";
-import { useNavigate } from "react-router-dom";
 import "./page.css";
 import {
   getReportStateAll,
@@ -109,24 +108,24 @@ export default function Report() {
       {admin && (
         <OutletContainer>
           <PageLeft select={select}>
-            <div className="flex flex-col w-full">
+            <div className="flex w-full flex-col">
               {/* inputContainer */}
-              <div className="flex w-full h-1/5 pb-2">
+              <div className="flex h-1/5 w-full pb-2">
                 <form className="w-full" action="submit" onSubmit={handleInput}>
                   <input
                     ref={inputRef}
                     onSubmit={handleInput}
-                    className={`w-full  h-[56px] ${
+                    className={`h-[56px]  w-full ${
                       select ? "pl-2 text-lg" : ""
-                    } border border-[#D9D9D9] mt-2 pl-4 rounded-[10px] half:mx-1`}
+                    } mt-2 rounded-[10px] border border-[#D9D9D9] pl-4 half:mx-1`}
                     placeholder="찾고자 하는 닉네임을 입력후 앤터키를 눌러주세요"
                   />
                 </form>
               </div>
               {/* reportState */}
-              <div className="flex justify-center items-center w-full h-[132px] pb-3 text-[32px] font-bold border-b border-gray">
+              <div className="flex h-[132px] w-full items-center justify-center border-b border-gray pb-3 text-[32px] font-bold">
                 <div
-                  className="flex flex-col w-1/6 h-[72px] justify-center items-center px-5 py-8 cursor-pointer"
+                  className="flex h-[72px] w-1/6 cursor-pointer flex-col items-center justify-center px-5 py-8"
                   data-id="ALL"
                   onClick={selectReport}
                 >
@@ -136,7 +135,7 @@ export default function Report() {
                   <div className="text-lg font-normal">전체</div>
                 </div>
                 <div
-                  className="flex flex-col w-1/6 h-[72px] justify-center items-center px-5 py-8 cursor-pointer"
+                  className="flex h-[72px] w-1/6 cursor-pointer flex-col items-center justify-center px-5 py-8"
                   data-id="notRead"
                   onClick={selectReport}
                 >
@@ -146,7 +145,7 @@ export default function Report() {
                   <div className="text-lg font-normal">안 읽음</div>
                 </div>
                 <div
-                  className="flex flex-col w-1/6 h-[72px] justify-center items-center px-5 py-8 cursor-pointer"
+                  className="flex h-[72px] w-1/6 cursor-pointer flex-col items-center justify-center px-5 py-8"
                   data-id="checked"
                   onClick={selectReport}
                 >
@@ -157,13 +156,13 @@ export default function Report() {
                 </div>
               </div>
               {/* reportList  */}
-              <div className="w-full h-2/3 mt-9">
-                <div className="flex text-xl text-darkGray font-bold mb-5 border-b pb-4 border-[#F2F2F2]">
-                  <div className="w-[12%] text-xl text-center">NO.</div>
-                  <div className="w-[30%] text-xl text-center">닉네임</div>
-                  <div className="w-[20%] text-xl text-center">신고유형</div>
-                  <div className="w-[20%] text-xl text-center">상태</div>
-                  <div className="w-[18%] text-xl text-center">관리</div>
+              <div className="mt-9 h-2/3 w-full">
+                <div className="mb-5 flex border-b border-[#F2F2F2] pb-4 text-xl font-bold text-darkGray">
+                  <div className="w-[12%] text-center text-xl">NO.</div>
+                  <div className="w-[30%] text-center text-xl">닉네임</div>
+                  <div className="w-[20%] text-center text-xl">신고유형</div>
+                  <div className="w-[20%] text-center text-xl">상태</div>
+                  <div className="w-[18%] text-center text-xl">관리</div>
                 </div>
                 {/* reportItem */}
                 {reportList.length > 0 &&
@@ -182,80 +181,80 @@ export default function Report() {
             </div>
           </PageLeft>
           <PageRight select={select}>
-            <div className="flex flex-col min-w-[648px] max-h-[992px]">
+            <div className="flex max-h-[992px] min-w-[648px] flex-col">
               <div
-                className="relative flex text-2xl font-bold cursor-pointer"
+                className="relative flex cursor-pointer text-2xl font-bold"
                 onClick={() => {
                   setSelect((prev) => !prev);
                 }}
               >
-                <IoIosArrowBack className="mt-[5px] mr-1 text-[28px]" />
+                <IoIosArrowBack className="mr-1 mt-[5px] text-[28px]" />
                 <div className="">신고 관리</div>
               </div>
               <div>
-                <div className="mt-[22px] mb-1 text-xl text-darkGray">신고 날짜</div>
+                <div className="mb-1 mt-[22px] text-xl text-darkGray">신고 날짜</div>
                 <input
-                  className={`w-full  h-[56px] ${
+                  className={`h-[56px]  w-full ${
                     select ? "pl-2 text-lg" : ""
-                  } border border-[#D9D9D9] mr-[6px] pl-4 rounded-[10px] half:mx-1`}
+                  } mr-[6px] rounded-[10px] border border-[#D9D9D9] pl-4 half:mx-1`}
                   value={`${reportInfo ? date : ""}`}
                 />
               </div>
               <div>
-                <div className="mt-[22px] mb-1 text-xl text-darkGray">유저 닉네임</div>
+                <div className="mb-1 mt-[22px] text-xl text-darkGray">유저 닉네임</div>
                 <input
-                  className={`w-full  h-[56px] ${
+                  className={`h-[56px]  w-full ${
                     select ? "pl-2 text-lg" : ""
-                  } border border-[#D9D9D9] mr-[6px] pl-4 rounded-[10px] half:mx-1`}
+                  } mr-[6px] rounded-[10px] border border-[#D9D9D9] pl-4 half:mx-1`}
                   value={`${reportInfo ? name : ""}`}
                 />
               </div>
               <div>
-                <div className="mt-[22px] mb-1 text-xl text-darkGray">신고 유형</div>
+                <div className="mb-1 mt-[22px] text-xl text-darkGray">신고 유형</div>
                 <input
-                  className={`w-full  h-[56px] ${
+                  className={`h-[56px]  w-full ${
                     select ? "pl-2 text-lg" : ""
-                  } border border-[#D9D9D9] mr-[6px] pl-4 rounded-[10px] half:mx-1`}
+                  } mr-[6px] rounded-[10px] border border-[#D9D9D9] pl-4 half:mx-1`}
                   value={`${reportInfo ? type : ""}`}
                 />
               </div>
               <div>
-                <div className="mt-[22px] mb-1 text-xl text-darkGray">신고사유</div>
+                <div className="mb-1 mt-[22px] text-xl text-darkGray">신고사유</div>
                 <textarea
-                  className={`w-full h-[207px] pl-4 pt-2 text-lg border border-[#D9D9D9] mr-[6px] rounded-[10px]`}
+                  className={`mr-[6px] h-[207px] w-full rounded-[10px] border border-[#D9D9D9] pl-4 pt-2 text-lg`}
                   value={content}
                 />
               </div>
               <div>
-                <div className="mt-[22px] mb-1 text-xl text-darkGray">신고 게시글 링크</div>
+                <div className="mb-1 mt-[22px] text-xl text-darkGray">신고 게시글 링크</div>
                 <div className="flex">
                   <input
-                    className={`w-3/4  h-[56px] ${
+                    className={`h-[56px]  w-3/4 ${
                       select ? "pl-2 text-lg" : ""
-                    } border border-[#D9D9D9] mr-[6px] pl-4 rounded-[10px] half:mx-1`}
+                    } mr-[6px] rounded-[10px] border border-[#D9D9D9] pl-4 half:mx-1`}
                     value={`${reportInfo ? link : ""}`}
                   />
                   <button
-                    className="w-1/4 bg-white text-purple border border-purple rounded-[10px]"
+                    className="w-1/4 rounded-[10px] border border-purple bg-white text-purple"
                     onClick={() => window.open(`${link}`)}
                   >
                     바로가기
                   </button>
                 </div>
               </div>
-              <div className="relative mt-[118px] mb-[120px]">
+              <div className="relative mb-[120px] mt-[118px]">
                 <div className="flex font-bold">
                   <button
                     onClick={() => {
                       reportDelete(id).then((res) => setData(res as reportData[]));
                     }}
-                    className={`w-1/2 h-[60px] mr-2 text-lg text-purple bg-white border border-purple rounded-[10px]`}
+                    className={`mr-2 h-[60px] w-1/2 rounded-[10px] border border-purple bg-white text-lg text-purple`}
                   >
                     삭제하기
                   </button>
                   <button
                     onClick={() => reportChecked(name).then((res: any) => setData(res))}
-                    className={`w-1/2 h-[60px]text-lg text-white bg-purple border border-purple rounded-[10px]`}
+                    className={`h-[60px]text-lg w-1/2 rounded-[10px] border border-purple bg-purple text-white`}
                   >
                     신고확인
                   </button>

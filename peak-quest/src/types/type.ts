@@ -24,17 +24,6 @@ export interface reportData {
 }
 
 export interface userData {
-  name: string;
-  user_name: string;
-  state: string;
-  report_type: string;
-  report_date: string;
-  content: string;
-  url: string;
-  delete: string;
-}
-
-export interface userData {
   user_name: string;
   role: string;
   email: string;
@@ -48,7 +37,6 @@ export interface userData {
   delete: {
     delete_state: string;
     delete_content: string;
-    deleted_at: string;
     deleted_at: string;
   };
 }

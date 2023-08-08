@@ -24,7 +24,7 @@ const defaultUserCount = {
   ban: 0,
 };
 
-const userDefaultData: userData = {
+const userDefaultData: any = {
   name: "",
   role: "",
   email: "",
@@ -135,23 +135,23 @@ export default function User() {
     <>
       <OutletContainer>
         <PageLeft select={select}>
-          <div className="flex flex-col w-full">
+          <div className="flex w-full flex-col">
             {/* inputContainer */}
-            <div className="flex w-full h-1/5 pb-2">
+            <div className="flex h-1/5 w-full pb-2">
               <form className="w-full" action="submit" onSubmit={handleInput}>
                 <input
                   ref={inputRef}
-                  className={`w-full  h-[56px] ${
+                  className={`h-[56px]  w-full ${
                     select ? "pl-2 text-lg" : ""
-                  } border border-[#D9D9D9] mt-2 pl-4 rounded-[10px] half:mx-1`}
+                  } mt-2 rounded-[10px] border border-[#D9D9D9] pl-4 half:mx-1`}
                   placeholder="닉네임 검색"
                 />
               </form>
             </div>
             {/* userState */}
-            <div className="flex justify-center items-center w-full h-[132px] pb-3 text-[32px] font-bold border-b border-gray">
+            <div className="flex h-[132px] w-full items-center justify-center border-b border-gray pb-3 text-[32px] font-bold">
               <div
-                className="flex flex-col w-1/6 h-[72px] justify-center items-center px-5 py-8 cursor-pointer"
+                className="flex h-[72px] w-1/6 cursor-pointer flex-col items-center justify-center px-5 py-8"
                 data-id="all"
                 onClick={selectReport}
               >
@@ -161,7 +161,7 @@ export default function User() {
                 <div className="text-lg font-normal">전체</div>
               </div>
               <div
-                className="flex flex-col w-1/6 h-[72px] justify-center items-center px-5 py-8 cursor-pointer"
+                className="flex h-[72px] w-1/6 cursor-pointer flex-col items-center justify-center px-5 py-8"
                 data-id="user"
                 onClick={selectReport}
               >
@@ -171,7 +171,7 @@ export default function User() {
                 <div className="text-lg font-normal">일반 유저</div>
               </div>
               <div
-                className="flex flex-col w-1/6 h-[72px] justify-center items-center px-5 py-8 cursor-pointer"
+                className="flex h-[72px] w-1/6 cursor-pointer flex-col items-center justify-center px-5 py-8"
                 data-id="delete"
                 onClick={selectReport}
               >
@@ -181,7 +181,7 @@ export default function User() {
                 <div className="text-lg font-normal">탈퇴 유저</div>
               </div>
               <div
-                className="flex flex-col w-1/6 h-[72px] justify-center items-center px-5 py-8 cursor-pointer"
+                className="flex h-[72px] w-1/6 cursor-pointer flex-col items-center justify-center px-5 py-8"
                 data-id="ban"
                 onClick={selectReport}
               >
@@ -193,13 +193,13 @@ export default function User() {
             </div>
           </div>
           {/* userList  */}
-          <div className="w-full h-2/3 mt-9">
-            <div className="flex text-xl text-darkGray font-bold mb-5 border-b pb-4 border-[#F2F2F2]">
-              <div className="w-[12%] text-xl text-center">NO.</div>
-              <div className="w-[30%] text-xl text-center">닉네임</div>
-              <div className="w-[15%] text-xl text-center">탈퇴</div>
-              <div className="w-[25%] text-xl text-center">상태</div>
-              <div className="w-[18%] text-xl text-center">관리</div>
+          <div className="mt-9 h-2/3 w-full">
+            <div className="mb-5 flex border-b border-[#F2F2F2] pb-4 text-xl font-bold text-darkGray">
+              <div className="w-[12%] text-center text-xl">NO.</div>
+              <div className="w-[30%] text-center text-xl">닉네임</div>
+              <div className="w-[15%] text-center text-xl">탈퇴</div>
+              <div className="w-[25%] text-center text-xl">상태</div>
+              <div className="w-[18%] text-center text-xl">관리</div>
             </div>
             {/* userListItem */}
             {userList &&
@@ -219,12 +219,12 @@ export default function User() {
         </PageLeft>
         <PageRight select={select}>
           <div
-            className="relative flex text-2xl font-bold cursor-pointer"
+            className="relative flex cursor-pointer text-2xl font-bold"
             onClick={() => {
               setSelect((prev) => !prev);
             }}
           >
-            <IoIosArrowBack className="mt-[5px] mr-1 text-[28px]" />
+            <IoIosArrowBack className="mr-1 mt-[5px] text-[28px]" />
             <div className="">회원 관리</div>
           </div>
           {delete_state === "Y" ? (
