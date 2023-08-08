@@ -19,39 +19,39 @@ export default function Header() {
   return (
     <>
       {admin?.isAdmin && (
-        <header className="fixed flex justify-between items-center w-full h-[60px] bg-purple z-10">
+        <header className="fixed z-10 flex h-[60px] w-full items-center justify-between bg-purple">
           <RxHamburgerMenu
-            className="absolute text-white text-2xl font-bold ml-5 cursor-pointer"
-            onClick={() => setToggle((prev) => !prev)}
+            className="absolute ml-5 cursor-pointer text-2xl font-bold text-white"
+            onClick={() => setToggle((prev: any) => !prev)}
           />
           <div className="ml-16 min-w-[100px] bg-white"></div>
-          <div className="flex min-w-[453px] text-base leading-6 font-light mr-5">
-            <button className="border px-4 py-[5px] mr-3 text-white border-white rounded-lg">
+          <div className="mr-5 flex min-w-[453px] text-base font-light leading-6">
+            <button className="mr-3 rounded-lg border border-white px-4 py-[5px] text-white">
               위젯 수정
             </button>
-            <button className="flex items-center border px-5 py-[5px] mr-3 text-black border-white rounded-lg bg-white">
-              <BsShare className="text-[14px] mr-2" />
+            <button className="mr-3 flex items-center rounded-lg border border-white bg-white px-5 py-[5px] text-black">
+              <BsShare className="mr-2 text-[14px]" />
               공유
             </button>
-            <button className="flex items-center border px-5 py-[5px] mr-3 text-black border-white rounded-lg bg-white">
-              <MdOutlineIosShare className="text-[14px] mr-2" />
+            <button className="mr-3 flex items-center rounded-lg border border-white bg-white px-5 py-[5px] text-black">
+              <MdOutlineIosShare className="mr-2 text-[14px]" />
               내보내기
             </button>
             {admin && (
               <button
-                className="flex items-center border px-5 py-[5px] text-black border-white rounded-lg bg-white"
+                className="flex items-center rounded-lg border border-white bg-white px-5 py-[5px] text-black"
                 onClick={handleLogout}
               >
-                <div className="text-[12px] mr-2">✕</div>
+                <div className="mr-2 text-[12px]">✕</div>
                 나가기
               </button>
             )}
             {!admin && (
               <button
-                className="flex items-center border px-5 py-[5px] text-black border-white rounded-lg bg-white"
+                className="flex items-center rounded-lg border border-white bg-white px-5 py-[5px] text-black"
                 onClick={adminLogin}
               >
-                <div className="text-[12px] mr-2">✕</div>
+                <div className="mr-2 text-[12px]">✕</div>
                 로그인
               </button>
             )}
