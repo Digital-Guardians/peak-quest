@@ -60,7 +60,7 @@ export default function Nearby() {
             // 0 ~ 10, 10.1 ~30, 30.1 ~50
             // 20씩 차이나서 .. -20
             if (
-              distanceFromLocation > 0 &&
+              // distanceFromLocation > 0 &&
               distanceFromLocation > distance - 20 &&
               distanceFromLocation <= distance
             ) {
@@ -80,6 +80,7 @@ export default function Nearby() {
   }, []);
 
   useEffect(() => {
+    setNearCourseList([]);
     if (location) {
       // setLoading(false);
       // 처음 렌더링시 => 10km
@@ -132,7 +133,7 @@ export default function Nearby() {
       </div>
       {/* course 목록 */}
       <div className="flex h-[300px] w-full flex-col items-center justify-start">
-        {nearCourseList.length > 1 ? (
+        {nearCourseList.length > 0 ? (
           <CourseItem courseList={nearCourseList} isMine={false} />
         ) : (
           <>

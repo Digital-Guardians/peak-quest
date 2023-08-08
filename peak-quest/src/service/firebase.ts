@@ -375,25 +375,26 @@ export async function getCourseList() {
   const data = res.val();
 
   const myCourse = Object.values(data);
-  // console.log(myCourse);
 
-  const items: any = myCourse.map((item: any) => {
-    const newData = {
-      ...item,
-      id: item.id,
-      title: item.myCourseTitle,
-      thumbnail: item.previewImgUrl,
-      views: item.views,
-      recommendations: item.recommendations,
-      area: item.selectedOption?.label,
-      option: item.checkedItems,
-      position: {
-        lat: item.lists[0].position.lat,
-        lng: item.lists[0].position.lng,
-      },
-    };
-    return newData;
-  });
+  const items: any = myCourse
+    .filter((item: any) => item.lists && item.lists[0]?.position)
+    .map((item: any) => {
+      const newData = {
+        ...item,
+        id: item.id,
+        title: item.myCourseTitle,
+        thumbnail: item.previewImgUrl,
+        views: item.views,
+        recommendations: item.recommendations,
+        area: item.selectedOption?.label,
+        option: item.checkedItems,
+        position: {
+          lat: item.lists[0].position.lat,
+          lng: item.lists[0].position.lng,
+        },
+      };
+      return newData;
+    });
 
   return items;
 }
