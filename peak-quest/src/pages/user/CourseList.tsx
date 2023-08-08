@@ -45,7 +45,7 @@ export default function CourseList() {
   // 스크롤 시 업데이트 될 코스 목록 => 현재 보여지는 코스목록
   const [courseList, setCourseList] = useState<Course[]>([]);
   // 몇개씩 보여줄지?
-  const itemPerPage = 5;
+  const itemPerPage = 8;
   // 스크롤 여부
   const [isScroll, setIsScroll] = useState<boolean>(false);
   // 데이터를 불러오는 중인지 확인
@@ -132,37 +132,15 @@ export default function CourseList() {
     const fetchAreaCourseList = async () => {
       const data = await getAreaCourseList(select.areaName);
 
-      // console.log("data", data);
+      console.log("data", data);
 
       setAllCourseList(data as any);
-      setCourseList(data.slice(0, itemPerPage) as any);
+      if (data.length > itemPerPage)
+        setCourseList(data.slice(0, itemPerPage) as any);
+      else setCourseList(data.slice(0, data.length) as any);
     };
     fetchAreaCourseList();
-    // fetch(`/mock/user/courseList_${select.areaName.toLocaleLowerCase()}.json`)
-    //   .then((res) => {
-    //     if (res.status === 200) return res.json();
-    //     else throw new Error("API 요청 실패");
-    //   })
-    //   .then((data) => {
-    //     // 코스 목록 상태 업데이트 => 기존 코스 목록에 새로 가져온 코스 목록 data추가
-    //     setAllCourseList(data.courses);
-    //     setCourseList(data.courses.slice(0, itemPerPage));
-    //   })
-    //   .catch((error) => {
-    //     setAllCourseList([]);
-    //     setCourseList([]);
-    //     console.error("Error fetching more courses:", error);
-    //   });
-    // page가 존재할 때 사용!
-    // fetch(`/mock/user/courseList_${select.areaName.toLocaleLowerCase()_{page}}.json`)
-    //     .then((res) => res.json())
-    //     .then((data) => {
-    //       // 코스 목록 상태 업데이트 => 기존 코스 목록에 새로 가져온 코스 목록 data추가
-    //       setCourseList((prevCourseList) => [...prevCourseList, ...data.courses]);
-    //     })
-    //     .catch((error) => {
-    //       console.error("Error fetching more courses:", error);
-    //     });
+
     isFetching = false;
   };
 
@@ -176,7 +154,7 @@ export default function CourseList() {
         className={`scrollbar-custom mx-auto h-full w-full overflow-auto bg-white duration-700 ease-linear ${
           isScroll
             ? "absolute top-[50px] rounded-none"
-            : "absolute top-[285px] rounded-t-2xl"
+            : "absolute top-[290px] rounded-t-2xl"
         } `}
       >
         {courseList.length > 0 ? (
