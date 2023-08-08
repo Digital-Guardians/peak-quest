@@ -8,6 +8,7 @@ import Nearby from "../../components/user/Nearby";
 import Header from "../../components/Header";
 import Login from "../../components/Login";
 import { useUserContext } from "../../context/userContext";
+import { getStartBadge } from "../../service/firebase";
 
 export default function Main() {
   const { user } = useUserContext();
@@ -22,6 +23,16 @@ export default function Main() {
   //   }
   // }, [user]);
 
+  useEffect(() => {
+    const badge = setInterval(() => {
+      getStartBadge(user);
+    }, 1000);
+
+    setTimeout(() => {
+      clearInterval(badge);
+    }, 5000);
+  }, [user]);
+
   return (
     <div className="bg-lightGray text-black">
       <Header />
@@ -33,7 +44,11 @@ export default function Main() {
               <br />
               코스 만들기
             </p>
-            <img className="shadow-3xl" src={createCourse} alt="create-course" />
+            <img
+              className="shadow-3xl"
+              src={createCourse}
+              alt="create-course"
+            />
           </div>
         </Link>
         <Link to={"/area"}>

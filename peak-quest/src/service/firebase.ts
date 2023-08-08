@@ -1,5 +1,5 @@
+import { userData } from "./../types/type";
 import { initializeApp } from "firebase/app";
-import { v4 as uuidv4 } from "uuid";
 import { getDatabase, ref, get, set } from "firebase/database";
 import {
   getAuth,
@@ -8,11 +8,9 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { userData } from "../types/type";
+import { changeKorean } from "../helper/changeAreaName";
 
 // import { getAnalytics } from "firebase/analytics";
-
-const uuid = uuidv4();
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -81,11 +79,9 @@ export async function userLogin() {
         badges,
         role: "user",
         state: "user",
-        post: "",
+        post: 0,
       };
       console.log("추가합니다");
-
-      console.log(newUserData);
 
       await set(ref(database, "userTest/" + user.uid), newUserData);
     }
@@ -149,14 +145,11 @@ async function adminUser(user: any) {
 export async function addBannerImage(bannerData: any, imgUrl: any) {
   return get(ref(database, "bannerItem")).then((res) => {
     const data = res.val();
-    console.log(data);
     if (!data) {
       set(ref(database, "bannerItem"), "");
     }
 
     const id = Object.keys(data).length + 1;
-
-    console.log(id);
 
     const newData = {
       ...bannerData,
@@ -180,7 +173,7 @@ export async function getBannerItemList() {
 }
 
 //게시글 작성
-export async function addCourse(formData: any, img: any, user: any) {
+export async function addCourse(formData: any, img: any, user: any, uuid: any) {
   const res = await get(ref(database, "course"));
   const data = res.val();
   if (!data) {
@@ -199,6 +192,7 @@ export async function addCourse(formData: any, img: any, user: any) {
     id: newPost,
     uid: user.uid,
     views: 0,
+    likes: 0,
     recommendations: 0,
     writer: user.displayName,
     area: item.selectedOption?.label,
@@ -206,15 +200,62 @@ export async function addCourse(formData: any, img: any, user: any) {
 
   set(ref(database, `course/${uuid}`), newData);
   set(ref(database, "post"), newPost);
+
+  const userData = await get(ref(database, `userTest/${user.uid}`)).then(
+    (res) => res.val()
+  );
+  //유저의 게시글 수
+  const post = userData.post;
+  const newUserData = {
+    ...userData,
+    post: post + 1,
+  };
+  set(ref(database, `userTest/${user.uid}`), newUserData);
   return newData;
 }
+
+// 최초 게시글 작성시 획득하는 뱃지
+export async function getStartBadge(user: any) {
+  const userData = await get(ref(database, `userTest/${user.uid}`)).then(
+    (res) => res.val()
+  );
+  if (userData.post !== 1) {
+    return;
+  } else if (userData.badges.start.hasBadge === "N") {
+    console.log("뱃지획득");
+
+    const badges = userData.badges;
+    const newBadges = {
+      ...badges,
+      start: {
+        hasBadge: "Y",
+      },
+    };
+
+    const newUserData = {
+      ...userData,
+      badges: newBadges,
+    };
+    set(ref(database, `userTest/${user.uid}`), newUserData);
+  }
+}
+
+// 유저별 post 개수 확인하기 위한 Api
 
 //코스 디테일
 export async function getCourseDetail(id: any) {
   const res = await get(ref(database, "course"));
   const data = res.val();
-  const detail = Object.values(data).filter((course: any) => course.id === id);
-  const item: any = detail[0];
+
+  const detail = Object.entries(data).map(([key, value]) => {
+    return { key, value };
+  });
+
+  const filterData: any = detail.filter((item: any) => item.value.id === id);
+  // const detail = Object.values(data).filter((course: any) => course.id === id);
+
+  const item: any = filterData[0].value;
+  const view = item.views;
 
   const newData = {
     ...item,
@@ -228,7 +269,41 @@ export async function getCourseDetail(id: any) {
     },
   };
 
+  const updateData = {
+    ...item,
+    views: view + 1,
+  };
+
+  // const viewItem = dataFilter[0];
+
+  const key = filterData[0].key;
+
+  set(ref(database, `course/${key}`), updateData);
   return newData;
+}
+
+//좋아요
+export async function courseLikes(id: any) {
+  const res = await get(ref(database, "course"));
+  const data = res.val();
+
+  const detail = Object.entries(data).map(([key, value]) => {
+    return { key, value };
+  });
+
+  const filterData: any = detail.filter((item: any) => item.value.id === id);
+
+  const item: any = filterData[0].value;
+  const likes = item.likes;
+
+  const updateData = {
+    ...item,
+    likes: likes + 1,
+  };
+
+  const key = filterData[0].key;
+
+  set(ref(database, `course/${key}`), updateData);
 }
 
 // 내 코스 보기(마이페이지용)
@@ -236,6 +311,9 @@ export async function getCourseDetail(id: any) {
 export async function getMyCourse(user: any) {
   const res = await get(ref(database, "course"));
   const data = res.val();
+  // const myCourse = Object.values(data).filter(
+  //   (course: any) => course.uid === "XyTgG5IsxfXMMrl1u3FdIIivoe22"
+  // );
   const myCourse = Object.values(data).filter(
     (course: any) => course.uid === user.uid
   );
@@ -268,11 +346,60 @@ export async function getAreaCourseList(area: any) {
   const data = res.val();
 
   const myCourse = Object.values(data).filter(
-    (course: any) => course.area === area
+    (course: any) => course.area === changeKorean(area)
   );
 
-  return myCourse;
+  const items: any = myCourse.map((item: any) => {
+    const newData = {
+      ...item,
+      id: item.id,
+      title: item.myCourseTitle,
+      thumbnail: item.previewImgUrl,
+      views: item.views,
+      recommendations: item.recommendations,
+      area: item.selectedOption?.label,
+      option: item.checkedItems,
+      position: {
+        lat: item.selectOriginCourse.position[0].lat,
+        lng: item.selectOriginCourse.position[0].lng,
+      },
+    };
+    return newData;
+  });
+
+  console.log(items);
+
+  return items;
 }
+
+// 전체코스 불러오기
+export async function getCourseList() {
+  const res = await get(ref(database, "course"));
+  const data = res.val();
+
+  const myCourse = Object.values(data);
+
+  const items: any = myCourse.map((item: any) => {
+    const newData = {
+      ...item,
+      id: item.id,
+      title: item.myCourseTitle,
+      thumbnail: item.previewImgUrl,
+      views: item.views,
+      recommendations: item.recommendations,
+      area: item.selectedOption?.label,
+      option: item.checkedItems,
+      position: {
+        lat: item.selectOriginCourse.position[0].lat,
+        lng: item.selectOriginCourse.position[0].lng,
+      },
+    };
+    return newData;
+  });
+  
+  return items;
+}
+
 
 // export function getBannerList() {
 //   return get(ref(database, "banner")).then((res) => res.val());
@@ -304,7 +431,6 @@ export function deleteBanner(id: string) {
 
 export function itemDelete(url: string) {
   return get(ref(database, "banner")).then((res) => {
-    console.log(url);
     const data = Object.values(res.val());
     const newData = data.filter((item: any) => item.url !== url);
     set(ref(database, "banner"), newData);
@@ -363,7 +489,6 @@ export function reportDelete(id: number) {
   return get(ref(database, "report")).then((res) => {
     const data = res.val();
     const newData = Object.values(data).filter((user: any) => user.id !== id);
-    console.log(newData);
 
     const message = confirm("해당 신고내용을 삭제하시겠습니까?");
     if (message) {
@@ -372,8 +497,6 @@ export function reportDelete(id: number) {
     } else {
       alert("취소되었습니다.");
     }
-
-    console.log(newData);
 
     return newData;
   });
@@ -384,7 +507,6 @@ export function reportDelete(id: number) {
 export function getUserListAll() {
   return get(ref(database, "users")).then((res) => {
     const data = res.val();
-    console.log(data);
     return Object.values(data);
   });
 }
@@ -437,8 +559,6 @@ export function userSuspend(
   startDate?: string,
   endDate?: string
 ) {
-  console.log(banType);
-
   return get(ref(database, "users")) //
     .then((res) => {
       const data = res.val();
@@ -463,18 +583,17 @@ export function userSuspend(
             const day = String(currentDate.getDate()).padStart(2, "0");
 
             const formattedDate = `${year}-${month}-${day}`;
-            console.log(formattedDate);
             user.ban.ban_start_date = formattedDate;
             user.ban.ban_end_date = "";
           }
           alert("변경되었습니다.");
         }
       });
-      console.log(newData);
       set(ref(database, "users"), newData);
       return newData;
     });
 }
+
 //회원 정지 취소
 export function userUnsuspend(userName: string) {
   return get(ref(database, "users")) //
@@ -496,7 +615,6 @@ export function userUnsuspend(userName: string) {
           }
         }
       });
-      console.log(newData);
       set(ref(database, "users"), newData);
       return newData;
     });

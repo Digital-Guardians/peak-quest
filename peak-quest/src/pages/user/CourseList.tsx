@@ -4,6 +4,8 @@ import Filter from "../../components/user/Filter";
 import Header from "../../components/Header";
 import "../../components/user/scroll.css";
 import { useParams } from "react-router-dom";
+import { getAreaCourseList, onUserStateChanged } from "../../service/firebase";
+import { useUserContext } from "../../context/userContext";
 
 // 코스 타입 정의
 interface Course {
@@ -25,6 +27,7 @@ interface Course {
 }
 
 export default function CourseList() {
+  const { user, setUser } = useUserContext();
   // 기본 선택 지역 => url
   const { AreaName } = useParams<{ AreaName?: string }>();
   // 코스 지역, 유형, 난이도 선택
@@ -125,21 +128,31 @@ export default function CourseList() {
   }, [select.level, select.courseOption]);
 
   const fetchCourses = () => {
-    fetch(`/mock/user/courseList_${select.areaName.toLocaleLowerCase()}.json`)
-      .then((res) => {
-        if (res.status === 200) return res.json();
-        else throw new Error("API 요청 실패");
-      })
-      .then((data) => {
-        // 코스 목록 상태 업데이트 => 기존 코스 목록에 새로 가져온 코스 목록 data추가
-        setAllCourseList(data.courses);
-        setCourseList(data.courses.slice(0, itemPerPage));
-      })
-      .catch((error) => {
-        setAllCourseList([]);
-        setCourseList([]);
-        console.error("Error fetching more courses:", error);
-      });
+    onUserStateChanged(setUser);
+    const fetchAreaCourseList = async () => {
+      const data = await getAreaCourseList(select.areaName);
+
+      // console.log("data", data);
+
+      setAllCourseList(data as any);
+      setCourseList(data.slice(0, itemPerPage) as any);
+    };
+    fetchAreaCourseList();
+    // fetch(`/mock/user/courseList_${select.areaName.toLocaleLowerCase()}.json`)
+    //   .then((res) => {
+    //     if (res.status === 200) return res.json();
+    //     else throw new Error("API 요청 실패");
+    //   })
+    //   .then((data) => {
+    //     // 코스 목록 상태 업데이트 => 기존 코스 목록에 새로 가져온 코스 목록 data추가
+    //     setAllCourseList(data.courses);
+    //     setCourseList(data.courses.slice(0, itemPerPage));
+    //   })
+    //   .catch((error) => {
+    //     setAllCourseList([]);
+    //     setCourseList([]);
+    //     console.error("Error fetching more courses:", error);
+    //   });
     // page가 존재할 때 사용!
     // fetch(`/mock/user/courseList_${select.areaName.toLocaleLowerCase()_{page}}.json`)
     //     .then((res) => res.json())

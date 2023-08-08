@@ -11,6 +11,7 @@ import {
   getBagdes,
   getMyCourse,
   onUserStateChanged,
+  userLogOut,
 } from "../../service/firebase";
 
 // 코스 타입 정의
@@ -74,7 +75,7 @@ export default function MyPage() {
     const fetchMyCourse = async () => {
       const data = await getMyCourse(user);
       setMyourseList(data);
-      console.log(data);
+      console.log("내코스", data);
     };
 
     fetchMyCourse();
@@ -178,14 +179,26 @@ export default function MyPage() {
         </div>
         <RecentCourse />
       </div>
-      {/* 로그아웃 */}
-      <button className="mb-3 mt-3 h-[48px] w-[95%] rounded-md bg-mint text-lg font-bold text-white duration-300 ease-linear sm:h-[40px] sm:text-md">
-        로그아웃
-      </button>
-      {/* 회원탈퇴 */}
-      <button className="mb-4 mt-1 border-b-[1px] border-gray p-1 text-md font-bold text-[#A4A4A4] duration-300 ease-linear sm:text-sm">
-        회원탈퇴
-      </button>
+      {user && (
+        <>
+          {" "}
+          {/* 로그아웃 */}
+          <button
+            className="mb-3 mt-3 h-[48px] w-[95%] rounded-md bg-mint text-lg font-bold text-white duration-300 ease-linear sm:h-[40px] sm:text-md"
+            onClick={() => {
+              userLogOut();
+              setUser("");
+              navigate("/");
+            }}
+          >
+            로그아웃
+          </button>
+          {/* 회원탈퇴 */}
+          <button className="mb-4 mt-1 border-b-[1px] border-gray p-1 text-md font-bold text-[#A4A4A4] duration-300 ease-linear sm:text-sm">
+            회원탈퇴
+          </button>
+        </>
+      )}
     </div>
   );
 }

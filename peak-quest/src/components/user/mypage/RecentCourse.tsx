@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { changeEnglish } from "../../../helper/changeAreaName";
 import mountain from "../../../assets/user/mountain.png";
+import { IoIosArrowForward } from "react-icons/io";
 
 interface RecentCourse {
   id: string;
@@ -61,6 +62,12 @@ export default function RecentCourse() {
             <span className="font-bold text-green"> 특별한 코스들</span>을 한 번
             둘러보세요.
           </p>
+          <a
+            className="mt-2 flex items-center justify-center border-b-[1px] border-mint text-md font-bold text-mint"
+            href="/area"
+          >
+            코스 둘러보러 가기 <IoIosArrowForward />
+          </a>
         </div>
       )}
     </>

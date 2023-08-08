@@ -26,15 +26,18 @@ import MyCourseLists from "../../components/user/course/MyCourseLists";
 // 11. 해시 태그
 import CourseTags from "../../components/user/course/CourseTags";
 // 12. 코스 상세 설명
-import CourseEditor from "../../components/user/course/CourseEditor";
+// import CourseEditor from "../../components/user/course/CourseEditor";
 import { useNavigate } from "react-router-dom";
 import { TransformedResult } from "../../types/forestTypes";
 import OriginCourseLists from "../../components/user/course/OriginCourseLists";
-import { uploadImage } from "../../service/imageUploader";
-import { addCourse } from "../../service/firebase";
+import { addCourse, onUserStateChanged } from "../../service/firebase";
+// import { uploadImage } from "../../service/imageUpLoader";
 import { useUserContext } from "../../context/userContext";
 import { IoClose } from "react-icons/io5";
 import User from "../admin/User";
+import { v4 as uuidv4 } from "uuid";
+import { uploadImage } from "../../service/imageUploader";
+import CourseEditor from "../../components/user/course/CourseEditor";
 
 // **타입 정의**
 // 7. 소요 시간
@@ -69,7 +72,9 @@ export default function CourseEdit() {
   const { user, setUser } = useUserContext();
   // 0.페이지 이동을 위함
   const navigate = useNavigate();
-  // const { user } = useUserContext();
+
+  //uuid
+  const uuid = uuidv4();
 
   // 2. 코스 제목
   // myCourseTitle :string
@@ -260,6 +265,17 @@ export default function CourseEdit() {
 
   // 10. 기존 코스 정보
 
+  // 11. 해시 태그
+  // tags :string[]
+  const [tags, setTags] = useState<string[]>([]);
+  const handleTagsChange = (newTags: string[]) => {
+    setTags(newTags);
+  };
+
+  // 12. 코스 상세 설명
+  // courseEditorText :string
+  const [courseEditorText, setCourseEditorText] = useState<string>("");
+
   // 공공데이터
   const [originCourseLists, setOriginCourseLists] = useState<
     TransformedResult[]
@@ -323,39 +339,21 @@ export default function CourseEdit() {
     fetchData();
   }, []);
 
-  // 11. 해시 태그
-  // tags :string[]
-  const [tags, setTags] = useState<string[]>([]);
-  const handleTagsChange = (newTags: string[]) => {
-    setTags(newTags);
-  };
-
-  // 12. 코스 상세 설명
-  // courseEditorText :string
-  const [courseEditorText, setCourseEditorText] = useState<string>("");
-
   useEffect(() => {
     // 페이지 진입 시 맨 위로 스크롤 이동
     window.scrollTo(0, 0);
   }, []);
 
-  // (서버에 전달할) 에디터 이미지
-  const [editorImage, setEditorImage] = useState<string>("");
-
-  // 13. 최종 데이터
-  const data = {
-    myCourseTitle,
-    previewImgUrl,
-    selectedOption,
-    checkedItems,
-    level,
-    totalTimes,
-    selectOriginCourse,
-    totalDistances,
-    lists,
-    tags,
-    courseEditorText,
-  };
+  interface list {
+    id: number;
+    place: string;
+    amenities: Amenities;
+    position: {
+      lat: string;
+      lng: string;
+    };
+    address_name: string;
+  }
 
   interface formdata {
     myCourseTitle: string;
@@ -420,7 +418,9 @@ export default function CourseEdit() {
   const handleSubmit = (data: formdata) => {
     console.log("최종", data);
     handleOpenPopup();
-    uploadImage(data.previewImgUrl).then((url) => addCourse(data, url, user));
+    uploadImage(data.previewImgUrl).then((url) =>
+      addCourse(data, url, user, uuid)
+    );
   };
 
   const onSubmitMyCourse = (data: formdata) => {
@@ -525,13 +525,9 @@ export default function CourseEdit() {
       </div>
       {/* 12. 코스 상세 설명 */}
       <div className="mb-8 px-2">
-        <CourseEditor
-          setCourseEditorText={setCourseEditorText}
-          editorImage={editorImage}
-          setEditorImage={setEditorImage}
-        />
+        <CourseEditor setCourseEditorText={setCourseEditorText} />
       </div>
-      {/* 13. 코스 등록 */}
+      {/* 13. 추가 버튼 */}
       <div className="mb-5 px-2">
         <button
           className="mt-5 w-full rounded-md bg-green py-2 text-white"
