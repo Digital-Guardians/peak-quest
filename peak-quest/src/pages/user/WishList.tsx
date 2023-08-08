@@ -71,7 +71,6 @@ export default function WishList() {
         //   ...data.courses,
         // ]);
         if (data.courses.length === 0) {
-          console.log("나");
           document.body.style.overflow = "hidden";
         }
       })

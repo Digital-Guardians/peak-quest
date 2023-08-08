@@ -75,7 +75,7 @@ export default function MyPage() {
     const fetchMyCourse = async () => {
       const data = await getMyCourse(user);
       setMyourseList(data);
-      console.log("내코스", data);
+      // console.log("내코스", data);
     };
 
     fetchMyCourse();

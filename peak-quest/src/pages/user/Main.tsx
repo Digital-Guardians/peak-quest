@@ -99,9 +99,9 @@ export default function Main() {
     }, 5000);
   }, [user, isPopupShown, badgeStatus, isGetPopUpOpen]);
 
-  console.log("isPopupShown", isPopupShown);
-  console.log("isGetPopUpOpen", isGetPopUpOpen);
-  console.log("badgeStatus", badgeStatus);
+  // console.log("isPopupShown", isPopupShown);
+  // console.log("isGetPopUpOpen", isGetPopUpOpen);
+  // console.log("badgeStatus", badgeStatus);
 
   return (
     <div className="bg-lightGray text-black">

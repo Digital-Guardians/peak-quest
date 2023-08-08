@@ -25,7 +25,6 @@ export const changeKorean = (areaName: string | undefined) => {
 };
 
 export const changeEnglish = (areaName: string | undefined) => {
-  console.log(areaName);
   // 한글 => 영어
   switch (areaName) {
     case "수도권":

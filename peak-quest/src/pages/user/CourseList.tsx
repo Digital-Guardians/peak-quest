@@ -132,7 +132,7 @@ export default function CourseList() {
     const fetchAreaCourseList = async () => {
       const data = await getAreaCourseList(select.areaName);
 
-      console.log("data", data);
+      // console.log("data", data);
 
       setAllCourseList(data as any);
       if (data.length > itemPerPage)

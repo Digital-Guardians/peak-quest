@@ -6,7 +6,12 @@ import { useEffect, useState } from "react";
 import BannerItem from "./BannerItem";
 import { useService } from "../../context/ContextProvider";
 import { IoIosArrowBack } from "react-icons/io";
-import { DragDropContext, Draggable, DropResult, Droppable } from "react-beautiful-dnd";
+import {
+  DragDropContext,
+  Draggable,
+  DropResult,
+  Droppable,
+} from "react-beautiful-dnd";
 import { bannerData } from "../../types/type";
 import { imgUpload } from "../../service/imgUploader";
 import {
@@ -74,7 +79,7 @@ export default function Banner() {
     getBannerList() //
       .then((data) => {
         const banner = Object.keys(data).map((key) => data[key]);
-        console.log(banner);
+        // console.log(banner);
 
         setList(banner);
       });
@@ -83,7 +88,7 @@ export default function Banner() {
   useEffect(() => {
     getBannerItemList() //
       .then((data) => {
-        console.log(data);
+        // console.log(data);
         const dataArray = Object.keys(data).map((key) => data[key]);
         setBanner(dataArray);
       });
@@ -119,11 +124,11 @@ export default function Banner() {
     if (target.dataset.id === "button") {
       event.preventDefault();
       if (target.name === "save") {
-        console.log("이미지");
+        // console.log("이미지");
         imgUpload(selectImg)
           .then((url) => addBannerImage(formData, url))
           .then((res) => setData(res));
-        console.log("업로드 완료");
+        // console.log("업로드 완료");
       } else if (target.name === "delete") {
         deleteBanner(id).then((res: any) => setData(res));
       }
@@ -133,7 +138,7 @@ export default function Banner() {
   const handleImageChange = (event: any) => {
     const { files, name, value } = event.target;
 
-    console.log("change");
+    // console.log("change");
 
     if (name === "file") {
       setSelectImg(files && files[0]);
@@ -148,12 +153,16 @@ export default function Banner() {
 
     if (
       !destination ||
-      (destination.droppableId === source.droppableId && source.index === destination.index)
+      (destination.droppableId === source.droppableId &&
+        source.index === destination.index)
     ) {
       return;
     }
 
-    if (source.droppableId === "bannerItems" && destination.droppableId === "banner") {
+    if (
+      source.droppableId === "bannerItems" &&
+      destination.droppableId === "banner"
+    ) {
       const selectItem = banner.at(source.index); // 없으면 und
       if (selectItem) {
         const add = list.find((item) => item.id === selectItem.id);
@@ -179,7 +188,7 @@ export default function Banner() {
         newList.splice(source.index, 1);
         newList.splice(destination.index, 0, selectItem);
 
-        console.log(newList);
+        // console.log(newList);
         setList(newList);
       } else {
       }
@@ -235,7 +244,11 @@ export default function Banner() {
                       >
                         {list &&
                           list.map((item, i) => (
-                            <Draggable draggableId={item.key} index={i} key={item.key}>
+                            <Draggable
+                              draggableId={item.key}
+                              index={i}
+                              key={item.key}
+                            >
                               {(provided) => (
                                 <div
                                   {...provided.dragHandleProps}
@@ -265,12 +278,18 @@ export default function Banner() {
                 </div>
                 <div className="h-2/3 w-full">
                   <div className="flex text-xl font-bold text-darkGray">
-                    <div className="w-[12%] border-b border-gray pb-[13px] text-center">선택</div>
-                    <div className="w-[15%] border-b border-gray pb-[13px] text-center">이미지</div>
+                    <div className="w-[12%] border-b border-gray pb-[13px] text-center">
+                      선택
+                    </div>
+                    <div className="w-[15%] border-b border-gray pb-[13px] text-center">
+                      이미지
+                    </div>
                     <div className="w-[58%] border-b border-gray pb-[13px] text-center">
                       제목/설명
                     </div>
-                    <div className="w-[15%] border-b border-gray pb-[13px] text-center">관리</div>
+                    <div className="w-[15%] border-b border-gray pb-[13px] text-center">
+                      관리
+                    </div>
                   </div>
                 </div>
                 <Droppable droppableId="bannerItems">
@@ -309,7 +328,11 @@ export default function Banner() {
           </PageLeft>
           {/* 확인하기 648px */}
           <PageRight select={select}>
-            <form data-id="form" className="flex min-w-[648px] flex-col" onClick={handleSubmit}>
+            <form
+              data-id="form"
+              className="flex min-w-[648px] flex-col"
+              onClick={handleSubmit}
+            >
               <div
                 className="relative flex cursor-pointer text-2xl font-bold"
                 onClick={() => {
@@ -317,10 +340,14 @@ export default function Banner() {
                 }}
               >
                 <IoIosArrowBack className="mr-1 mt-[5px] text-[28px]" />
-                <div className="">{bannerInfo.id === "" ? "배너 추가하기" : "베너 관리하기"}</div>
+                <div className="">
+                  {bannerInfo.id === "" ? "배너 추가하기" : "베너 관리하기"}
+                </div>
               </div>
               <div>
-                <div className="mb-1 mt-[42px] text-xl text-darkGray">배너 제목</div>
+                <div className="mb-1 mt-[42px] text-xl text-darkGray">
+                  배너 제목
+                </div>
                 <input
                   data-id="title"
                   className={`h-[60px]  w-full ${
@@ -360,7 +387,11 @@ export default function Banner() {
                 <div
                   className={`mr-[6px] flex justify-center overflow-hidden rounded-[10px] border border-[#D9D9D9] pb-2 pl-4 pt-2 text-lg`}
                 >
-                  <img className="max-h-[200px]" src={url ? url : selectImg} alt="미리보기" />
+                  <img
+                    className="max-h-[200px]"
+                    src={url ? url : selectImg}
+                    alt="미리보기"
+                  />
                 </div>
               </div>
               <div className="relative mt-[28px]">

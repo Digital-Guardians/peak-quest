@@ -64,8 +64,6 @@ export default function Profile() {
   // 유저정보
   const { user, setUser } = useUserContext();
 
-  console.log(user);
-
   // 뱃지
   const [userBadges, setUserBadges] = useState<
     {

@@ -46,8 +46,7 @@ export default function Nearby() {
     onUserStateChanged(setUser);
     const fetchNearourseList = async () => {
       const data = await getCourseList();
-      // console.log(data);
-      // console.log(distance);
+
       if (data.length > 0) {
         data.forEach((el: NearByCourse) => {
           if (location) {

@@ -368,7 +368,7 @@ export async function getAreaCourseList(area: any) {
     return newData;
   });
 
-  console.log(items);
+  // console.log(items);
 
   return items;
 }
@@ -379,7 +379,7 @@ export async function getCourseList() {
   const data = res.val();
 
   const myCourse = Object.values(data);
-  console.log(myCourse);
+  // console.log(myCourse);
 
   const items: any = myCourse.map((item: any) => {
     const newData = {
