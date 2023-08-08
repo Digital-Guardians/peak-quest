@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import createCourse from "../../assets/create-course.png";
+import courseList from "../../assets/course-lists.png";
 import createCourse from "../../assets/course/create-course.png";
 import courseList from "../../assets/course/course-lists.png";
 import { Link } from "react-router-dom";

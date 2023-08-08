@@ -1,0 +1,44 @@
+{
+  "bannerItems": [
+    {
+      "id": "banner-1",
+      "url": "/images/banner/banner1.png",
+      "title": "강릉 바다 일출보기",
+      "tags": "강원도,일출,새해소원",
+      "content": "대한민국의 특별자치도. 서쪽으로 경기도, 남서쪽으로는 충청북도, 남쪽으로 경상북도, 동쪽으로 동해와 맞닿아 있으며, 군사분계선을 통해 북한의 강원도와 접한다. 북한 지역을 포함한 하위 행정구역은 7시 16군이고, 북한 지역을 제외한 행정구역은 7시 11군이다. 2023년 6월 11일에 강원도에서 강원특별자치도가 됐다.",
+      "link": "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&ie=utf8&query=강릉바다"
+    },
+    {
+      "id": "banner-2",
+      "url": "/images/banner/banner2.png",
+      "title": "물길을 따라 비룡폭포로",
+      "tags": "설악산,폭포,동해",
+      "content": "대한민국의 특별자치도. 서쪽으로 경기도, 남서쪽으로는 충청북도, 남쪽으로 경상북도, 동쪽으로 동해와 맞닿아 있으며, 군사분계선을 통해 북한의 강원도와 접한다. 북한 지역을 포함한 하위 행정구역은 7시 16군이고, 북한 지역을 제외한 행정구역은 7시 11군이다. 2023년 6월 11일에 강원도에서 강원특별자치도가 됐다.",
+      "link": "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&ie=utf8&query=비룡폭포"
+    },
+    {
+      "id": "banner-3",
+      "url": "/images/banner/banner3.png",
+      "title": "단풍과 낙엽의 길, 돌오름길",
+      "tags": "제주도,한라산,단풍",
+      "content": "대한민국의 특별자치도. 서쪽으로 경기도, 남서쪽으로는 충청북도, 남쪽으로 경상북도, 동쪽으로 동해와 맞닿아 있으며, 군사분계선을 통해 북한의 강원도와 접한다. 북한 지역을 포함한 하위 행정구역은 7시 16군이고, 북한 지역을 제외한 행정구역은 7시 11군이다. 2023년 6월 11일에 강원도에서 강원특별자치도가 됐다.",
+      "link": "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&ie=utf8&query=돌오름길"
+    },
+    {
+      "id": "banner-4",
+      "url": "/images/banner/banner4.png",
+      "title": "한국의 은하수, 굴업도",
+      "tags": "인천,백패킹,갈라파고스",
+      "content": "대한민국의 특별자치도. 서쪽으로 경기도, 남서쪽으로는 충청북도, 남쪽으로 경상북도, 동쪽으로 동해와 맞닿아 있으며, 군사분계선을 통해 북한의 강원도와 접한다. 북한 지역을 포함한 하위 행정구역은 7시 16군이고, 북한 지역을 제외한 행정구역은 7시 11군이다. 2023년 6월 11일에 강원도에서 강원특별자치도가 됐다.",
+      "link": "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&ie=utf8&query=굴업도"
+    },
+    {
+      "id": "banner-5",
+      "url": "/images/banner/banner5.png",
+      "title": "초보자도 갈 수 있는 소백산",
+      "tags": "충북,봄엔철쭉,겨울엔눈꽃",
+      "content": "대한민국의 특별자치도. 서쪽으로 경기도, 남서쪽으로는 충청북도, 남쪽으로 경상북도, 동쪽으로 동해와 맞닿아 있으며, 군사분계선을 통해 북한의 강원도와 접한다. 북한 지역을 포함한 하위 행정구역은 7시 16군이고, 북한 지역을 제외한 행정구역은 7시 11군이다. 2023년 6월 11일에 강원도에서 강원특별자치도가 됐다.",
+      "link": "https://search.naver.com/search.naver?where=nexearch&sm=top_hty&ie=utf8&query=소백산"
+    }
+  ]
+}

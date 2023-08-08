@@ -1,14 +1,30 @@
 export interface bannerData {
   id: string;
-  img_url: string;
+  url: string;
   link: string;
-  tags: string;
+  tags?: string;
   content: string;
   title: string;
+  tag: string;
+  date1: string;
+  date2: string;
+  img_url: string;
 }
 
 export interface reportData {
   id: number;
+  name: string;
+  state: boolean;
+  type: string;
+  date: string;
+  content: string;
+  link: string;
+  delete?: string;
+  uid?: string;
+}
+
+export interface userData {
+  name: string;
   user_name: string;
   state: string;
   report_type: string;
@@ -24,14 +40,15 @@ export interface userData {
   email: string;
   state: string;
   ban: {
-    ban_type: string | null;
-    ban_content: string | null;
-    ban_start_date: string | null;
-    ban_end_date: string | null;
+    ban_type: string;
+    ban_content: string;
+    ban_start_date: string;
+    ban_end_date: string;
   };
   delete: {
     delete_state: string;
     delete_content: string;
-    deleted_at: string | null;
+    deleted_at: string;
+    deleted_at: string;
   };
 }
