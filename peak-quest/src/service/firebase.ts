@@ -265,8 +265,8 @@ export async function getCourseDetail(id: any) {
     thumbnail: item.previewImgUrl,
     recommendations: item.recommendations,
     position: {
-      lat: item.selectOriginCourse.position[0].lat,
-      lng: item.selectOriginCourse.position[0].lng,
+      lat: item.lists[0].position.lat,
+      lng: item.lists[0].position.lng,
     },
   };
 
@@ -331,8 +331,8 @@ export async function getMyCourse(user: any) {
       recommendations: item.recommendations,
       area: item.selectedOption?.label,
       position: {
-        lat: item.selectOriginCourse.position[0].lat,
-        lng: item.selectOriginCourse.position[0].lng,
+        lat: item.lists[0].position.lat,
+        lng: item.lists[0].position.lng,
       },
     };
     newArray.push(newData);
@@ -361,8 +361,8 @@ export async function getAreaCourseList(area: any) {
       area: item.selectedOption?.label,
       option: item.checkedItems,
       position: {
-        lat: item.selectOriginCourse.position[0].lat,
-        lng: item.selectOriginCourse.position[0].lng,
+        lat: item.lists[0].position.lat,
+        lng: item.lists[0].position.lng,
       },
     };
     return newData;
@@ -379,6 +379,7 @@ export async function getCourseList() {
   const data = res.val();
 
   const myCourse = Object.values(data);
+  console.log(myCourse);
 
   const items: any = myCourse.map((item: any) => {
     const newData = {
@@ -391,8 +392,8 @@ export async function getCourseList() {
       area: item.selectedOption?.label,
       option: item.checkedItems,
       position: {
-        lat: item.selectOriginCourse.position[0].lat,
-        lng: item.selectOriginCourse.position[0].lng,
+        lat: item.lists[0].position.lat,
+        lng: item.lists[0].position.lng,
       },
     };
     return newData;

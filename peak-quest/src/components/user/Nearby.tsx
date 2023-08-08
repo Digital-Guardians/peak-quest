@@ -73,37 +73,6 @@ export default function Nearby() {
       }
     };
     fetchNearourseList();
-    // // 초기화
-    // setNearCourseList([]);
-    // if (location) {
-    //   // 코스 불러와서 거리 계산하고 해당 값만 저장
-    //   fetch("/mock/user/nearbyCourse.json")
-    //     .then((res) => res.json())
-    //     .then((data) => {
-    //       // console.log(distance);
-    //       if (data.courses.length > 0) {
-    //         data.courses.forEach((el: NearByCourse) => {
-    //           // 계산 된 거리 값
-    //           let distanceFromLocation = calcDistance(
-    //             el.position.lat,
-    //             el.position.lng,
-    //             location.lat,
-    //             location.lng
-    //           );
-    //           // 0 ~ 10, 10.1 ~30, 30.1 ~50
-    //           // 20씩 차이나서 .. -20
-    //           if (
-    //             distanceFromLocation > 0 &&
-    //             distanceFromLocation > distance - 20 &&
-    //             distanceFromLocation <= distance
-    //           ) {
-    //             // 코스 el 저장
-    //             setNearCourseList((prevCourseList) => [...prevCourseList, el]);
-    //           }
-    //         });
-    //       }
-    //     });
-    // }
   };
 
   useEffect(() => {
