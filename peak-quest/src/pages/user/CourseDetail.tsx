@@ -14,7 +14,11 @@ import { BsShieldFillExclamation } from "react-icons/bs";
 import CourseInfo from "../../components/user/courseDetail/CourseInfo";
 import AlreadyModal from "../../components/user/courseDetail/AlreadyModal";
 import ReportModal from "../../components/user/courseDetail/ReportModal";
-import { getCourseDetail, onUserStateChanged } from "../../service/firebase";
+import {
+  courseLikes,
+  getCourseDetail,
+  onUserStateChanged,
+} from "../../service/firebase";
 import { useUserContext } from "../../context/userContext";
 
 // 코스 타입 정의
@@ -240,6 +244,7 @@ export default function CourseDetail() {
               }`}
                 onClick={() => {
                   setIsRecommend(!isRecommend);
+                  courseLikes(course.id);
                   // api 호출
                   console.log("recommend", course.id);
                 }}

@@ -108,8 +108,8 @@ export default function CourseInfo({
         </div>
       </div>
       {/* 코스설명 */}
-      <div className="my-10 text-xl font-bold text-black sm:text-lg">
-        <p className="mb-8 border-b-[1px] border-gray pb-3 sm:mb-5">
+      <div className="my-10  text-black">
+        <p className="mb-8 border-b-[1px] border-gray pb-3 text-xl font-bold sm:mb-5 sm:text-lg">
           코스 설명
         </p>
         <div dangerouslySetInnerHTML={{ __html: courseEditorText }}></div>

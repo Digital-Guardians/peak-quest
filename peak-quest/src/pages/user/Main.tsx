@@ -8,6 +8,7 @@ import Nearby from "../../components/user/Nearby";
 import Header from "../../components/Header";
 import Login from "../../components/Login";
 import { useUserContext } from "../../context/userContext";
+import { getStartBadge } from "../../service/firebase";
 
 export default function Main() {
   const { user } = useUserContext();
@@ -21,6 +22,16 @@ export default function Main() {
   //     }, 2000);
   //   }
   // }, [user]);
+
+  useEffect(() => {
+    const badge = setInterval(() => {
+      getStartBadge(user);
+    }, 1000);
+
+    setTimeout(() => {
+      clearInterval(badge);
+    }, 5000);
+  }, [user]);
 
   return (
     <div className="bg-lightGray text-black">
@@ -49,6 +60,7 @@ export default function Main() {
       </div>
       {/* rankSection */}
       <div className="m-auto rounded-xl bg-white">
+        <RankSection />
         {/* <RankSection /> */}
         <EventBanner />
         {/* nearbySection */}
