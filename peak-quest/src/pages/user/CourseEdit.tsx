@@ -31,13 +31,12 @@ import { useNavigate } from "react-router-dom";
 import { TransformedResult } from "../../types/forestTypes";
 import OriginCourseLists from "../../components/user/course/OriginCourseLists";
 import { addCourse, onUserStateChanged } from "../../service/firebase";
-// import { uploadImage } from "../../service/imageUpLoader";
 import { useUserContext } from "../../context/userContext";
 import { IoClose } from "react-icons/io5";
 import User from "../admin/User";
 import { v4 as uuidv4 } from "uuid";
 import CourseEditor from "../../components/user/course/CourseEditor";
-import { uploadImage } from "../../service/imageUpLoader";
+import { uploadImage } from "../../service/imageUploader";
 
 // **타입 정의**
 // 7. 소요 시간
@@ -244,7 +243,10 @@ export default function CourseEdit() {
     setLists(updatedLists);
   };
   // 편의시설 선택
-  const handleToggleAmenity = (itemId: number, amenityType: keyof Amenities) => {
+  const handleToggleAmenity = (
+    itemId: number,
+    amenityType: keyof Amenities
+  ) => {
     const updatedLists = lists.map((list) => {
       if (list.id === itemId) {
         return {
@@ -274,12 +276,15 @@ export default function CourseEdit() {
   const [courseEditorText, setCourseEditorText] = useState<string>("");
 
   // 공공데이터
-  const [originCourseLists, setOriginCourseLists] = useState<TransformedResult[]>([]);
+  const [originCourseLists, setOriginCourseLists] = useState<
+    TransformedResult[]
+  >([]);
 
-  const [selectOriginCourse, setSelectOriginCourse] = useState<TransformedResult>({
-    frtrlNm: "",
-    position: [{ lat: 0, lng: 0 }],
-  });
+  const [selectOriginCourse, setSelectOriginCourse] =
+    useState<TransformedResult>({
+      frtrlNm: "",
+      position: [{ lat: 0, lng: 0 }],
+    });
 
   // 13. 최종 데이터
   const data = {
@@ -412,7 +417,9 @@ export default function CourseEdit() {
   const handleSubmit = (data: formdata) => {
     console.log("최종", data);
     handleOpenPopup();
-    uploadImage(data.previewImgUrl).then((url) => addCourse(data, url, user, uuid));
+    uploadImage(data.previewImgUrl).then((url) =>
+      addCourse(data, url, user, uuid)
+    );
   };
 
   const onSubmitMyCourse = (data: formdata) => {
@@ -466,7 +473,10 @@ export default function CourseEdit() {
       </div>
       {/* 5. 코스 분류 */}
       <div className="mb-8 px-3">
-        <CourseCategory checkedItems={checkedItems} handleCheckboxChange={handleCheckboxChange} />
+        <CourseCategory
+          checkedItems={checkedItems}
+          handleCheckboxChange={handleCheckboxChange}
+        />
       </div>
       {/* 6. 난이도 */}
       <div className="mb-8 px-3">
@@ -474,7 +484,10 @@ export default function CourseEdit() {
       </div>
       {/* 7. 소요 시간 */}
       <div className="mb-8 px-3">
-        <CourseTotalTimes totalTimes={totalTimes} handleTotalTimes={handleTotalTimes} />
+        <CourseTotalTimes
+          totalTimes={totalTimes}
+          handleTotalTimes={handleTotalTimes}
+        />
       </div>
       {/* 8. 총 거리 */}
       <div className="mb-8 px-3">
@@ -526,7 +539,10 @@ export default function CourseEdit() {
       {/* 팝업 */}
       {isPopupOpen && (
         <div className="fixed inset-0 z-30 flex items-center justify-center">
-          <div className="absolute inset-0 bg-black opacity-70" onClick={handleClosePopup} />
+          <div
+            className="absolute inset-0 bg-black opacity-70"
+            onClick={handleClosePopup}
+          />
           <div className="relative flex items-center justify-center rounded-lg bg-white p-5 text-center text-black shadow-3xl sm:p-2">
             <div className="p-2">
               {/* 팝업 내용 */}
@@ -557,7 +573,10 @@ export default function CourseEdit() {
               </div>
             </div>
             {/* 닫기 버튼 */}
-            <button className="absolute right-2 top-2 text-darkGray" onClick={handleClosePopup}>
+            <button
+              className="absolute right-2 top-2 text-darkGray"
+              onClick={handleClosePopup}
+            >
               <IoClose size={20} />
             </button>
           </div>
