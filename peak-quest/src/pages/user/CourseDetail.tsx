@@ -14,11 +14,7 @@ import { BsShieldFillExclamation } from "react-icons/bs";
 import CourseInfo from "../../components/user/courseDetail/CourseInfo";
 import AlreadyModal from "../../components/user/courseDetail/AlreadyModal";
 import ReportModal from "../../components/user/courseDetail/ReportModal";
-import {
-  courseLikes,
-  getCourseDetail,
-  onUserStateChanged,
-} from "../../service/firebase";
+import { courseLikes, getCourseDetail, onUserStateChanged } from "../../service/firebase";
 import { useUserContext } from "../../context/userContext";
 
 // 코스 타입 정의
@@ -88,9 +84,9 @@ export default function CourseDetail() {
           // 최근 본 코스 추가
           saveRecentCourse({
             id: parseInt(courseId),
-            title: data.course.title,
-            thumbnail: data.course.thumbnail,
-            area: data.course.area,
+            title: data.title,
+            thumbnail: data.thumbnail,
+            area: data.area,
           });
         }
       }
@@ -152,11 +148,7 @@ export default function CourseDetail() {
           </div>
           {/* 썸네일 */}
           <div className="relative h-[390px] w-full max-w-[430px] overflow-hidden text-white sm:h-[380px]">
-            <img
-              className="h-full w-full"
-              src={`${course.thumbnail}`}
-              alt={`${course.title}`}
-            />
+            <img className="h-full w-full" src={`${course.thumbnail}`} alt={`${course.title}`} />
             {/* 그라데이션 */}
             <div className="absolute left-0 top-0 h-full w-full bg-gradient-to-b from-black/60 to-black/0" />
             {/* 코스 필터 */}
@@ -237,11 +229,7 @@ export default function CourseDetail() {
             <div className="my-5 flex h-[60px] w-full items-center justify-evenly text-lg font-bold sm:h-[50px] sm:text-md">
               <div
                 className={`flex h-full w-[45%] cursor-pointer flex-col items-center justify-center rounded-lg 
-              ${
-                isRecommend
-                  ? "bg-lightGreen text-green"
-                  : "bg-[#f1f1f1] text-darkGray"
-              }`}
+              ${isRecommend ? "bg-lightGreen text-green" : "bg-[#f1f1f1] text-darkGray"}`}
                 onClick={() => {
                   setIsRecommend(!isRecommend);
                   courseLikes(course.id);
