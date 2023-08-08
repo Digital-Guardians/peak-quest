@@ -2,11 +2,11 @@
   "course_ranking": [
     {
       "user_id": "asd123",
-      "nickname": "천둥치는 날의 정현님",
-      "title": "북한산 정복하기",
+      "nickname": "트래킹 고수 진희",
+      "title": "물길 따라 비룡폭포",
       "view": 4313,
       "likes": 394,
-      "img_url": "./images/rank/profile.png",
+      "img_url": "./images/banner/banner2.png",
       "tags": {
         "toilet": true,
         "restaurant": true,
@@ -39,7 +39,7 @@
       "img_url": "./images/rank/profile.png",
       "tags": {
         "toilet": true,
-        "restaurant": true,
+        "restaurant": false,
         "service": true
       },
       "created_at": "2023-03-02T14:30:00Z",
@@ -47,11 +47,11 @@
     },
     {
       "user_id": "asd123",
-      "nickname": "천둥치는 날의 정현님",
-      "title": "북한산 정복하기",
+      "nickname": "자연을담다",
+      "title": "초보자의 소백산!",
       "view": 4213,
       "likes": 294,
-      "img_url": "./images/rank/profile.png",
+      "img_url": "./images/banner/banner5.png",
       "tags": {
         "toilet": false,
         "restaurant": true,

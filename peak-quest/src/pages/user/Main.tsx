@@ -44,11 +44,7 @@ export default function Main() {
               <br />
               코스 만들기
             </p>
-            <img
-              className="shadow-3xl"
-              src={createCourse}
-              alt="create-course"
-            />
+            <img className="shadow-3xl" src={createCourse} alt="create-course" />
           </div>
         </Link>
         <Link to={"/area"}>
@@ -64,6 +60,7 @@ export default function Main() {
       </div>
       {/* rankSection */}
       <div className="m-auto rounded-xl bg-white">
+        <RankSection />
         {/* <RankSection /> */}
         <EventBanner />
         {/* nearbySection */}

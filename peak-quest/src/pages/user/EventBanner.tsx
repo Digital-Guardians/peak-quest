@@ -4,31 +4,41 @@ import Slider from "react-slick";
 import BannerItem from "./BannerItem";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { useEffect, useState } from "react";
+import { getMainBanner } from "../../service/firebase";
 
 export default function EventBanner() {
   const [banner, setBanner] = useState([]);
 
   useEffect(() => {
-    fetch("./mock/banner.json")
-      .then((res) => res.json())
-      .then((data) => {
-        setBanner(data.banner);
-      });
-  }, []);
+    getMainBanner().then((res) => {
+      const data = res;
 
+      const newData: any = data.map((item) => ({
+        id: item.id,
+        img_url: item.url,
+        title: item.title,
+        tags: item.tag,
+        link: item.link,
+      }));
+
+      console.log(newData);
+
+      setBanner(newData);
+    });
+  }, []);
   function PrevArrow(props: any) {
     return (
       <div
-        className="absolute top-1/2 left-[10px] 
-        translate-y-[-50%]
-        w-10 h-10 rounded-full
-        bg-black bg-opacity-30 text-center
-        text-md font-bold
-        z-10"
+        className="absolute left-[10px] top-1/2 
+        z-10
+        h-10 w-10 translate-y-[-50%]
+        rounded-full bg-black bg-opacity-30
+        text-center text-md
+        font-bold"
         onClick={props.onClick}
       >
-        <div className="flex justify-center translate-y-1">
-          <IoIosArrowBack className="relative text-[#D9D9D9] text-3xl left-[-2px]" />
+        <div className="flex translate-y-1 justify-center">
+          <IoIosArrowBack className="relative left-[-2px] text-3xl text-[#D9D9D9]" />
         </div>
       </div>
     );
@@ -37,16 +47,16 @@ export default function EventBanner() {
   function NextArrow(props: any) {
     return (
       <div
-        className="absolute top-1/2 right-[10px]
-        translate-y-[-50%]
-          w-10 h-10 rounded-full
-      bg-black bg-opacity-30 text-center
-        text-md font-bold
-        z-10"
+        className="absolute right-[10px] top-1/2
+        z-10
+          h-10 w-10 translate-y-[-50%]
+      rounded-full bg-black bg-opacity-30
+        text-center text-md
+        font-bold"
         onClick={props.onClick}
       >
-        <div className="relative flex justify-center translate-y-1">
-          <IoIosArrowForward className="relative text-[#D9D9D9] text-3xl right-[-2px]" />
+        <div className="relative flex translate-y-1 justify-center">
+          <IoIosArrowForward className="relative right-[-2px] text-3xl text-[#D9D9D9]" />
         </div>
       </div>
     );

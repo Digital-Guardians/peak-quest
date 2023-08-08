@@ -201,9 +201,7 @@ export async function addCourse(formData: any, img: any, user: any, uuid: any) {
   set(ref(database, `course/${uuid}`), newData);
   set(ref(database, "post"), newPost);
 
-  const userData = await get(ref(database, `userTest/${user.uid}`)).then(
-    (res) => res.val()
-  );
+  const userData = await get(ref(database, `userTest/${user.uid}`)).then((res) => res.val());
   //유저의 게시글 수
   const post = userData.post;
   const newUserData = {
@@ -216,9 +214,7 @@ export async function addCourse(formData: any, img: any, user: any, uuid: any) {
 
 // 최초 게시글 작성시 획득하는 뱃지
 export async function getStartBadge(user: any) {
-  const userData = await get(ref(database, `userTest/${user.uid}`)).then(
-    (res) => res.val()
-  );
+  const userData = await get(ref(database, `userTest/${user.uid}`)).then((res) => res.val());
   if (userData.post !== 1) {
     return;
   } else if (userData.badges.start.hasBadge === "N") {
@@ -314,9 +310,7 @@ export async function getMyCourse(user: any) {
   // const myCourse = Object.values(data).filter(
   //   (course: any) => course.uid === "XyTgG5IsxfXMMrl1u3FdIIivoe22"
   // );
-  const myCourse = Object.values(data).filter(
-    (course: any) => course.uid === user.uid
-  );
+  const myCourse = Object.values(data).filter((course: any) => course.uid === user.uid);
 
   const newArray: any = [];
 
@@ -345,9 +339,7 @@ export async function getAreaCourseList(area: any) {
   const res = await get(ref(database, "course"));
   const data = res.val();
 
-  const myCourse = Object.values(data).filter(
-    (course: any) => course.area === changeKorean(area)
-  );
+  const myCourse = Object.values(data).filter((course: any) => course.area === changeKorean(area));
 
   const items: any = myCourse.map((item: any) => {
     const newData = {
@@ -396,10 +388,9 @@ export async function getCourseList() {
     };
     return newData;
   });
-  
+
   return items;
 }
-
 
 // export function getBannerList() {
 //   return get(ref(database, "banner")).then((res) => res.val());
@@ -465,9 +456,7 @@ export function searchReportUser(userName: string) {
   get(ref(database, "report")) //
     .then((res) => {
       const data = res.val();
-      return Object.values(data).filter((user: any) =>
-        user.name.includes(userName)
-      );
+      return Object.values(data).filter((user: any) => user.name.includes(userName));
     });
 }
 
@@ -535,9 +524,7 @@ export function getDeleteUser() {
   return get(ref(database, "users")) //
     .then((res) => {
       const data = res.val();
-      return Object.values(data).filter(
-        (user: any) => user.delete.delete_state === "N"
-      );
+      return Object.values(data).filter((user: any) => user.delete.delete_state === "N");
     });
 }
 
@@ -545,9 +532,7 @@ export function searchUser(userName: string) {
   return get(ref(database, "users")) //
     .then((res) => {
       const data = res.val();
-      return Object.values(data).filter((user: any) =>
-        user.name.includes(userName)
-      );
+      return Object.values(data).filter((user: any) => user.name.includes(userName));
     });
 }
 
@@ -568,11 +553,7 @@ export function userSuspend(
           user.state = "ban";
           user.ban.ban_type = banType;
           user.ban.ban_content = content;
-          if (
-            banType === "temporary" &&
-            startDate !== undefined &&
-            endDate !== undefined
-          ) {
+          if (banType === "temporary" && startDate !== undefined && endDate !== undefined) {
             user.ban.ban_start_date = startDate;
             user.ban.ban_end_date = endDate;
           } else if (banType === "permanent") {
@@ -625,19 +606,19 @@ export function userUnsuspend(userName: string) {
 //banner
 
 export async function getMainBanner() {
-  const bannerList = Object.values(await getBannerList());
-  const bannerItemList = Object.values(await getBannerItemList());
+  const bannerList: any = Object.values(await getBannerList());
+  const bannerItemList: any = Object.values(await getBannerItemList());
 
   const bannerArr: { [key: number]: any } = {};
   const bannerItemArr: { [key: number]: any } = {};
 
-  // for (const item of bannerList) {
-  //   bannerArr[item.id] = item;
-  // }
+  for (const item of bannerList) {
+    bannerArr[item.id] = item;
+  }
 
-  // for (const item of bannerItemList) {
-  //   bannerItemArr[item.id] = item;
-  // }
+  for (const item of bannerItemList) {
+    bannerItemArr[item.id] = item;
+  }
 
   const newData = [];
   for (const id in bannerArr) {
