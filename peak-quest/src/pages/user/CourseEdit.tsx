@@ -34,8 +34,7 @@ import { uploadImage } from "../../service/imageUploader";
 import { addCourse } from "../../service/firebase";
 import { useUserContext } from "../../context/userContext";
 import { IoClose } from "react-icons/io5";
-import { addCourse, onUserStateChanged } from "../../service/firebase";
-
+import User from "../admin/User";
 
 // **타입 정의**
 // 7. 소요 시간
@@ -70,7 +69,7 @@ export default function CourseEdit() {
   const { user, setUser } = useUserContext();
   // 0.페이지 이동을 위함
   const navigate = useNavigate();
-  const { user } = useUserContext();
+  // const { user } = useUserContext();
 
   // 2. 코스 제목
   // myCourseTitle :string
@@ -272,6 +271,32 @@ export default function CourseEdit() {
       position: [{ lat: 0, lng: 0 }],
     });
 
+  // 13. 최종 데이터
+  const data = {
+    myCourseTitle,
+    previewImgUrl,
+    selectedOption,
+    checkedItems,
+    level,
+    totalTimes,
+    selectOriginCourse,
+    totalDistances,
+    lists,
+    tags,
+    courseEditorText,
+  };
+
+  // console.log("myCourseTitle", myCourseTitle);
+  // console.log("previewImgUrl", previewImgUrl);
+  // console.log("selectedOption", selectedOption);
+  // console.log("checkedItems", checkedItems);
+  // console.log("level", level);
+  // console.log("totalTimes", totalTimes);
+  // console.log("totalDistances", totalDistances);
+  // console.log("lists", lists);
+  // console.log("tags", tags);
+  // console.log("courseEditorText", courseEditorText);
+
   const selectedOriginCourse = (selectOrigin: TransformedResult) => {
     setSelectOriginCourse(selectOrigin);
   };
@@ -352,6 +377,35 @@ export default function CourseEdit() {
     courseEditorText: string;
   }
 
+  // const defaultFormData: formdata = {
+  //   myCourseTitle: "",
+  //   previewImgUrl: "",
+  //   selectedOption: "",
+  //   checkedItems: [""],
+  //   level: 0,
+  //   totalTimes: {
+  //     hours: "",
+  //     minutes: "",
+  //   },
+  //   totalDistances: "",
+  //   selectOriginCourse: {
+  //     value: "",
+  //     label: "",
+  //   },
+  //   lists: [],
+  //   tags: [""],
+  //   courseEditorText: "",
+  // };
+
+  // const [formData, setFormData] = useState<formdata>(defaultFormData);
+
+  // function handleSubmit(data: formdata) {
+  //   uploadImage(data.previewImgUrl) //
+  //     .then((url) => {
+  //       addCourse(data, url, user);
+  //     });
+  // }
+
   // 최종 확인 팝업
   const [isPopupOpen, setIsPopupOpen] = useState(false);
 
@@ -366,9 +420,7 @@ export default function CourseEdit() {
   const handleSubmit = (data: formdata) => {
     console.log("최종", data);
     handleOpenPopup();
-    uploadImage(data.previewImgUrl).then((url) =>
-      addCourse(data, url, user.uid)
-    );
+    uploadImage(data.previewImgUrl).then((url) => addCourse(data, url, user));
   };
 
   const onSubmitMyCourse = (data: formdata) => {
@@ -376,6 +428,7 @@ export default function CourseEdit() {
     handleOpenPopup();
     navigate("/");
   };
+
   return (
     <div>
       {/* 0. 메뉴탭 */}
@@ -482,6 +535,7 @@ export default function CourseEdit() {
       <div className="mb-5 px-2">
         <button
           className="mt-5 w-full rounded-md bg-green py-2 text-white"
+          // onClick={() => handleSubmit(data)}
           onClick={handleOpenPopup}
         >
           코스 등록하기

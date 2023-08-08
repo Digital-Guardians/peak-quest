@@ -8,7 +8,7 @@ import {
   signOut,
   onAuthStateChanged,
 } from "firebase/auth";
-import { banner, userData } from "../types/type";
+import { userData } from "../types/type";
 
 // import { getAnalytics } from "firebase/analytics";
 
@@ -81,6 +81,7 @@ export async function userLogin() {
         badges,
         role: "user",
         state: "user",
+        post: "",
       };
       console.log("추가합니다");
 
@@ -99,7 +100,7 @@ export function userLogOut() {
 }
 
 export function onUserStateChanged(callback: any) {
-  onAuthStateChanged(auth, (user) => {
+  onAuthStateChanged(auth, (user: any) => {
     const updatedUser = user ? user : null;
     // console.log(updatedUser);
     callback(updatedUser);
@@ -126,7 +127,7 @@ export function adminLogOut() {
 }
 
 export function onAdminStateChanged(callback: any) {
-  onAuthStateChanged(auth, async (user) => {
+  onAuthStateChanged(auth, async (user: any) => {
     const updatedUser = user ? await adminUser(user) : null;
     callback(updatedUser);
   });
@@ -179,7 +180,7 @@ export async function getBannerItemList() {
 }
 
 //게시글 작성
-export async function addCourse(formData, img, uid) {
+export async function addCourse(formData: any, img: any, user: any) {
   const res = await get(ref(database, "course"));
   const data = res.val();
   if (!data) {
@@ -190,13 +191,17 @@ export async function addCourse(formData, img, uid) {
   const id = await get(ref(database, "post"));
   const newPost = id.val() + 1;
 
+  const item = { ...formData };
+
   const newData = {
-    ...formData,
+    ...item,
     previewImgUrl: img,
     id: newPost,
-    uid,
+    uid: user.uid,
     views: 0,
     recommendations: 0,
+    writer: user.displayName,
+    area: item.selectedOption?.label,
   };
 
   set(ref(database, `course/${uuid}`), newData);
@@ -204,12 +209,69 @@ export async function addCourse(formData, img, uid) {
   return newData;
 }
 
-export async function getCourseDetail(id) {
+//코스 디테일
+export async function getCourseDetail(id: any) {
   const res = await get(ref(database, "course"));
   const data = res.val();
-  const detail = Object.values(data).filter((course) => course.id === id);
+  const detail = Object.values(data).filter((course: any) => course.id === id);
+  const item: any = detail[0];
 
-  return detail;
+  const newData = {
+    ...item,
+    title: item.myCourseTitle,
+    area: item.selectedOption?.label,
+    thumbnail: item.previewImgUrl,
+    recommendations: item.recommendations,
+    position: {
+      lat: item.selectOriginCourse.position[0].lat,
+      lng: item.selectOriginCourse.position[0].lng,
+    },
+  };
+
+  return newData;
+}
+
+// 내 코스 보기(마이페이지용)
+
+export async function getMyCourse(user: any) {
+  const res = await get(ref(database, "course"));
+  const data = res.val();
+  const myCourse = Object.values(data).filter(
+    (course: any) => course.uid === user.uid
+  );
+
+  const newArray: any = [];
+
+  myCourse.map((item: any) => {
+    const newData = {
+      id: item.id,
+      title: item.myCourseTitle,
+      writer: user.displayName,
+      thumbnail: item.previewImgUrl,
+      views: item.views,
+      recommendations: item.recommendations,
+      area: item.selectedOption?.label,
+      position: {
+        lat: item.selectOriginCourse.position[0].lat,
+        lng: item.selectOriginCourse.position[0].lng,
+      },
+    };
+    newArray.push(newData);
+  });
+
+  return newArray;
+}
+
+//지역별 코스 가져오기
+export async function getAreaCourseList(area: any) {
+  const res = await get(ref(database, "course"));
+  const data = res.val();
+
+  const myCourse = Object.values(data).filter(
+    (course: any) => course.area === area
+  );
+
+  return myCourse;
 }
 
 // export function getBannerList() {
@@ -234,7 +296,7 @@ export function addBanner(bannerList: any) {
 export function deleteBanner(id: string) {
   return get(ref(database, "bannerItem")).then((res) => {
     const data = Object.values(res.val());
-    const newData = data.filter((user) => user.id !== id);
+    const newData = data.filter((user: any) => user.id !== id);
     set(ref(database, "bannerItem"), newData);
     return newData;
   });
@@ -244,7 +306,7 @@ export function itemDelete(url: string) {
   return get(ref(database, "banner")).then((res) => {
     console.log(url);
     const data = Object.values(res.val());
-    const newData = data.filter((item) => item.url !== url);
+    const newData = data.filter((item: any) => item.url !== url);
     set(ref(database, "banner"), newData);
     return newData;
   });
@@ -262,14 +324,14 @@ export function getReportStateTrue() {
   return get(ref(database, "report")) //
     .then((res) => {
       const data = res.val();
-      return Object.values(data).filter((user) => user.state === true);
+      return Object.values(data).filter((user: any) => user.state === true);
     });
 }
 export function getReportStateFalse() {
   return get(ref(database, "report")) //
     .then((res) => {
       const data = res.val();
-      return Object.values(data).filter((user) => user.state === false);
+      return Object.values(data).filter((user: any) => user.state === false);
     });
 }
 
@@ -277,14 +339,16 @@ export function searchReportUser(userName: string) {
   get(ref(database, "report")) //
     .then((res) => {
       const data = res.val();
-      return Object.values(data).filter((user) => user.name.includes(userName));
+      return Object.values(data).filter((user: any) =>
+        user.name.includes(userName)
+      );
     });
 }
 
 export function reportChecked(userName: string) {
   get(ref(database, "report")).then((res) => {
     const data = res.val();
-    Object.values(data).forEach((user) => {
+    Object.values(data).forEach((user: any) => {
       if (user.name === userName) {
         user.state = true;
         alert("변경되었습니다.");
@@ -298,7 +362,7 @@ export function reportChecked(userName: string) {
 export function reportDelete(id: number) {
   return get(ref(database, "report")).then((res) => {
     const data = res.val();
-    const newData = Object.values(data).filter((user) => user.id !== id);
+    const newData = Object.values(data).filter((user: any) => user.id !== id);
     console.log(newData);
 
     const message = confirm("해당 신고내용을 삭제하시겠습니까?");
@@ -331,7 +395,7 @@ export function getUserList() {
     .then((res) => {
       const data = res.val();
       return Object.values(data).filter(
-        (user) => user.state === "user" && user.delete.delete_state === "N"
+        (user: any) => user.state === "user" && user.delete.delete_state === "N"
       );
     });
 }
@@ -341,7 +405,7 @@ export function getSuspendedUser() {
   return get(ref(database, "users")) //
     .then((res) => {
       const data = res.val();
-      return Object.values(data).filter((user) => user.state === "ban");
+      return Object.values(data).filter((user: any) => user.state === "ban");
     });
 }
 //탈퇴 유저
@@ -350,7 +414,7 @@ export function getDeleteUser() {
     .then((res) => {
       const data = res.val();
       return Object.values(data).filter(
-        (user) => user.delete.delete_state === "N"
+        (user: any) => user.delete.delete_state === "N"
       );
     });
 }
@@ -359,7 +423,9 @@ export function searchUser(userName: string) {
   return get(ref(database, "users")) //
     .then((res) => {
       const data = res.val();
-      return Object.values(data).filter((user) => user.name.includes(userName));
+      return Object.values(data).filter((user: any) =>
+        user.name.includes(userName)
+      );
     });
 }
 
@@ -377,7 +443,7 @@ export function userSuspend(
     .then((res) => {
       const data = res.val();
       const newData = Object.values(data) as userData[];
-      newData.forEach((user) => {
+      newData.forEach((user: any) => {
         if (user.name === userName) {
           user.state = "ban";
           user.ban.ban_type = banType;
@@ -415,7 +481,7 @@ export function userUnsuspend(userName: string) {
     .then((res) => {
       const data = res.val();
       const newData = Object.values(data) as userData[];
-      newData.forEach((user) => {
+      newData.forEach((user: any) => {
         if (user.name === userName) {
           if (user.state !== "ban") {
             alert("정지 상태의 유저가 아닙니다.");
@@ -444,15 +510,16 @@ export async function getMainBanner() {
   const bannerList = Object.values(await getBannerList());
   const bannerItemList = Object.values(await getBannerItemList());
 
-  const bannerArr = {};
-  const bannerItemArr = {};
+  const bannerArr: { [key: number]: any } = {};
+  const bannerItemArr: { [key: number]: any } = {};
 
-  for (const item of bannerList) {
-    bannerArr[item.id] = item;
-  }
-  for (const item of bannerItemList) {
-    bannerItemArr[item.id] = item;
-  }
+  // for (const item of bannerList) {
+  //   bannerArr[item.id] = item;
+  // }
+
+  // for (const item of bannerItemList) {
+  //   bannerItemArr[item.id] = item;
+  // }
 
   const newData = [];
   for (const id in bannerArr) {
@@ -465,60 +532,6 @@ export async function getMainBanner() {
   }
 
   // console.log(newData);
-
-  return newData;
-}
-
-// 내 코스 보기(마이페이지용)
-
-export async function getMyCourse(user) {
-  const res = await get(ref(database, "course"));
-  const data = res.val();
-  const myCourse = Object.values(data).filter(
-    (course) => course.uid === user.uid
-  );
-
-  const newArray = [];
-
-  myCourse.map((item) => {
-    const newData = {
-      id: item.id,
-      title: item.myCourseTitle,
-      writer: user.displayName,
-      thumbnail: item.previewImgUrl,
-      views: item.views,
-      recommendations: item.recommendations,
-      area: item.selectedOption?.label,
-      position: {
-        lat: item.selectOriginCourse.position[0].lat,
-        lng: item.selectOriginCourse.position[0].lng,
-      },
-    };
-    newArray.push(newData);
-  });
-
-  return newArray;
-}
-
-// 코스 상세
-export async function getCourseDetail(id) {
-  console.log(id);
-  const res = await get(ref(database, "course"));
-  const data = res.val();
-  const detail = Object.values(data).filter((course) => course.id === id);
-  const item = detail[0];
-
-  const newData = {
-    ...item,
-    title: item.myCourseTitle,
-    area: item.selectedOption?.label,
-    thumbnail: item.previewImgUrl,
-    recommendations: item.recommendations,
-    position: {
-      lat: item.selectOriginCourse.position[0].lat,
-      lng: item.selectOriginCourse.position[0].lng,
-    },
-  };
 
   return newData;
 }

@@ -7,6 +7,8 @@ import congratulations from "../../assets/congratulations.png";
 import "./BadgeList.css";
 import { useUserContext } from "../../context/userContext";
 import { getBagdes, onUserStateChanged } from "../../service/firebase";
+import { ListItem } from "./CourseEdit";
+import { TransformedResult } from "../../types/forestTypes";
 
 // 뱃지 인증 여부
 type BadgeStatus = "Y" | "N";
@@ -24,6 +26,26 @@ interface BadgeInfoProps {
   activeColor: string;
   activeTextColor: string;
   popupText: string;
+}
+
+interface formdata {
+  myCourseTitle: string;
+  previewImgUrl: string;
+  selectedOption: {
+    value: string;
+    label: string;
+  };
+  checkedItems: string[];
+  level: number;
+  totalTimes: {
+    hours: string;
+    minutes: string;
+  };
+  totalDistances: string;
+  selectOriginCourse: TransformedResult;
+  lists: ListItem[];
+  tags: string[];
+  courseEditorText: string;
 }
 
 // 뱃지 인증 여부 -> "Y" or "N" 구분
@@ -110,7 +132,7 @@ export default function BadgeList() {
     onUserStateChanged(setUser);
     const fetch = async () => {
       const data = await getBagdes(user.uid);
-      setBadgeStatus(data);
+      setBadgeStatus(data as any);
     };
 
     fetch();
